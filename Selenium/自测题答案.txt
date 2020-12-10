@@ -1,0 +1,17 @@
+5-2 环境迁移必备的requirements
+
+1. 如何从当前环境中导出requirements
+(pip)pip freeze > requirements.txt
+(conda)conda list > requirements.txt (conda方式其实不太对， conda用的是yml文件)
+
+2. 如何在新环境中安装requirements
+(pip)pip install -r requirements.txt
+(conda)conda install -r requirements.txt
+
+5-3 分布式环境搭建
+
+1. 如何搭建分布式环境？
+    1. 安装Chrome浏览器和Chrome driver
+    2. 在每台机器上安装好jdk8环境， 设置环境变量
+    3. 下载standalone server的jar包， 并分别部署到每台机器上
+    4. 启动jar： java -jar standalone-server包
