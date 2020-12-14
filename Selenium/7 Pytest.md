@@ -344,7 +344,7 @@ def test_baidu_search(class_scope):
 
 `pytest -v -m "smoke" test.py`
 
-如何使用allure生成报告
+## 如何使用allure生成报告
 
 1. `brew install allure`
 
@@ -356,7 +356,7 @@ def test_baidu_search(class_scope):
 
 4. 生成测试报告: `allure generate allure-results -o allure`
 
-   在第3步生成了数据文件后,还要执行这句话来生成html格式的报告, 其中allure-results是数据文件夹名称, allure是htm报告文件夹名称, 可根据需要自行编写
+   在第3步生成了数据文件后,还要执行这句话来生成html格式的报告, 其中allure-results是数据文件夹名称, allure是html报告文件夹名称, 可根据需要自行编写
 
 ## 注册标记来防范拼写错误
 
@@ -421,6 +421,12 @@ def pytest_configure(config):
 
 `@pytest.mark.parametrize(argnames, argvalues)`装饰器可以达到批量传送参数的目的
 
+这个装饰器是放在测试用例前, 一个参数是argnames, 就是在case里调用的名字, 第二个就是这个名字对应的值.
+
+首先来看一个不用装饰器的例子:
+
+## 不用装饰器
+
 第一步: 用python的requests请求一个接口:
 
 ```python
@@ -433,7 +439,7 @@ class TestParam1:
     """
     @pyest.fixture(scope="class", autouse=True)
     def prepare(self, request):
-        with allure.step("测试数据准备"):
+        with allure.step("测试数据准备:"):
             pass
           
         @allure.step("测试数据数据清理:")
@@ -465,6 +471,8 @@ class TestParam1:
 执行这个脚本,返回的数据为:
 
 `{'message': 'add message success', 'status': 200}`
+
+## 测试数据与测试用例相分离
 
 第二步: 把测试数据和测试case相分离
 
@@ -505,10 +513,14 @@ class TestParam2:
 
 使用`@pytst.mark.parametrize`有两个要点:
 
-1. 在装饰器里列出要取的字段的名字, 以及从哪取
-2. 在测试用例里把这两个参数传进去
+1. 在装饰器里列出要取的字段的名字(这部分是说在方法中的参数, 比如上例, 方法中的参数是headers和payload, 所以要写在第一个参数的位置, 并且要用引号包裹), 以及从哪取(就是param, 相当于数据源)
+2. 在测试用例里把这两个参数传进去(这个地方还要注意: 并不是在装饰器里写了参数名字方法就可以直接用了, 而是要在方法的入参中再显式地写一下, 才能够顺利引用)
 
-data下的层级目录要和测试样例下面的一样,这样好找测试数据.
+## 测试数据独立成文件
+
+再下一步就是把测试数据单拎出来成为一个文件 ,实现真正的与测试用例相分离.
+
+data下的层级目录要和测试样例下面的一样,这样好找测试数据.测试数据存成json格式.
 
 怎么找:
 
@@ -524,7 +536,7 @@ data下的层级目录要和测试样例下面的一样,这样好找测试数据
 
    一共有两处不同, 一个是要把tests目录变成data, 另一个是要把py变成json, 所以我们就可以根据测试用例所在的目录获取测试数据所在的目录
 
-2. 用python读取文件的方法读取每条测试数据
+2. 用python读取文件的方法读取每条测试数据(获取测试数据的函数是放在utils下面的)
 
 ```python
 # 在utils下新建get_data.py
@@ -532,11 +544,79 @@ data下的层级目录要和测试样例下面的一样,这样好找测试数据
 import os
 
 def get_data_path(case_path):
-	  file_name = os.path.dirname(case_path).split(os.sep+'tests'+os.sep)
+	file_name = os.path.dirname(case_path).split(os.sep+'tests'+os.sep, 1)
     print(file_name)
     test_data = os.sep.join([filename[0],'data',file_name[1], os.path.basename(case_path).replace('.py', '.json')])
     return test_data
-  
+```
+
+case_path 传入的是像 `/Users/echo/Documents/python/untitled11/tests/test_params/test1.py` 这种绝对路径. `os.path.dirname` 获取的是该文件所在目录, `os.path.basename` 获取的是该文件的名字, 去掉前面的所有路径信息.
+
+`os.path.dirname(case_path)`获取到case的目录后, 是一个字符串, 然后使用字符串的`str.split`的方法对这个字符串进行分割, 其中 `os.sep+"tests"+os.sep`是使用`\tests\`作为分隔符, 然后分割1次, 最终得到的启示就是`tests`的父级目录和在`tests`下的子目录名字. 然后就是用`os.sep`来进行`join`, 包括tests的父级目录+data+tests的子目录+文件名.
+
+文件名这里用到了`os.path.basename`, 得到文件名后再使用字符串的`replace`方法对文件名后缀进行替换.
+
+> 之前可能和`os.path.split`方法有点混淆了. `os.path.split`是用来分割一个绝对路径的文件目录和文件名的, 只要把一个绝对路径传进去就行了, 不需要传分隔符和最大分割几次这些参数, 默认就是分割最后一个slash之前和之后的内容, 得到一个元组.
+>
+> 而字符串的`str.split`方法是来分割一个字符串的, 需要传入分隔符和最大分割几次.
+>
+> 还有一个`os.path.splitext`, 是用来得到文件的扩展名的, 也是只需要传入一个路径地址就行了.
+
+测试数据是一个json文件: json文件里有一个字典, 字典里有一个key叫test, test的value值就是多组测试用例,都存在一个列表里, 列表里有一个个字典, 每一个字典就是一组测试数据, 字典里有几个key就是接口需要的测试数据, case就是接口测试用例名,
+
+json文件格式:
+
+```json
+{
+  "test": [
+    {
+      "case": "this is name1",
+      "cookies": {
+        "JSESSIONID": "1g8git7dix5q51oblwxblipy7v"
+      },
+      "params": {
+        "fetchRoles": true,
+        "_dc": 1607844270887,
+        "statusType": -1
+      },
+      "expected": {
+      }
+    },
+    
+    {
+      "case": "this is name2",
+      "cookies": {
+        "JSESSIONID": "1g8git7dix5q51oblwxblipy7v"
+      },
+      "params": {
+        "fetchRoles": true,
+        "_dc": 1607844270887,
+        "statusType": -1
+      },
+      "expected": {
+      }
+    },
+    
+    {
+      "case": "this is name3",
+      "cookies": {
+        "JSESSIONID": "1g8git7dix5q51oblwxblipy7v"
+      },
+      "params": {
+        "fetchRoles": true,
+        "_dc": 1607844270887,
+        "statusType": -1
+      },
+      "expected": {
+      }
+    }
+  ]
+}
+```
+
+然后就是想办法把他们提取出来, 提取成之前param的样子, 就是一个列表里包含多个元组, 然后每个元组里包含多多个字典, 每个字典对应一个参数.
+
+```python
 def get_test_data(test_data_path):
     case = []
     headers = []
@@ -545,63 +625,37 @@ def get_test_data(test_data_path):
     expected =[]
     with open(test_data_path, encoding='utf-8') as f:
         dat = json.loads(f.read())
-        test = dat['test']
-        for td in test:
-          case.append(td['case'])
+        test = dat['test']  # 得到的是一个列表
+        for td in test: # 循环列表里的每个字典
+          case.append(td['case'])  # 取到每个字典里的对应关键字的值后存到对应的列表里
           headers.append(td.get('headers', {}))
           querystring.append(td.get('querystring', {}))
           payload.append(td.get('payload', {}))
           expected.append(td.get('expected', {}))
    list_parameters = list(zip(case, headers, querystring, payload, expected))
-   return list_parameters
+   return case, list_parameters
 ```
 
-case_path 传入的是像 `/Users/echo/Documents/python/untitled11/tests/test_params/test1.py` 这种直接到底的路径. `os.path.dirname` 获取的是该文件所在目录, `os.path.basename` 获取的是该文件的名字, 去掉前面的所有路径信息.
+zip解释:
 
-json文件格式:
-
-```json
-{
-    "test": [
-        {
-          	"case": "this is name1",  #用例名称
-          	"headers": {
-                "Content-Type": "application/x-www-form-urlencoded"
-            },
-          	"querystring": {
-            },
-          	"payload": {
-              	"mid": "9",
-              	"name": "android",
-              	"content": "8",
-              	"status": "1",
-              	"author": "xixi"
-            },
-          	"expected":{
-              
-            }
-        },
-      	{
-          	"case": "this is name1",
-          	"headers": {
-                "Content-Type": "application/x-www-form-urlencoded"
-            },
-          	"querystring": {
-            },
-          	"payload": {
-              	"mid": "9",
-              	"name": "android",
-              	"content": "8",
-              	"status": "1",
-              	"author": "xixi"
-            },
-          	"expected":{
-              
-            }
-        },
-    ]
-}
+```python
+case = [1, 2, 3]
+headers = [4, 5, 6]
+query= [7, 8, 9]
+zip(case, headers, query)
+<zip object at 0x102199848>
 ```
+
+意思就是取了1,4,7为一个元组, 2,5,8为一个元组
+
+然后再`list()`变成列表格式
+
+```python
+>>> list(zip(case, headers, query))
+[(1, 4, 7), (2, 5, 8), (3, 6, 9)]
+```
+
+这个形式和之前param的形式是一样的.
 
 到这一步就可以把测试case中的数据删掉了, 替换为
 
@@ -626,10 +680,10 @@ case, param = get_test_data(get_data_path(__file__))
 
 # 在测试样例的parametrize装饰器里添加ids
 @pytest.mark.parametrize("case,headers,querystring,payload,expected", param, ids=case)
-def test_param_2(self, headers, payload):
+def test_param_2(self, case, headers, querystring, payload, expected):
 ```
 
-
+## 1213自测结果
 
 # [pytest测试框架4-插件与hook函数](https://www.bilibili.com/video/BV1k4411C7X4)
 
