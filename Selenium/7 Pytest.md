@@ -325,9 +325,9 @@ addopts = -v --alluredir ./allure-results
 
 `-—collect-only`:展示在给定的配置下哪些测试用例会被执行
 
-示例: `pytest -v -k "baidu" —-collect-only test.py` 可以查看根据`-k`具体筛选出了哪些用例
+示例: `pytest -v -k "baidu" —-collect-only test.py` 可以查看根据`-k`具体筛选出了哪些用例(但并不会执行这些用例, 只是把在这个条件下的用例展示出来)
 
-`-k`:允许使用表达式指定希望运行的测试用例(是指测试用例的名字中含有相应的“关键字”)
+`-k`:允许使用表达式指定希望运行的测试用例(是指测试用例(==就是测试方法==)的名字中含有相应的“关键字”)
 
 示例: `pytest -v -k "baidu" test.py`
 
@@ -342,7 +342,23 @@ def test_baidu_search(class_scope):
     ...
 ```
 
+在方法前加上装饰器`@pytest.mark.smoke`(`somke`可以自己随便取名), 比如想把一些测试用例作为冒烟测试, 在开发提测后先跑一遍, 只想跑这些冒烟, 这时候就可以用这种方法:
+
 `pytest -v -m "smoke" test.py`
+
+> 如何注册marker?
+
+[Registering custom markers](https://docs.pytest.org/en/latest/writing_plugins.html#registering-custom-markers)
+
+If your plugin uses any markers, you should register them so that they appear in pytest’s help text and do not cause spurious warnings. For example, the following plugin would register `cool_marker` and `mark_with` for all users:
+
+```python
+def pytest_configure(config):
+    config.addinivale_line("markers", "cool_markder: this one is for cool tests.")
+    config.addinivalue_line(
+        "markers", "mark_with(arg, arg2): this marker takes arguments."
+    )
+```
 
 ## 如何使用allure生成报告
 
@@ -360,30 +376,24 @@ def test_baidu_search(class_scope):
 
 ## 注册标记来防范拼写错误
 
-自定义标记可以简化测试工作,但是标记容易拼写错误,默认情况下不会引起错误,pytest以为这是另外一个标记.为了避免拼写错误,可以在`pytest.ini`文件里注册标记
+自定义标记可以简化测试工作,但是标记容易拼写错误(比如`@pytest.mark.smoke`写成了`@pytest.mark.smoke1`),这种情况下不会引起错误,pytest以为这是另外一个标记.为了避免拼写错误,可以在`pytest.ini`文件里注册标记
 
-```python
+```ini
 markers = 
-	data_file: a test_data get_and_format mark
+	smoke: run the smoke test functions for test project
 ```
 
 可以通过命令查看:
 
 `pytest --markers`
 
-没有注册的标记不会出现在 `--markers`列表里,如果使用 `—strict`选项(在`addopts`里),遇到拼写错误的标记或未注册的标记就会报错
-
-如何自己增加一个测试函数的标记呢
-
-`@pytest.mark.smoke`
-
-`pytest -m ‘smoke’ test.py`
+没有注册的标记不会出现在 `--markers`列表里, 同时还需要使用 `—strict`选项(在`addopts`里),遇到拼写错误的标记或未注册的标记就会报错
 
 ## 指定pytest的最低版本号
 
 `minversion = 5.0`
 
-minversion选项可以指定运行测试用例的pytest的最低版本
+`minversion`选项可以指定运行测试用例的pytest的最低版本
 
 ## 指定pytest忽略某些目录
 
@@ -391,7 +401,7 @@ pytest执行用例搜索时,会递归遍历所有子目录,包括某些你明知
 
 `norecursedirs = .* data config utils`
 
-可以使用norecursedirs缩小pytest的搜索范围
+可以使用`norecursedirs`缩小`pytest`的搜索范围
 
 指定访问目录
 
@@ -401,17 +411,7 @@ pytest执行用例搜索时,会递归遍历所有子目录,包括某些你明知
 
 增加`__init__.py`文件
 
-[Registering custom markers](https://docs.pytest.org/en/latest/writing_plugins.html#registering-custom-markers)
 
-If your plugin uses any markers, you should register them so that they appear in pytest’s help text and do not cause spurious warnings. For example, the following plugin would register `cool_marker` and `mark_with` for all users:
-
-```python
-def pytest_configure(config):
-    config.addinivale_line("markers", "cool_markder: this one is for cool tests.")
-    config.addinivalue_line(
-        "markers", "mark_with(arg, arg2): this marker takes arguments."
-    )
-```
 
 # [pytest测试框架3-如何将测试代码与测试数据分离？](https://www.bilibili.com/video/BV1M4411o7vV/)
 
