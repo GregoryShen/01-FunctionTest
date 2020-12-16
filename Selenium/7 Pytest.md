@@ -323,7 +323,7 @@ addopts = -v --alluredir ./allure-results
 
 `-v`:输出详细信息
 
-`-—collect-only`:展示在给定的配置下哪些测试用例会被执行
+`-—collect-only`:展示在给定的配置下哪些测试用例会被执行,但并不会真的执行这些测试
 
 示例: `pytest -v -k "baidu" —-collect-only test.py` 可以查看根据`-k`具体筛选出了哪些用例(但并不会执行这些用例, 只是把在这个条件下的用例展示出来)
 
@@ -360,20 +360,6 @@ def pytest_configure(config):
     )
 ```
 
-## 如何使用allure生成报告
-
-1. `brew install allure`
-
-2. 安装`pytest-allure`
-
-3. 运行case时增加命令行选项 `pytest -v  —-alluredir ./allure-results test.py`
-
-   `./allure-results`指生成allure结果的文件夹地址,生成结果是一些json文件
-
-4. 生成测试报告: `allure generate allure-results -o allure`
-
-   在第3步生成了数据文件后,还要执行这句话来生成html格式的报告, 其中allure-results是数据文件夹名称, allure是html报告文件夹名称, 可根据需要自行编写
-
 ## 注册标记来防范拼写错误
 
 自定义标记可以简化测试工作,但是标记容易拼写错误(比如`@pytest.mark.smoke`写成了`@pytest.mark.smoke1`),这种情况下不会引起错误,pytest以为这是另外一个标记.为了避免拼写错误,可以在`pytest.ini`文件里注册标记
@@ -388,6 +374,20 @@ markers =
 `pytest --markers`
 
 没有注册的标记不会出现在 `--markers`列表里, 同时还需要使用 `—strict`选项(在`addopts`里),遇到拼写错误的标记或未注册的标记就会报错
+
+## 如何使用allure生成报告
+
+1. `brew install allure`
+
+2. 安装`pytest-allure`
+
+3. 运行case时增加命令行选项 `pytest -v  —-alluredir ./allure-results test.py`
+
+   `./allure-results`指生成allure结果的文件夹地址,生成结果是一些json文件
+
+4. 生成测试报告: `allure generate allure-results -o allure`
+
+   在第3步生成了数据文件后,还要执行这句话来生成html格式的报告, 其中allure-results是数据文件夹名称, allure是html报告文件夹名称, 可根据需要自行编写
 
 ## 指定pytest的最低版本号
 
