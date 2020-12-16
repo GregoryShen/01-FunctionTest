@@ -1,0 +1,5 @@
+﻿Pytest测试框架2 - 深入讲解Pytest的配置文件
+
+1. pytest.ini放在哪里？ 
+
+2. conftest.py里主要放什么？

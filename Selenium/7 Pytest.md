@@ -482,9 +482,9 @@ import pytest
 import allure
 
 param = [
-  	({'Content-Type': "application/x-www-form-urlencoded"}, {"mid": "104","name": 						"adroid3", "content": "8", "status": "1", "author": "xixi"}),
-  	({'Content-Type': "application/x-www-form-urlencoded"}, {"mid": "104","name": 						"adroid3", "content": "8", "status": "1", "author": "xixi"}),
-  	({'Content-Type': "application/x-www-form-urlencoded"}, {"mid": "104","name": 						"adroid3", "content": "8", "status": "1", "author": "xixi"})
+  	({'Content-Type': "application/x-www-form-urlencoded"}, {"mid": "104","name": "adroid3", "content": "8", "status": "1", "author": "xixi"}),
+  	({'Content-Type': "application/x-www-form-urlencoded"}, {"mid": "104","name": "adroid3", "content": "8", "status": "1", "author": "xixi"}),
+  	({'Content-Type': "application/x-www-form-urlencoded"}, {"mid": "104","name": "adroid3", "content": "8", "status": "1", "author": "xixi"})
 ]
 
 class TestParam2:
@@ -614,7 +614,7 @@ json文件格式:
 }
 ```
 
-然后就是想办法把他们提取出来, 提取成之前param的样子, 就是一个列表里包含多个元组, 然后每个元组里包含多多个字典, 每个字典对应一个参数.
+然后就是想办法把他们提取出来, 提取成之前param的样子, 就是一个列表里包含多个元组, 然后每个元组里包含多个字典, 每个字典对应一个参数.
 
 ```python
 def get_test_data(test_data_path):
@@ -775,7 +775,7 @@ class TestFixture:
 ```python
 def pytest_collection_modifyitems(items):
     """
-    测试用例收集完成时,将收集到的item的name和nodeid的中文显示在控制台上,所有的测试用例收集完毕后调用,			可以再次过滤或者对他们重新排序
+    测试用例收集完成时,将收集到的item的name和nodeid的中文显示在控制台上,所有的测试用例收集完毕后调用,可以再次过滤或者对他们重新排序
     items (收集的测试项目列表)
     """
     for item in items:
