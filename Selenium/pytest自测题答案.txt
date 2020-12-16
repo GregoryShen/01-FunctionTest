@@ -1,1 +1,67 @@
-﻿
+﻿1. pytest.ini是什么? 放在哪里? 如何查看pytest.ini的内容?
+是pytest的主配置文件
+放在项目的根目录下
+使用pytest --help查看pytest.ini的所有设置选项
+
+2. conftest.py里主要放什么？作用范围是什么?
+主要放hook函数和fixture, 作用范围是该文件所在的目录以及所有子目录
+
+3. -v参数的含义? 如何在pytest.ini文件中配置该参数?
+在pytest中默认以.来表示测试通过, 为了显示更详细的信息, 使用-v
+在pytest.ini中的配置方式:
+[pytest]
+addopts = -v
+
+4. -—collect-only 参数的含义? 给一个示例?
+展示在给定的配置下哪些测试用例会被执行, 但并不会真的执行这些测试
+示例: pytest -v -k "baidu" --collect-only test.py
+表示根据-k筛选出了哪些用例
+
+5. -k 参数的含义? 使用示例?
+指定含有关键字的测试用例, 即类中含有这些关键字的方法
+示例: pytest -v -k "baidu" test.py 即只会运行含有baidu的方法
+
+6. -m 参数的含义? 使用示例?
+指定mark 来运行测试用例, marker要提前在pytest.ini里注册, marker的
+样子类似: @pytest.mark.{markname} 
+示例: pytest -v -m "smoke" test.py
+
+7. 如何在pytest.ini中注册一个名为smoke的marker?
+[pytest]
+markers = 
+    smoke: run the smoke test functions for test project
+
+8. 如何限制没有注册的marker?
+[pytest]
+addopts = --strict-markers
+markers =
+    slow: marks tests as slow (deselect with '-m "not slow"')
+    serial
+
+9. 如何查看所有的marker
+pytest --markers
+
+10. 如何使用allure生成测试报告? 每个参数的含义?
+[pytest]
+addopts = --alluredir ./allure-results
+
+--alluredir 后面指定了allure生成结果的文件夹地址, 内容是一些json文件
+
+allure generate allure-results -o allure
+然后在命令行继续调用allure命令, 数据来源是 generate 后面的参数, 
+-o 是指输出文件夹的名称
+
+11. 如何在pytest.ini中指定pytest的最低版本为5以上
+minversion = 5.0
+
+12. 如何指定pytest忽略目录? 如何指定访问目录?
+norecursedirs = .* data config utils
+testpaths = tests
+
+官网的例子:
+[pytest]
+minversion = 6.0
+addopts = -ra -q
+testpaths =
+    tests
+    integration

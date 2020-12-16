@@ -1,5 +1,27 @@
-﻿Pytest测试框架2 - 深入讲解Pytest的配置文件
+﻿
 
-1. pytest.ini放在哪里？ 
+Pytest测试框架2 - 深入讲解Pytest的配置文件
 
-2. conftest.py里主要放什么？
+1. pytest.ini是什么? 放在哪里？ 如何查看pytest.ini的内容?
+
+2. conftest.py里主要放什么？作用范围是什么?
+
+3. -v参数的含义? 如何在pytest.ini文件中配置该参数?
+
+4. -—collect-only 参数的含义? 给一个示例? py文件名为test.py 关键字为baidu
+
+5. -k 参数的含义? 使用示例? py文件名为test.py 关键字为baidu
+
+6. -m 参数的含义? 使用示例? py文件名为test.py
+
+7. 如何在pytest.ini中注册一个名为smoke的marker?
+
+8. 如何限制没有注册的marker?
+
+9. 如何查看所有的marker
+
+10. 如何使用allure生成测试报告? 每个参数的含义?
+
+11. 如何在pytest.ini中指定pytest的最低版本为5以上
+
+12. 如何指定pytest忽略目录? 如何指定访问目录?
