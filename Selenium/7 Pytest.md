@@ -1,4 +1,4 @@
-# [【软件测试教程】自动化测试入门教程-pytest测试框架](https://www.bilibili.com/video/BV1JC4y147XK?from=search&seid=6591519480958300496)
+# [【软件测试教程】自动化测试入门教程-pytest测试框架](https://www.bilibili.com/video/BV1JC4y147XK)
 
 * pytest是一个非常成熟的全功能的Python测试框架,第三方插件丰富,可扩展性强,兼容性强,越来越多的项目开始放弃unittest和nose以及robotframework
   * 能够支持简单的单元测试和复杂的功能测试,还可以用来做selenium/appnium等自动化测试,接口自动化测试(pytest+requests)
@@ -411,6 +411,14 @@ pytest执行用例搜索时,会递归遍历所有子目录,包括某些你明知
 
 增加`__init__.py`文件
 
+## Pytest 官网文档
+
+### [Marking test functions with attributes](https://docs.pytest.org/en/stable/mark.html)
+
+### [Using markers to pass data to fixtures](https://docs.pytest.org/en/stable/fixture.html#using-markers-to-pass-data-to-fixtures)
+
+### [Using marks with parametrized fixtures](https://docs.pytest.org/en/stable/fixture.html#using-marks-with-parametrized-fixtures)
+
 
 
 # [pytest测试框架3-如何将测试代码与测试数据分离？](https://www.bilibili.com/video/BV1M4411o7vV/)
@@ -685,6 +693,24 @@ def test_param_2(self, case, headers, querystring, payload, expected):
 
 ## 1213自测结果
 
+## Pytest 官网
+
+### [Parametrizing fixtures and test functions](https://docs.pytest.org/en/stable/parametrize.html)
+
+Pytest enables test parametrization at several levels:
+
+* pytest.fixture() allows one to parametrize fixture functions.
+* @pytest.mark.parametrize allows one to define multiple sets of arguments and fixtures at the test function or class.
+* pytest_generate_tests allows one to define custom parametrization schemes or extensions
+
+#### @pytest.mark.parametrize: parametrizing test functions
+
+The builtin `pytest.mark.parametrize` decorator enables parametrization of arguments for a test function. Here is a typical example of a test function that implements checking that a certain input leads to an expected output:
+
+### [Parametrizing tests](https://docs.pytest.org/en/stable/example/parametrize.html#paramexamples)
+
+
+
 # [pytest测试框架4-插件与hook函数](https://www.bilibili.com/video/BV1k4411C7X4)
 
 ## 简介
@@ -850,15 +876,17 @@ https://www.jianshu.com/p/54b0f4016300
 
 https://docs.pytest.org/en/latest/fixture.html
 
-https://docs.pytest.org/en/latest/parametrize.html
 
-https://docs.pytest.org/en/latest/example/parametrize.html#paramexamples
 
 https://docs.pytest.org/en/latest/_modules/_pytest/hookspec.html
 
 https://docs.pytest.org/en/latest/example/simple.html#incremental-testing-test-steps
 
+# allure 介绍
 
+Allure Framework is a flexible lightweight multi-language test report 
+
+# [【软件测试教程】Allure一节课学会生成业内最优秀的自动化测试报告](https://www.bilibili.com/video/BV1Hz4y1Q7Xu)
 
 
 
