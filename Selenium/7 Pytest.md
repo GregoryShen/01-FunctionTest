@@ -876,11 +876,117 @@ https://www.jianshu.com/p/54b0f4016300
 
 https://docs.pytest.org/en/latest/fixture.html
 
-
-
 https://docs.pytest.org/en/latest/_modules/_pytest/hookspec.html
 
 https://docs.pytest.org/en/latest/example/simple.html#incremental-testing-test-steps
+
+# Pytest 官网补充
+
+## Installation and Getting Started
+
+### Install pytest
+
+### Create your first test
+
+### Run multiple tests
+
+### Assert that a certain exception is raised
+
+### Group multiple tests in a class
+
+### Request a unique temporary directory for functional tests
+
+### Continue reading
+
+## Usage and Invocations
+
+### Calling pytest through `python -m pytest`
+
+### Possible exit codes
+
+### Getting help on version, option names, environment variables
+
+### Stopping after the first (or N) failures
+
+### Specifying tests / selecting tests
+
+### Modifying Python tracebck printing
+
+### Detailed summary report
+
+### Dropping to PDB (Python Debugger) on failures
+
+### Dropping to PDB (Python Debugger) at the start of a test
+
+### Setting breakpoints
+
+### Using the bulitin breakpoint function
+
+### Profiling test execution duration
+
+### Fault Handler
+
+### Warning about unraisable exceptions and unhandled thread exceptions
+
+### Creating JUnitXML format files
+
+### Creating resultlog format files
+
+### Sending test report to online pastebin service
+
+### Early loading plugins
+
+### Disabling plugins
+
+### Calling pytest from Python code
+
+## Using pytest with an existing test suite
+
+### Running an existing test suite with pytest
+
+## The writing and reporting of assertions in tests
+
+### Asserting with the assert statement
+
+### Assertions about expected exceptions
+
+### Assertions about expected warnings
+
+### Making use of context-sensitive comparisons
+
+### Defining your own explanation for failed assertions
+
+### Assertion introspection details
+
+## pytest fixtures: explicit, modular, scalable
+
+### Fixtures as Function arguments
+
+### Fixtures: a prime example of dependency injection
+
+### conftest.py: sharing fixture functions
+
+### Sharing test data
+
+### Scope: sharing fixtures across classes, modules, packages or session
+
+### Order: Higher-scoped fixtures are instantiated first
+
+### Fixture finalization / executing teardown code
+
+### Fixtures can introspect the requestiong test context
+
+### Using markers to pass data to fixutures
+
+### Factories as fixtures
+
+### Parametrizing fixtures
+
+### Using marks with parametrized fixtures
+
+
+
+
 
 # allure 介绍
 
@@ -888,7 +994,72 @@ Allure Framework is a flexible lightweight multi-language test report
 
 # [【软件测试教程】Allure一节课学会生成业内最优秀的自动化测试报告](https://www.bilibili.com/video/BV1Hz4y1Q7Xu)
 
+Allure 实现自动化测试用例与手工测试用例关联的作用
 
+## allure介绍
+
+* allure 是一个轻量级, 灵活的, 支持多语言的测试报告工具
+* 多平台的, 奢华的report框架
+* 可以为dev/qa 提供详尽的测试报告、测试步骤、log
+* 也可以为管理层提供high level统计报告
+* java语言开发的,支持pytest, javascript, PHP, ruby等
+* 可以集成到Jenkins
+
+## allure安装
+
+## pytest-allure插件
+
+## Allure 报告的生成
+
+## allure 特性分析
+
+### 场景:
+
+​			希望在报告中看到测试功能, 子功能或场景, 测试步骤, 包括测试附加信息
+
+### 解决:
+
+​			`@feature`, `@story`, `@step,` `@attach`
+
+### 步骤:
+
+* import allure
+* 功能加上`@allure.feature(“功能名称”)`
+* 子功能上加`@allure.story(“子功能名称”)`
+* 步骤上加`@allure.step(“步骤细节”)`
+* `@allure.attach(“具体文本信息”)`, 需要附加的信息, 可以是数据, 文本, 图片, 视频, 网页
+* 如果只测试登录功能运行的时候可以加限制过滤:
+  * `pytest 文件名 --allure-features='购物车功能' --alure-stories '加入购物车'`
+
+示例:
+
+```python
+def test_search(""):
+    with allure.step("第一步: 打开搜索页面")
+    
+```
+
+清理存在的目录使用 `--clean-alluredir`
+
+## 按feature, story运行
+
+注解`@allure.feature` 与 `@allure.story` 的关系
+
+feature相当于一个功能, 一个大的模块, 将case分类到某个feature中, 报告中behavior中显示, 相当于testsuite
+
+story相当于对应这个功能或者模块下的不同场景, 分支功能, 属于feature之下的结构, 报告在features中显示, 相当于testcase
+
+feature与story类似于父子关系
+
+```python
+class TestLogin
+```
+
+
+
+
+
+## allure+pytest+selenium 实战演示
 
 
 
