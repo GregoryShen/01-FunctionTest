@@ -174,6 +174,121 @@ def teardown_module()
 
 # [Junit结合下一代测试报告框架Allure2](https://www.bilibili.com/video/BV1jb41177zF)
 
+### xUnit体系
+
+Java: JUnit4, TestNG, JUnit5
+
+python: Unittest, pytest
+
+测试用例的管理概念
+
+测试用例 testcase
+
+测试用例核心元素
+
+测试用例名字
+
+测试用例标签
+
+测试用例描述
+
+测试过程
+
+单元测试
+
+Web自动化测试Selenium
+
+App
+
+定义测试套件
+
+RunWith
+
+SuiteClasses
+
+测试套
+
+用例分组标签
+
+方法级别的标签
+
+基于标签运行
+
+include
+
+## 数据驱动
+
+### 参数化
+
+JUnit
+
+RunWith
+
+Parameterized
+
+### 数据驱动
+
+数据来源: csv, yaml, xml, db, excel, json
+
+读取数据源返回数组:
+
+* 基于shcema: `List<Class>`
+* 纯数据: `Array<Array<String, Object>>`
+
+利用参数化进行数据与变量的对应
+
+第一级能力: 参数化
+
+第二级能力: 测试数据数据化
+
+第三级能力: 业务逻辑数据化
+
+第四级能力: 测试框架数据化
+
+数据格式的选择
+
+| 数据格式 | 优点            | 缺点                       |
+| -------- | --------------- | -------------------------- |
+| Excel    | 生成数据方便    | 二进制文件不利于版本管理   |
+| CSV      | 可使用Excel编辑 | 文本格式方便版本管理       |
+| YAML     | 格式完备        | 格式简单                   |
+| XML      | 格式完备        | 冗长复杂                   |
+| JSON     | 格式完备        | 不能编写注释, 格式相对复杂 |
+
+### 汇总断言失败
+
+```java
+@Rule
+public ErrorCollector collector = new ErrorCollector();
+
+@Test
+public void assertions(){
+    collector.checkThat( value: 1, equalTo( operand: 2));
+    collector.checkThat( value: 2, equalTo( operand: 2));
+    collector.checkThat( value: 3, equalTo( operand: 2));
+}
+```
+
+## jenkins
+
+allure历史报告对比
+
+allure generate allure
+
+
+
+# [【软件测试教程】自动化测试pytest实战案例](https://www.bilibili.com/video/BV1wZ4y1H7Fi)
+
+
+
+
+
+# [【软件测试教程】一节课掌握超好用的软件测试框架pytest](https://www.bilibili.com/video/BV1b54y1q7Cj)
+
+
+
+
+
 # [小鱼老师讲pytest测试框架1-强大的Fixture功能](https://www.bilibili.com/video/BV1Kt41157qg)
 
 ## fixture 是干什么用的
@@ -1029,7 +1144,7 @@ Allure 实现自动化测试用例与手工测试用例关联的作用
 * 步骤上加`@allure.step(“步骤细节”)`
 * `@allure.attach(“具体文本信息”)`, 需要附加的信息, 可以是数据, 文本, 图片, 视频, 网页
 * 如果只测试登录功能运行的时候可以加限制过滤:
-  * `pytest 文件名 --allure-features='购物车功能' --alure-stories '加入购物车'`
+  * `pytest 文件名 --allure-features='购物车功能' --alure-stories='加入购物车'`
 
 示例:
 
@@ -1052,10 +1167,18 @@ story相当于对应这个功能或者模块下的不同场景, 分支功能, �
 feature与story类似于父子关系
 
 ```python
-class TestLogin
+@allure.feature("登录类")
+class TestLoginDemo:
+    def test_login1(self):
+        allure.attach('<img>...', attachment_type=allure.attachment_type.HTML)
+        allure.attach.file('路径地址', attachment_type=allure.attachment_type.PNG)
+        allure.attach.file()
+    
 ```
 
+Allure 生成包含日志, html代码片段, 图片, 视频
 
+关联测试用例, 
 
 
 
