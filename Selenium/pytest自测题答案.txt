@@ -1,4 +1,29 @@
-﻿1. pytest.ini是什么? 放在哪里? 如何查看pytest.ini的内容?
+﻿Pytest测试框架1 - 强大的fixture功能
+
+1. 如何声明一个fixture, 如何使用一个fixture?
+1) 在函数前加上装饰器pytest.fixture()(当然前提是在脚本中先import pytest).
+2) 依照1)中的操作先声明一个fixture, 然后在测试函数的参数列表中添加fixture函数名, 然后在测试函数中就可以像引用参数那样引用fixture的结果了
+
+2. fixture的优先级顺序?
+首先搜索该测试所在的模块, 然后搜索conftest.py, 然后才执行这些fixture函数
+
+3. 如何具体查看fixture是怎样执行的?
+pytest --setup-show {文件名}  例: pytest --setup-show test_example.py
+
+4. 写一个fixture使得一个测试用例函数在函数前打印“开始执行测试用例”, 测试用例结束后打印“测试用例执行结束”
+@pytest.fixture()
+def deco_function():
+    print("开始执行测试用例")
+    yield
+    print(“测试用例执行结束”)
+
+def test_function(deco_function):
+    print("执行测试用例")
+
+
+Pytest测试框架2 - 深入讲解Pytest的配置文件
+
+1. pytest.ini是什么? 放在哪里? 如何查看pytest.ini的内容?
 是pytest的主配置文件
 放在项目的根目录下
 使用pytest --help查看pytest.ini的所有设置选项

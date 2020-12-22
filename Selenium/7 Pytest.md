@@ -320,10 +320,12 @@ fixture可以完成测试任务,也可以返回数据给测试函数.
 
 `pytest --setup-show test_example1.py`
 
+`SETUP`是在测试用例前需要执行的步骤, `TEARDOWN`部分一般是执行一些临时数据清理工作, 但是他们同处于一个fixture函数, 可以用`yield`隔开使fixture函数分别执行setup和teardown的部分, 以下是示例:
+
 ```python
 @pytest.fixture()
 def some_data():
- 		print("222222")
+ 	print("222222")
     yield
     print("hhhh")
     
@@ -332,7 +334,7 @@ def test_some_data(some_data):
     print("test")
 ```
 
-执行顺序是先打印“222222”,然后打印“test”, 最后打印“hhhhh”
+执行顺序是先打印“222222”(这是setup的部分),然后打印“test”(这是执行测试函数), 最后打印“hhhhh”(这是teardown的部分). 
 
 ## fixture函数放在哪里合适
 
@@ -703,6 +705,7 @@ json文件格式:
         "statusType": -1
       },
       "expected": {
+          "status_code": 200
       }
     },
     
