@@ -995,7 +995,7 @@ https://docs.pytest.org/en/latest/_modules/_pytest/hookspec.html
 
 https://docs.pytest.org/en/latest/example/simple.html#incremental-testing-test-steps
 
-# Pytest 官网补充
+# [Pytest 官网补充](https://docs.pytest.org/en/stable/contents.html)
 
 ## Installation and Getting Started
 
@@ -1099,7 +1099,64 @@ https://docs.pytest.org/en/latest/example/simple.html#incremental-testing-test-s
 
 ### Using marks with parametrized fixtures
 
+## Good Integration Practices
 
+### Install package with pip
+
+For deveopment, we recommend you use venv for virtual environments and pip for installing your application and any dependencies, as well as the pytest package itself. This ensures your code and dependencies are isolated from your system Python installation.
+
+Next, place a `setup.py` file in the root of your package with the following minimum content:
+
+```python
+from setuptools import setup, find_packages
+
+setup(name="PACKAGENAME", packages=find_packages())
+```
+
+Where `PACKAGENAME` is the name of your package. You can then install your package in “editable” mode by running from the same directory:
+
+```python
+pip install -e .
+```
+
+which lets you change your source code (both tests and application) and return tests at will. This is similar to running python setup.py develop or conda develop in that it installs your package using a symlink to your development code.
+
+扩展阅读：https://stackoverflow.com/questions/19048732/python-setup-py-develop-vs-install
+
+https://zhuanlan.zhihu.com/p/162842824
+
+### Conventions for Python test discovery
+
+pytest implements the following standard test discovery:
+
+* if no arguments are specified then collection starts from testpaths(if configured) or the current directory. Alternatively, command line arguments can be used in any combination of directories, file names or node ids.
+* Recurse into directories, unless match norecursedirs.
+* In those directories, search for `test_*.py` or `*_test.py` files, imported by their test package name.
+* From those files, collect test items:
+	* test prefixed test functions or methods outside of class
+	* test prefixed test functions or methods inside Test prefixed test classes(without an `__init__` method)
+
+For examples of how to customize your test discovery Changing stardard(Python) test discovery.
+
+Within Python modules, pytest alos discovers tests using the standard unittest.TestCase subclassing technique.
+
+### Choosing a test layout / import rules
+
+### tox
+
+## Flaky tests
+
+### Why flaky tests are a problem
+
+### Potential root causes
+
+### Pytest features
+
+### Other general strategies
+
+### Research
+
+### Resources
 
 
 
