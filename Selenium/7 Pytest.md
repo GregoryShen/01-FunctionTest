@@ -18,8 +18,8 @@
 ​	`pip install -U pytes`t  U表示升级
 
 * pytest常用的插件
-  * pytest-selenium 集成selenium
-  * pytest-allure-adaptor 生成漂亮的allure报告
+  * `pytest-selenium` 集成selenium
+  * `pytest-allure-adaptor` 生成漂亮的allure报告
   * `pip install pytest-sugar` 优化运行效果
   * `pip install pytest-rerunfailures` 重新运行错误用例
   * `pip install pytest-xdist` 多CPU分发分布式执行
@@ -366,7 +366,7 @@ def mysql(request, env):
 
 ## 使用fixture传递测试数据
 
-fixture非常适合存放测试数据,并且他可以返回任何数据
+fixture非常适合存放测试数据(一个接口进行测试的时候需要传入很多组数据, 比如正常的, 异常的各种接口数据),并且他可以返回任何数据
 
 ```python
 @pytest.fixture()
@@ -377,6 +377,8 @@ def test_a_list(a_list):
     assert a_list[2] == 3
 ```
 
+fixture函数return了一个list, 测试函数将fixture函数进行传入, 相当于把list传入, 然后断言a_list的第3个元素是否等于3.
+
 ## 指定fixture 作用范围
 
 fixture 里面有个scope参数可以控制fixture的作用范围: session>module>class>function
@@ -384,7 +386,9 @@ fixture 里面有个scope参数可以控制fixture的作用范围: session>modul
 1. function 每一个函数或方法都会调用
 
 ```python
-@pytest.fixture
+import pytest
+
+@pytest.fixture()
 def first():
     print("\n获取用户名")
     a = "xiaoyulaoshi"
@@ -395,13 +399,123 @@ def second():
     print("\n获取密码")
     b = "123456"
     return b
-  
-  
+
+def test_1(first):
+    """用例传fixture"""
+    print("测试账号:{}".format(first))
+    assert first == "xiaoyulaoshi"
+
+def test_2(second):
+    """用例传fixture"""
+    print("测试密码:{}".format(second))
+    assert second == "123456"
 ```
 
+`scope`默认参数值就是`“function”`,
 
+也可以传入多个fixture:
 
-1. 
+```python
+def test_1(first, second):
+    """用例传fixture"""
+    print("测试账号:{}".format(first))
+    assert first == "xiaoyulaoshi"
+
+def test_2(first, second):
+    """用例传fixture"""
+    print("测试密码:{}".format(second))
+    assert second == "123456"
+```
+
+使用`pytest --setup-show test_example.py`来查看两个fixture执行的具体情况
+
+2. class 每个类调用一次, 一个类可以有多个方法
+
+```python
+import pytest
+
+@pytest.fixture(scope="class")
+def first():
+    print("\n获取用户名, scope为class级别只运行一次")
+    a = "xiaoyulaoshi"
+    return a
+
+class TestCase:
+    def test_1(self, first):
+    	"""用例传fixture"""
+    	print("测试账号:{}".format(first))
+    	assert first == "xiaoyulaoshi"
+        
+   	def test_2(self, first):
+    	"""用例传fixture"""
+    	print("测试账号:{}".format(first))
+    	assert first == "xiaoyulaoshi"
+```
+
+虽然每个测试方法都传了fixture, 但是fixture只会在TestCase被调用的时候使用一次, 同样也是可以用`pytest --setup-show test_example.py`来查看具体fixture的执行情况
+
+3. module, 每一个.py文件调用一次, 该文件内又有多个function和class
+
+```python
+import pytest
+
+@pytest.fixture(scope="module")
+def first():
+    print("\n获取用户名, scope为module级别, 当前.py模块只运行一次")
+    a = "xiaoyulaoshi"
+    return a
+
+def test_1(first):
+    """用例传fixture"""
+    print("测试账号:{}".format(first))
+    assert first == "xiaoyulaoshi"
+
+class TestCase:
+   	def test_2(self, first):
+    	"""用例传fixture"""
+    	print("测试账号:{}".format(first))
+    	assert first == "xiaoyulaoshi"
+```
+
+`test_1` 是function, 引用了first, `test_2`是类下面的方法, 也引用了first, 继续使用`pytest --setup-show test_example.py`来查看fixture的执行过程
+
+4. session是多个文件调用一次, 可以跨.py文件调用, 每个.py文件就是module
+
+   当我们有多个.py文件的时候, 如果多个用例只需调用一次fixture, 那就可以设置为`scope=“session”`, 并且写到`conftest.py`文件中
+
+`conftest.py`中:
+
+```python
+import pytest
+
+@pytest.fixture(scope="session")
+def first():
+    print("\n获取用户名, scope为module级别, 多个.py模块只运行一次")
+    a = "xiaoyulaoshi"
+    return a
+```
+
+`test_fixture11.py`中:
+
+```python
+def test_1(first):
+    """用例传fixture"""
+    print("测试账号:{}".format(first))
+    assert first == "xiaoyulaoshi"
+```
+
+`test_fixture12.py`中:
+
+```python
+def test_2(first):
+    """用例传fixture"""
+    print("测试账号:{}".format(first))
+    assert first == "xiaoyulaoshi"
+```
+
+使用`pytest --setup-show test_fixture11.py test_fixture12.py`查看fixture执行效果.
+
+注意到这里py文件也没有导入pytest, 更没有导入first, 但是fist可以直接使用不报错.
 
 ## fixture 的参数化
 
@@ -410,6 +524,21 @@ pytest支持在多个完整测试参数化方法
 1. `pytest.fixture()`:在fixture级别的function处参数化
 2. `@pytest.mark.parametrize`:允许在function或class级别的参数化,为特定的测试函数或类提供了多个argument/fixture设置
 3. `pytest_generate_tests`:可以实现自己的自定义动态参数化方案或扩展
+
+先讲第一种方法:
+
+```python
+@pytest.fixture(params = par_to_test):
+def class_scope(request):
+    return request.param
+
+def test_baidu_search(class_scope):
+    url = "https://www.baidu.com"
+    r = requests.request("GET", url, data=class_scope["payload"], headers=class_scope["headers"], params=class_scope["querystring"], )
+    assert r.status_code == class_scope["expected"]["status_code"]
+```
+
+request是pytest内建的fixture之一, 它代表的是fixture的调用状态, 当它发现class_scope这个fixture被调用了, 就`return request.param`, 就是返回`par_to_test`中的每一个字典.
 
 # [pytest测试框架2-深入讲解pytest的配置文件](https://www.bilibili.com/video/BV1Gt411u7nb)
 
