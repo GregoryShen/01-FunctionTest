@@ -1,4 +1,4 @@
-# [【软件测试教程】自动化测试入门教程-pytest测试框架](https://www.bilibili.com/video/BV1JC4y147XK)
+# [自动化测试入门教程-pytest测试框架](https://www.bilibili.com/video/BV1JC4y147XK)
 
 * pytest是一个非常成熟的全功能的Python测试框架,第三方插件丰富,可扩展性强,兼容性强,越来越多的项目开始放弃unittest和nose以及robotframework
   * 能够支持简单的单元测试和复杂的功能测试,还可以用来做selenium/appnium等自动化测试,接口自动化测试(pytest+requests)
@@ -166,128 +166,14 @@ def teardown_module()
 
   
 
-  
+
+# [自动化测试pytest实战案例](https://www.bilibili.com/video/BV1wZ4y1H7Fi)
 
 
 
 
 
-# [Junit结合下一代测试报告框架Allure2](https://www.bilibili.com/video/BV1jb41177zF)
-
-### xUnit体系
-
-Java: JUnit4, TestNG, JUnit5
-
-python: Unittest, pytest
-
-测试用例的管理概念
-
-测试用例 testcase
-
-测试用例核心元素
-
-测试用例名字
-
-测试用例标签
-
-测试用例描述
-
-测试过程
-
-单元测试
-
-Web自动化测试Selenium
-
-App
-
-定义测试套件
-
-RunWith
-
-SuiteClasses
-
-测试套
-
-用例分组标签
-
-方法级别的标签
-
-基于标签运行
-
-include
-
-## 数据驱动
-
-### 参数化
-
-JUnit
-
-RunWith
-
-Parameterized
-
-### 数据驱动
-
-数据来源: csv, yaml, xml, db, excel, json
-
-读取数据源返回数组:
-
-* 基于shcema: `List<Class>`
-* 纯数据: `Array<Array<String, Object>>`
-
-利用参数化进行数据与变量的对应
-
-第一级能力: 参数化
-
-第二级能力: 测试数据数据化
-
-第三级能力: 业务逻辑数据化
-
-第四级能力: 测试框架数据化
-
-数据格式的选择
-
-| 数据格式 | 优点            | 缺点                       |
-| -------- | --------------- | -------------------------- |
-| Excel    | 生成数据方便    | 二进制文件不利于版本管理   |
-| CSV      | 可使用Excel编辑 | 文本格式方便版本管理       |
-| YAML     | 格式完备        | 格式简单                   |
-| XML      | 格式完备        | 冗长复杂                   |
-| JSON     | 格式完备        | 不能编写注释, 格式相对复杂 |
-
-### 汇总断言失败
-
-```java
-@Rule
-public ErrorCollector collector = new ErrorCollector();
-
-@Test
-public void assertions(){
-    collector.checkThat( value: 1, equalTo( operand: 2));
-    collector.checkThat( value: 2, equalTo( operand: 2));
-    collector.checkThat( value: 3, equalTo( operand: 2));
-}
-```
-
-## jenkins
-
-allure历史报告对比
-
-allure generate allure
-
-
-
-# [【软件测试教程】自动化测试pytest实战案例](https://www.bilibili.com/video/BV1wZ4y1H7Fi)
-
-
-
-
-
-# [【软件测试教程】一节课掌握超好用的软件测试框架pytest](https://www.bilibili.com/video/BV1b54y1q7Cj)
-
-
-
-
+# [一节课掌握超好用的软件测试框架pytest](https://www.bilibili.com/video/BV1b54y1q7Cj)
 
 # [小鱼老师讲pytest测试框架1-强大的Fixture功能](https://www.bilibili.com/video/BV1Kt41157qg)
 
@@ -539,6 +425,10 @@ def test_baidu_search(class_scope):
 ```
 
 request是pytest内建的fixture之一, 它代表的是fixture的调用状态, 当它发现class_scope这个fixture被调用了, 就`return request.param`, 就是返回`par_to_test`中的每一个字典.
+
+
+
+
 
 # [pytest测试框架2-深入讲解pytest的配置文件](https://www.bilibili.com/video/BV1Gt411u7nb)
 
@@ -1221,7 +1111,115 @@ https://docs.pytest.org/en/latest/example/simple.html#incremental-testing-test-s
 
 ### Fixture finalization / executing teardown code
 
-### Fixtures can introspect the requestiong test context
+pytest supports execution of fixture specific finalization code when the fixture goes out of scope. By using a `yield` statement instead of `return`, all the code after the `yield` statement serves as the teardown code:
+
+```python
+# content of conftest.py
+
+import smtplib
+import pytest
+
+@pytest.fixture(scope="module")
+def smtp_connection():
+    smtp_connection = smtplib.SMTP("smtp.gmail.com", 587, timemout=5)
+    yield smtp_connection  # provide the fixture value
+    print("teardown smtp")
+    smtp_connection.close()
+```
+
+The `print` and `smtp.close()` statements will execute when the last test in the module has finished execution, regardless of the exception status of the tests.
+
+We see that `smtp_connection` instance is finalized after the two tests finished execution. Note that if we decorated out fixture with `scope='function’` then fixture setup and cleanup would occur around each single test. In either case the test module itself does not need to change or know about these details of fixture setup.
+
+Note that we can also seamlessly use the `yield` syntax with `with` statements:
+
+```python
+# content of test_yield2.py
+
+import smtplib
+import pytest
+
+@pytest.fixture(scope="module"):
+def smtp_connection():
+    with smtplib.SMTP("smtp.gmai.com", 587, timeout=5) as smtp_connection:
+        yield smtp_connection
+```
+
+The `smtp_connection` connection will be closed after the test finished execution because the `smtp_connection` object automatically closes when the `with` statement ends.
+
+Using the `contextlib.ExitStack` context manager finalizers will always be called regardless if the fixture *setup* code raises an exception. This is handy to properly close all resources created by a fixture even if one of them fails to be created/acquired:
+
+```python
+# content of test_yield3.py
+
+import contextlib
+import pytest
+
+@contextlib.contextmanager
+def connect(port):
+    ... # create connection
+    yield
+    ... # close connection
+    
+@pytest.fixture
+def equipments():
+    with contextlib.ExitStack() as stack:
+        yield [stack.enter_context(connect(port)) for port in ("C1", "C3", "C28")]
+```
+
+In the example above, if `"C28”` fails with an exception, `"C1"` and `"C3”`will still be properly closed.
+
+Note that ==if an exception happens during the *setup* code(before the `yield` keyword), the *teardown* code(after the `yield`) will not be called.==
+
+An alternative option for executing *teardown* code is to make use of the `addfinalizer` method of the request-context object to register finalization functions.
+
+Here’s the `smtp_connection` fixture changed to use `addfinalizer` for cleanup:
+
+```python
+# content of conftest.py
+import smtplib
+import pytest
+
+@pytest.fixture(scope="module")
+def smtp_connection(request):
+    smtp_connection = smtplib.SMTP("smtp.gmail.com", 587, timeout=5)
+    
+    def fin():
+        print("teardown smtp_connection")
+        smtp_connection.close()
+    
+    request.addfinalizer(fin)
+    return smtp_connection # provide the fixture value
+```
+
+Here’s the `equipments` fixture changed to use `addfinalizer` for cleanup:
+
+```python
+# content of test_yield3.py
+import contextlib
+import functools
+import pytest
+
+@contextlib.contextmanager
+def connect(port):
+    ...  # create connection
+    yield
+    ...  # close connection
+    
+@pytest.fixture
+def equipments(request):
+    r = []
+    for port in ("C1", "C3", "C28"):
+        cm = connect(port)
+        equip = cm.__enter__()
+        request.addfinalizer(functools.partial(cm.__exit__, None, None, None))
+        r.append(equip)
+    return r
+```
+
+Both `yield` and `addfinalizer` methods work similarly by calling their code after the test ends. Of course, if an exception happens before the finalize function is registered then it will not be executed.
+
+### Fixtures can introspect the requesting test context
 
 ### Using markers to pass data to fixutures
 
@@ -1278,6 +1276,8 @@ Within Python modules, pytest alos discovers tests using the standard unittest.T
 
 ## Flaky tests
 
+A “flaky” test is one that exhibits intermittent or sporadic faliture, that seems to 
+
 ### Why flaky tests are a problem
 
 ### Potential root causes
@@ -1292,86 +1292,19 @@ Within Python modules, pytest alos discovers tests using the standard unittest.T
 
 
 
-# allure 介绍
-
-Allure Framework is a flexible lightweight multi-language test report 
-
-# [【软件测试教程】Allure一节课学会生成业内最优秀的自动化测试报告](https://www.bilibili.com/video/BV1Hz4y1Q7Xu)
-
-Allure 实现自动化测试用例与手工测试用例关联的作用
-
-## allure介绍
-
-* allure 是一个轻量级, 灵活的, 支持多语言的测试报告工具
-* 多平台的, 奢华的report框架
-* 可以为dev/qa 提供详尽的测试报告、测试步骤、log
-* 也可以为管理层提供high level统计报告
-* java语言开发的,支持pytest, javascript, PHP, ruby等
-* 可以集成到Jenkins
-
-## allure安装
-
-## pytest-allure插件
-
-## Allure 报告的生成
-
-## allure 特性分析
-
-### 场景:
-
-​			希望在报告中看到测试功能, 子功能或场景, 测试步骤, 包括测试附加信息
-
-### 解决:
-
-​			`@feature`, `@story`, `@step,` `@attach`
-
-### 步骤:
-
-* import allure
-* 功能加上`@allure.feature(“功能名称”)`
-* 子功能上加`@allure.story(“子功能名称”)`
-* 步骤上加`@allure.step(“步骤细节”)`
-* `@allure.attach(“具体文本信息”)`, 需要附加的信息, 可以是数据, 文本, 图片, 视频, 网页
-* 如果只测试登录功能运行的时候可以加限制过滤:
-  * `pytest 文件名 --allure-features='购物车功能' --alure-stories='加入购物车'`
-
-示例:
-
-```python
-def test_search(""):
-    with allure.step("第一步: 打开搜索页面")
-    
-```
-
-清理存在的目录使用 `--clean-alluredir`
-
-## 按feature, story运行
-
-注解`@allure.feature` 与 `@allure.story` 的关系
-
-feature相当于一个功能, 一个大的模块, 将case分类到某个feature中, 报告中behavior中显示, 相当于testsuite
-
-story相当于对应这个功能或者模块下的不同场景, 分支功能, 属于feature之下的结构, 报告在features中显示, 相当于testcase
-
-feature与story类似于父子关系
-
-```python
-@allure.feature("登录类")
-class TestLoginDemo:
-    def test_login1(self):
-        allure.attach('<img>...', attachment_type=allure.attachment_type.HTML)
-        allure.attach.file('路径地址', attachment_type=allure.attachment_type.PNG)
-        allure.attach.file()
-    
-```
-
-Allure 生成包含日志, html代码片段, 图片, 视频
-
-关联测试用例, 
 
 
 
-## allure+pytest+selenium 实战演示
+
+
+
+
+
+
+
+
+
+
 
 
 
