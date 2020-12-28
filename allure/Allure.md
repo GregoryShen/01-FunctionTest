@@ -365,7 +365,17 @@ Test result falls into the category if its status is in the list and both error 
 
 ### 6.1.4. Supported Pytest features
 
+Some of the common Pytest features that the Allure report supports include xfails, fixtures and finalizers, marks, conditional skips and parametrization.
+
 #### xfail
+
+This is pytest way of marking expected failures:
+
+```python
+@pytest.mark.xfail(condition=lambda: True, reason='this test is expecting failure')
+def test_xfail_expected_failure():
+    
+```
 
 #### Conditional mark
 
@@ -392,13 +402,74 @@ def class_scope_fixture_with_finalizer(request):
     def class_finalizer_fixture():
         class_scope_step()
   	request.addfinalizer(class_finalizer_fixture)
+    
+
+@pytest.fixture(scope='module')
+def module_scope_fixture_with_finalizer(request):
+    def module_finalizer_fixture():
+        module_scope_step()
+    request.addfinalizer(module_finalizer_fixture)
+    
+    
+@pytest.fixture(scope='session')
+def session_scope_fixture_with_finalizer(request):
+    def session_finalizer_fixture():
+        session_scope_step()
+    request.addfinalizer(session_finalizer_fixture)
+    
+    
+class TestClass:
+    
+    def test_with_scoped_finalizers(self,
+                                    function_scope_fixture_with_finalizer,
+                                   	class_scope_fixture_with_finalizer,
+                                    module_scope_fixture_with_finalizer,
+                                    session_scope_fixture_with_finalizer):
+        stpe_inside_test_body()
+```
+
+Depending on an outcome of a fixture execution, test that is dependent on it may receive a different status. Exception in the fixture would make all dependent tests broken, `pytest.skip()` call would make all dependent test skipped.
+
+```python
+import pytest
+
+@pytest.fixture
+def skip_fixture():
+    pytest.skip()
+    
+@pytest.fixture
+def fail_fixture():
+    assert False
+    
+@pytest.fixture
+def broken_fixture():
+    raise Exception("Sorry, it's broken")
+    
+def test_with_pytest_skip_in_the_fixture(skip_fixture):
+    pass
+
+def test_with_failure_in_the_fixture(fail_fixture):
+    pass
+
+def test_with_broken_fixture(broken_fixture):
+    pass
 ```
 
 #### Parametrization
 
+You can generate many test cases from the sets of input parameters using `@pytest.mark.parametrize`.
+
+All argument names and values will be captured in the report, optionally argument names will be replaced with provided string descriptions in the `ids` kwarg.
+
 ### 6.1.5. Allure Features
 
+Allure currently supports almost every available feature except for environment with Pytest.
+
 #### Steps
+
+The first and probably most important aspect of the Allure report is that it allows to get a very detailed step-by-step representation of every test invocation. This is made possible with `@allure.step` decorator that adds invocation of the annotated method or function with provided arguments to the report.
+
+Methods annotated 
 
 #### Attachments
 

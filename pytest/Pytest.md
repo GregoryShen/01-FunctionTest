@@ -1229,6 +1229,24 @@ Both `yield` and `addfinalizer` methods work similarly by calling their code aft
 
 ### Using marks with parametrized fixtures
 
+## Skip and xfail: dealing with tests that connot succeed
+
+You can mark test functions that cannot be run on certain platforms or that you expect to fail so pytest can deal with them accordingly and present a summary of the test session, while keeping the test suite *green*.
+
+==A **skip** means that you expect your test to pass only if some conditions are met, otherwise pytest should skip running the test altogether.== Common examples are skipping windows-only tests on non-windows platforms, or skipping tests that depend on an external resource which is not available at the moment(for example a database).
+
+==An **xfail** means that you expect a test to fail for some reason.== A common example is a test for feature not yet implemented, or a bug not yet fixed. <u>When a test passes despite being expected to fail(marked with `pytest.mark.xfail`), ==it’s an **xpass** and will be reported in the test summary==.</u>
+
+pytest counts and lists *skip* and *xfail* tests separaterly. Detailed information about skipped/xfailed tests is not shown by default to avoid cluttering the output. You can use the `-r` option to see details corresponding to the “short” letters shown in the test progress:
+
+```python
+pytest -rxXs # show extra info on xfailed, xpassed, and skipped tests
+```
+
+
+
+
+
 ## Good Integration Practices
 
 ### Install package with pip
