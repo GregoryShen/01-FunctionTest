@@ -359,9 +359,35 @@ Test result falls into the category if its status is in the list and both error 
 
 ### 6.1.1. Installation
 
+Pytest is available for installation from the PyPI, therefore installation with pip is recommended. To install the latest version, execute from the command line:
+
+```shell
+$ pip install allure-pytest
+```
+
+That will install allure-pytest and allure-python-commons packages to produce report data compatible with Allure 2. If you are using a previous version of adapter for the first generation of Allure reports then you will need to uninstall it first.
+
 ### 6.1.2. Usage
 
+To enable Allure listener to collect results during the test execution simply add `–-alluredir` option and provide path to the folder where results should be stored. E.g:
+
+```shell
+$ pytest --alluredir=/tmp/my_allure_results
+```
+
+To see the actual report after your tests have finished, you need to use Allure commandline utility to generate report from the results.
+
+```shell
+$ allure serve /tmp/my_allure_results
+```
+
+This command will show you generated report in your default browser.
+
 ### 6.1.3. Basic Reporting
+
+Your can see all default pytest statuses in the Allure report: only tests that were not succeeded due to one of the assertion errors will be marked as failed, any other exception will cause a test to have a broken status.
+
+
 
 ### 6.1.4. Supported Pytest features
 
