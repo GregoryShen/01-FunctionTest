@@ -1233,7 +1233,11 @@ Both `yield` and `addfinalizer` methods work similarly by calling their code aft
 
 You can mark test functions that cannot be run on certain platforms or that you expect to fail so pytest can deal with them accordingly and present a summary of the test session, while keeping the test suite *green*.
 
+你可以把在某些特定平台上不能运行或者期望它是失败的测试函数进行标记, 这样pytest就可以处理他们, 并且在测试session中提供一个总结, 同事还能保证测试组件是通过的.
+
 ==A **skip** means that you expect your test to pass only if some conditions are met, otherwise pytest should skip running the test altogether.== Common examples are skipping windows-only tests on non-windows platforms, or skipping tests that depend on an external resource which is not available at the moment(for example a database).
+
+`skip`
 
 ==An **xfail** means that you expect a test to fail for some reason.== A common example is a test for feature not yet implemented, or a bug not yet fixed. <u>When a test passes despite being expected to fail(marked with `pytest.mark.xfail`), ==it’s an **xpass** and will be reported in the test summary==.</u>
 
@@ -1243,7 +1247,45 @@ pytest counts and lists *skip* and *xfail* tests separaterly. Detailed informati
 pytest -rxXs # show extra info on xfailed, xpassed, and skipped tests
 ```
 
+### Skipping test functions
 
+#### `skipif`
+
+#### Skip all test functions of a class or module
+
+#### Skipping files or directories
+
+#### Skipping on a missing import dependency
+
+#### Summary
+
+### Xfail: Mark test functions as expected to fail
+
+#### `condition` parameter
+
+#### `reason` parameter
+
+#### `raises` parameter
+
+#### `run` parameter
+
+#### `strict` parameter
+
+#### Ignoring xfail
+
+#### Examples
+
+### Skip/Xfail with parametrize
+
+
+
+## Parametrizing fixtures and test functions
+
+### `@pytest.mark.parametrize`: parametrizing test functions
+
+### Basic pytest_generate_tests example
+
+### More examples
 
 
 
@@ -1294,9 +1336,11 @@ Within Python modules, pytest alos discovers tests using the standard unittest.T
 
 ## Flaky tests
 
-A “flaky” test is one that exhibits intermittent or sporadic faliture, that seems to 
+A “flaky” test is one that exhibits intermittent or sporadic faliture, that seems to have non-deterministic behaviour. Sometimes it passes, sometimes it fails, and it’s not clear why. This page discusses pytest features that can help and other general strategies for identifying, fixing or mitigating them.
 
 ### Why flaky tests are a problem
+
+Flaky tests are particularly troublesome when a continuous integration (CI) server is being used, so that all tests must pass before a new code change can be merged. If the test result is not a reliable signal — that a test failure means the code change broke the test — developers can become mistrustful of the test results, which can lead to overlooking genuine failures. It is also a source of wasted time as developers must re-run test suites and investigate spurious failures.
 
 ### Potential root causes
 
