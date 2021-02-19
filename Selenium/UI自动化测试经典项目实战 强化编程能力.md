@@ -402,7 +402,7 @@ finally:
 
 ### 2-6 截图方法的应用及简单方法封装
 
-主要实现的动作: 打开京东首页左侧菜单的“手机”类目下的“老人机”页面, 然后保存老人机页面到项目下images目录中.
+主要实现的动作: 打开京东首页左侧菜单的“手机”类目下的“老人机”页面, 然后保存老人机页面到项目下 images 目录中.
 
 创建`my_screenshot.py`
 
@@ -488,7 +488,7 @@ driver.maximize_window()
 
       4. 新建一个文件夹
 
-      5. 获取当前时间并转换成字符串格式
+      5. ==获取当前时间并转换成字符串格式==
 
          ```python
          time.strftime("%Y%m%d-%H%M%S", time.localtime())
@@ -536,12 +536,12 @@ finally:
     driver.quit()
 ```
 
-存在的问题：
+##### 存在的问题
 
 1. `time.time()`获取当前时间用的不对，`time.time()`返回的是一个浮点数，而`time.strftime()`需要的是一个`time.struct_time`， 所以需要调用`time.localtime()`来获取合适的当前时间
-2. 在传递filepath的时候没有加文件名后缀 `".png"`
+2. 在传递 filepath 的时候没有加文件名后缀 `".png"`
 3. 没有在整个程序中应用`screenshot`方法
-4. 还有一个拼写需要注意的是：句柄是handle，不是handler
+4. 还有一个拼写需要注意的是：句柄是 handle，不是handler
 
 写的比原作好的地方：
 
@@ -552,7 +552,7 @@ finally:
 
 ### 2-7 获取登录后的cookies
 
-整个的思路:首先获取到cookies, 把cookie存储到一个文件里, 再从文件里读出来, 以后的访问都带着这个cookie去看看能不能把登录绕过去.
+整个的思路:首先获取到 cookies , 把 cookie 存储到一个文件里, 再从文件里读出来, 以后的访问都带着这个 cookie 去看看能不能把登录绕过去.
 
 创建`my_cookies.py`
 
@@ -598,7 +598,7 @@ if __name__ == '__main__':
   	login()
 ```
 
-然后把断点打在`login`函数的`save_cookies`哪一行, 以debug的方式运行, 因为中间需要手动拖动验证码
+然后把断点打在`login`函数的`save_cookies`哪一行, 以 debug 的方式运行, 因为中间需要手动拖动验证码
 
 #### 1030自测结果
 
@@ -650,10 +650,50 @@ finally:
 存在问题：
 
 1. 在获取cookies的时候，应该先获取，然后打开文件，也就是`cookies = driver.get_cookies()`应该放在with的外面
-2. 在写入文件的时候应该用`json.dump(cookies, f)`存成json的格式
+2. ==在写入文件的时候应该用`json.dump(cookies, f)`存成json的格式==
 3. 没有把登录写成一个函数，写成函数的话，可以通过 `if __name__ == __main__`来调用
 
+#### 0219自测结果
 
+```python
+from selenium import webdriver
+from time import sleep
+import os
+
+path = "C:\Program Files (x86)\Google\Chrome\Application\chromedriver.exe"
+driver = webdriver.Chrome(executable_path=path)
+driver.maximize_window()
+
+
+
+def login():
+    driver.get("https://jd.com")
+    driver.find_element_by_class_name("link-login").click()
+    driver.find_element_by_link_text("账户登录").click()
+    driver.find_element_by_id("loginname").send_keys("GregoryShen")
+    driver.find_element_by_id("nloginpwd").send_keys("shenxin22019891")
+    driver.find_element_by_id("loginsubmit").click()
+
+
+def save_cookies_to_file(driver):
+    cookies_path = get_cookies_path()
+    cookies_name = os.path.join(cookies_path, "jd.cookies")
+    with open(cookies_name, "w", encoding="utf-8") as f:
+        f.write(driver.get_cookies())
+
+
+def get_cookies_path():
+    project_path = os.path.dirname(os.getcwd())
+    cookies_path = os.path.join(project_path, "cookies")
+    if not os.path.exists(cookies_path):
+        os.mkdir(cookies_path)
+    return cookies_path
+
+```
+
+##### 存在的问题
+
+1. 使用 cookies 绕过登录的思路不清晰：
 
 ### 2-8 使用cookies绕过登录
 
@@ -802,7 +842,7 @@ driver.find_element_by_id("search_one").click()
 
 2. 操作的顺序可能有一点点问题，应该是先去掉readonly的属性，然后再定位元素（不过我写的先定位元素然后再去掉readonly属性也没什么问题）
 
-3. js的写法：`$().removeAttr` 这个是JQuery的写法，根据说明\$里写的是selector，原作里写的是用的css的方式：`$('input[id=train_date]').removeAttr('readonly')`
+3. js的写法：`$().removeAttr` 这个是 JQuery 的写法，根据说明\$里写的是 selector，原作里写的是用的css的方式：`$('input[id=train_date]').removeAttr('readonly')`
 
 	我直接在\$里写的id，也可以定位到，但是不通用。
 
