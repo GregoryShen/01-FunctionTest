@@ -179,9 +179,9 @@ def teardown_module()
 
 ## fixture 是干什么用的
 
-fixture是在测试函数运行前后,由pytest执行的外壳函数;代码可以定制,满足多变的测试需求;包括定义传入测试中的数据集(比如接口测试需要很多不同的测试数据源,可以通过fixture进行传入),配置测试系统的初始状态(比如在测试用例中需要验证数据是否插入了mysql,因而需要连接mysql,这些步骤可以不在测试用例里实现,可以在fixture里实现),为==批量测试提供数据源==等等...
+fixture 是在测试函数运行前后,由 pytest 执行的外壳函数;代码可以定制,满足多变的测试需求;包括定义传入测试中的数据集(比如接口测试需要很多不同的测试数据源,可以通过 fixture 进行传入),配置测试系统的初始状态(比如在测试用例中需要验证数据是否插入了 mysql,因而需要连接mysql,这些步骤可以不在测试用例里实现,可以在 fixture 里实现),为==批量测试提供数据源==等等...
 
-fixture是pytest用于将测试前后进行预备,清理工作的代码分离出核心测试逻辑的一种机制
+fixture 是 pytest 用于将测试前后进行预备,清理工作的代码分离出核心测试逻辑的一种机制
 
 举例:
 
@@ -196,17 +196,17 @@ def test_some_data(some_data):
     assert some_data == 42
 ```
 
-`@pytest.fixture()`装饰器用于声明函数是一个fixture,如果测试函数的参数列表中包含fixture名字,那么pytest会检测到.
+`@pytest.fixture()`装饰器用于声明函数是一个 fixture ,如果测试函数的参数列表中包含 fixture 名字,那么 pytest 会检测到.
 
-检测顺序是:优先搜索该测试所在的模块,然后搜索`conftest.py`并在测试函数运行之前执行该fixture.
+检测顺序是:优先搜索该测试所在的模块,然后搜索`conftest.py`并在测试函数运行之前执行该 fixture.
 
-fixture可以完成测试任务,也可以返回数据给测试函数.
+fixture 可以完成测试任务,也可以返回数据给测试函数.
 
 如果我们想看看fixture具体是怎么执行的,可以运行:
 
 `pytest --setup-show test_example1.py`
 
-`SETUP`是在测试用例前需要执行的步骤, `TEARDOWN`部分一般是执行一些临时数据清理工作, 但是他们同处于一个fixture函数, 可以用`yield`隔开使fixture函数分别执行setup和teardown的部分, 以下是示例:
+`SETUP`是在测试用例前需要执行的步骤, `TEARDOWN`部分一般是执行一些临时数据清理工作, 但是他们同处于一个 fixture 函数, 可以用`yield`隔开使 fixture 函数分别执行 setup 和 teardown 的部分, 以下是示例:
 
 ```python
 @pytest.fixture()
@@ -225,7 +225,7 @@ def test_some_data(some_data):
 ## fixture函数放在哪里合适
 
 1. 可以放在单独的测试文件里
-2. 如果希望多个测试文件共享fixture,可以放在某个公共目录下新建一个`conftest.py`文件,将fixture放在里面
+2. 如果希望多个测试文件共享 fixture,可以放在某个公共目录下新建一个`conftest.py`文件,将 fixture 放在里面
 
 ```python
 # 作者之前写的一个fixture函数,类似切换mysql的游标的
@@ -263,7 +263,7 @@ def test_a_list(a_list):
     assert a_list[2] == 3
 ```
 
-fixture函数return了一个list, 测试函数将fixture函数进行传入, 相当于把list传入, 然后断言a_list的第3个元素是否等于3.
+fixture函数return了一个list, 测试函数将fixture函数进行传入, 相当于把 list 传入, 然后断言 a_list 的第3个元素是否等于3.
 
 ## 指定fixture 作用范围
 
@@ -424,7 +424,7 @@ def test_baidu_search(class_scope):
     assert r.status_code == class_scope["expected"]["status_code"]
 ```
 
-request是pytest内建的fixture之一, 它代表的是fixture的调用状态, 当它发现class_scope这个fixture被调用了, 就`return request.param`, 就是返回`par_to_test`中的每一个字典.
+request是pytest内建的 fixture 之一, 它代表的是 fixture 的调用状态, 当它发现 class_scope 这个 fixture 被调用了, 就`return request.param`, 就是返回`par_to_test`中的每一个字典.
 
 
 
