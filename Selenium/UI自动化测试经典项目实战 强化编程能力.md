@@ -548,6 +548,41 @@ finally:
 1. 原作中在获取存储截图的目录时候用的是字符串拼接的方法，而更合适的方式是`os.path.join()`
 2. `save_screenshot`方法用的参数名字是`filename`，所以我觉得用filename更合适
 
+#### 20210213自测结果
+
+```python
+from selenium import webdriver
+from selenium.webdriver.common.action_chains import ActionChains
+from time import sleep
+import os
+
+
+def screenshot(_driver):
+    project_path = os.path.dirname(os.getcwd())
+    images_path = os.path.join(project_path, 'images_0214')
+    if not os.path.exists(images_path):
+        os.mkdir(images_path)
+    images_name = os.path.join(images_path, 'laorenji_0214.png')
+    _driver.save_screenshot(images_name)
+
+
+driver = webdriver.Chrome()
+driver.maximize_window()
+driver.get("https://jd.com")
+sleep(3)  # 为了等待大banner自动缩小
+ele = driver.find_element_by_link_text("手机")
+ActionChains(driver).move_to_element(ele).perform()
+sleep(1)
+laorenji = driver.find_element_by_link_text("老人机")
+laorenji.click()
+for handler in driver.window_handles:
+    if handler != driver.current_window_handle:
+        # driver.switch_to.frame(handler)
+        driver.switch_to.window(handler)
+# driver.save_screenshot("laorenji_0214.png")
+        screenshot(driver)
+```
+
 
 
 ### 2-7 获取登录后的cookies
@@ -4157,7 +4192,7 @@ class Properties:
   5. 获取字典的方法没有写
 
   	具体思路：
-
+  	
   	1. 在用等号进行切分后，获得到了一个包含两个元素的列表，分别取到这两个元素传给获取字典的方法
   	2. 首先还是对key的部分进行分解，value的部分没什么好说的
   	3. 判断key中是否包含.，如果包含.就以点进行切分，然后拿到第一个元素，把第一个元素放进结果字典里，并将这个元素的值设为{}
