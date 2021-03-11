@@ -90,3 +90,111 @@ addopts = -ra -q
 testpaths =
     tests
     integration
+
+
+pytest 测试框架3 - 如何将测试代码与测试数据分离
+
+1. 如何书写 pytest 参数化的装饰器? 每个参数代表的意义是什么?
+@pytest.mark.parametrize(argnames, argvalues)
+argnames 代表在测试方法里调用的参数名, argvalues 代表参数名对应的值
+
+2. 请对该测试方法进行参数化, 要求是参数化的数据在当前py文件中
+param = [({'Content-Type': "application/x-www-form-urlencoded"}, {"mid": "104", "name": "adroid3", "content": "8", "status": "1", "author": "xixi"}),
+         ({'Content-Type': "application/x-www-form-urlencoded"}, {"mid": "104", "name": "adroid3", "content": "8", "status": "1", "author": "xixi"}),
+         ({'Content-Type': "application/x-www-form-urlencoded"}, {"mid": "104", "name": "adroid3", "content": "8", "status": "1", "author": "xixi"})]
+
+@pytest.mark.parametrize("headers,payload", param)
+def test_param_1(self, headers, payload):
+    url = "http://127.0.0.1:8000/add_message/"
+    response = requests.request("POST", url, data=payload, headers=headers)
+    print(response.json())
+    assert response.json()['message'] == "add message success" 
+
+3. 测试数据独立成文件的思路? 分两步, 每一步的具体思路都是什么?
+1) 首先根据测试方法的文件路径找到测试数据的文件路径
+    具体思路: 1) 首先列出测试方法文件的绝对路径和数据文件的绝对路径, 观察两者的不同, 发现只有测试用例的主文件夹和
+                测试数据的主文件夹名不同, 还有最终的文件名后缀不同, 所以以不同的点为分界线取前后不变的部分
+            2)  然后用这两部分不变的加上测试数据的主文件夹名再加上替换过的文件名后缀,最终组成测试数据的绝对路径
+2) 然后用 python 读文件的方法从测试数据文件中读取数据
+    具体思路: 1) 设计另外一个函数, 传入参数为步骤1)中得到的测试数据绝对路径
+             2) 根据测试数据文件中一条测试数据的字段, 预先设置几个列表
+             3) 从测试数据文件中读取数据, 把每条测试数据中的每个字段存入2)中的列表中
+             4) 使用zip函数把一条测试数据变成元组的形式, 最终组成一个列表, 传给参数化装饰器
+
+4. 编写测试数据的json文件
+格式是: 最外层是一个字典, 每个关键字对应一个列表, 列表中的每个元素为字典, 一个字典为一条测试数据
+{
+  "test": [
+      {   "case": "测试用例名1",
+          "headers": {key: value},
+          "querystring": "string",
+          "payload": {
+              key: value,
+              key: value
+          },
+          "expected": {
+              key: vlaue
+          }
+      },
+      {   "case": "测试用例名2",
+          "headers": {key: value},
+          "querystring": "string",
+          "payload": {
+              key: value,
+              key: value
+          },
+          "expected": {
+              key: vlaue
+          }
+      }
+  ]
+}
+
+
+5. 实现查找测试数据文件的方法和从测试数据中读取文件的方法(假设测试用例主文件名为testcase, 测试数据主文件名叫data)
+import os
+
+def get_data_path(case_path):
+    file_paths = os.path.dirname(case_path).split(os.sep+"testcase"+os.sep, 1)
+    data_file_name = os.path.basename(case_path).replace(".py", ".json")
+    test_data_path = os.sep.join([file_paths[0], "data", file_paths[1], data_file_name])
+    return test_data_path
+
+def get_test_data(test_data_path):
+    case = []
+    headers = []
+    querystring = []
+    payload = []
+    expected = []
+    with open(test_data_path, encoding='utf-8') as f:
+        dat = json.loads(f.read())
+        test = dat['test']
+        for td in test:
+            case.append(td['case'])
+            headers.append(td.get('headers', {}))
+            querystring.append(td.get('querystring', {}))
+            payload.append(td.get('payload', {}))
+            expected.append(td.get('expected', {}))
+    list_parameters = list(zip(case, headers, querystring, payload, expected))
+    return list_parameters
+        
+6. 解释 zip 函数的使用方法
+假设有 
+list1 = [1, 2, 3]
+list2 = [4, 5, 6]
+list3 = [7, 8, 9]
+
+使用 list(zip(list1, list2, list3)) 会得到 [(1, 4, 7), (2, 5, 8), (3, 6, 9)]
+
+7. 参数化装饰器里ids是干什么用的?
+是给测试数据中的每条测试数据加上别名的, 方便追踪
+
+8. 结合2中的例子来做彻底的参数化
+from utils.get_data import get_data_path
+from utils.get_data import get_test_data
+
+case, param = get_test_data(get_data_path(__file__))
+
+@pytest.mark.parametrize("case, headers, querystring, payload, expected", param, ids=case)
+def test_params_2(self, case, headers, querystring, payload, expected):
+    pass

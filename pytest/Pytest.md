@@ -659,6 +659,7 @@ class TestParam2:
 
 1. 在装饰器里列出要取的字段的名字(这部分是说在方法中的参数, 比如上例, 方法中的参数是headers和payload, 所以要写在第一个参数的位置, 并且要用引号包裹), 以及从哪取(就是param, 相当于数据源)
 2. 在测试用例里把这两个参数传进去(这个地方还要注意: 并不是在装饰器里写了参数名字方法就可以直接用了, 而是要在方法的入参中再显式地写一下, 才能够顺利引用)
+3. param 是一个列表, 列表中的每个元素是一个元组, 每个元组就是一个测试用例的数据
 
 ## 测试数据独立成文件
 
@@ -696,7 +697,7 @@ def get_data_path(case_path):
 
 case_path 传入的是像 `/Users/echo/Documents/python/untitled11/tests/test_params/test1.py` 这种绝对路径. `os.path.dirname` 获取的是该文件所在目录, `os.path.basename` 获取的是该文件的名字, 去掉前面的所有路径信息.
 
-`os.path.dirname(case_path)`获取到case的目录后, 是一个字符串, 然后使用字符串的`str.split`的方法对这个字符串进行分割, 其中 `os.sep+"tests"+os.sep`是使用`\tests\`作为分隔符, 然后分割1次, 最终得到的启示就是`tests`的父级目录和在`tests`下的子目录名字. 然后就是用`os.sep`来进行`join`, 包括tests的父级目录+data+tests的子目录+文件名.
+`os.path.dirname(case_path)`获取到case的目录后, 是一个字符串, 然后使用字符串的`str.split`的方法对这个字符串进行分割, 其中 `os.sep+"tests"+os.sep`(`os.sep` 会自动判断是往左还是往右的斜杠)是使用`\tests\`作为分隔符, 然后分割1次, 最终得到的启示就是`tests`的父级目录和在`tests`下的子目录名字. 然后就是用`os.sep`来进行`join`, 包括tests的父级目录+data+tests的子目录+文件名.
 
 文件名这里用到了`os.path.basename`, 得到文件名后再使用字符串的`replace`方法对文件名后缀进行替换.
 

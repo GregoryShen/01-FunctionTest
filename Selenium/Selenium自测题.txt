@@ -23,7 +23,8 @@
 1. 打开京东首页左侧菜单的“手机”类目下的“老人机”页面, 然后保存老人机页面到项目下images目录中.
 
 2-7 获取登录后的cookies
-1. 获取京东登录后的cookies并存储，在控制台打印存储的cookies
+1. 获取 cookie 并绕过登录的思路?
+2. 获取京东登录后的cookies并存储，在控制台打印存储的cookies
 
 2-8 使用cookies绕过登录
 1. 使用上一小节获取到的cookies打开页面https://order.jd.com/center/list.action

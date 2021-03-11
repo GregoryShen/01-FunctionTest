@@ -12,26 +12,62 @@
 
 Pytest测试框架2 - 深入讲解Pytest的配置文件
 
-1. pytest.ini是什么? 放在哪里？ 如何查看pytest.ini的内容?
+01. pytest.ini是什么? 放在哪里？ 如何查看pytest.ini的内容?
 
-2. conftest.py里主要放什么？作用范围是什么?
+02. conftest.py里主要放什么？作用范围是什么?
 
-3. -v参数的含义? 如何在pytest.ini文件中配置该参数?
+03. -v参数的含义? 如何在pytest.ini文件中配置该参数?
 
-4. -—collect-only 参数的含义? 给一个示例? py文件名为test.py 关键字为baidu
+04. -—collect-only 参数的含义? 给一个示例? py文件名为test.py 关键字为baidu
 
-5. -k 参数的含义? 使用示例? py文件名为test.py 关键字为baidu
+05. -k 参数的含义? 使用示例? py文件名为test.py 关键字为baidu
 
-6. -m 参数的含义? 使用示例? py文件名为test.py
+06. -m 参数的含义? 使用示例? py文件名为test.py
 
-7. 如何在pytest.ini中注册一个名为smoke的marker?
+07. 如何在pytest.ini中注册一个名为smoke的marker?
 
-8. 如何限制没有注册的marker?
+08. 如何限制没有注册的marker?
 
-9. 如何查看所有的marker
+09. 如何查看所有的marker
 
 10. 如何使用allure生成测试报告? 每个参数的含义?
 
 11. 如何在pytest.ini中指定pytest的最低版本为5以上
 
 12. 如何指定pytest忽略目录? 如何指定访问目录?
+
+
+
+pytest 测试框架3 - 如何将测试代码与测试数据分离
+
+1. 如何书写 pytest 参数化的装饰器? 每个参数代表的意义是什么?
+
+2. 给定一个测试方法:
+def test_param_1(self):
+    url = "http://127.0.0.1:8000/add_message/"
+    headers = {
+        'Content-Type': "application/x-www-form-urlencoded"
+    }
+    payload = {
+        "mid": "104",
+        "name": "adroid3",
+        "content": "8",
+        "status": "1",
+        "author": "xixi"
+    }
+    response = requests.request("POST", url, data=payload, headers=headers)
+    print(response.json())
+    assert response.json()['message'] == "add message success"
+请对该测试方法进行参数化, 要求是参数化的数据在当前py文件中
+
+3. 测试数据独立成文件的思路? 分两步, 每一步的具体思路都是什么?
+
+4. 编写测试数据的json文件
+
+5. 实现查找测试数据文件的方法和从测试数据中读取文件的方法(假设测试用例主文件名为testcase, 测试数据主文件名叫data)
+
+6. 解释 zip 函数的使用方法
+
+7. 参数化装饰器里ids是干什么用的?
+
+8. 结合2中的例子来做彻底的参数化

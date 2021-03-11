@@ -583,7 +583,13 @@ for handler in driver.window_handles:
         screenshot(driver)
 ```
 
+##### 存在的问题
 
+1. 没有使用 `try…finally` 结构
+2. 切换句柄的方法是 `driver.switch_to.window(handle)`
+3. 没有调用封装的截图方法
+4. 截图方法的设计上,需要传递两个参数, 以 `file_path` 是否传递分类讨论
+5. 在给截图起名上, 直接用路径+自定义的名字, 可以使用当前时间来作为名字这样可以反复调用查看结果
 
 ### 2-7 获取登录后的cookies
 
@@ -728,7 +734,8 @@ def get_cookies_path():
 
 ##### 存在的问题
 
-1. 使用 cookies 绕过登录的思路不清晰：
+1. 使用 cookies 绕过登录的思路不清晰：在登录完成后, 就应该把 cookie 保存下来了, 可是并没有调用 `save_cookies_to_file` 函数
+2. 在往文件中写入 cookies 时, 不是调用 `f.write`, 而是调用 `json.dump(cookies, f)`
 
 ### 2-8 使用cookies绕过登录
 
