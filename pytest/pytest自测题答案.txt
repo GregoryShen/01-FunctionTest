@@ -195,6 +195,6 @@ from utils.get_data import get_test_data
 
 case, param = get_test_data(get_data_path(__file__))
 
-@pytest.mark.parametrize("case, headers, querystring, payload, expected", param, ids=case)
+@pytest.mark.parametrize("case,headers,querystring,payload,expected", param, ids=case)
 def test_params_2(self, case, headers, querystring, payload, expected):
     pass
