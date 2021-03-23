@@ -451,7 +451,7 @@ finally:
     driver.quit()
 ```
 
-#### 0815默写结果
+#### 20200815自测结果
 
 1. 导包:
 
@@ -496,7 +496,7 @@ driver.maximize_window()
 
       6. 直接调用driver的`save_screenshot`方法, 并传递更新过的`file_path`, 就不要自己造轮子去`with open了`
 
-#### 1025自测结果
+#### 20201025自测结果
 
 ```python
 from selenium import webdriver
@@ -590,6 +590,50 @@ for handler in driver.window_handles:
 3. 没有调用封装的截图方法
 4. 截图方法的设计上,需要传递两个参数, 以 `file_path` 是否传递分类讨论
 5. 在给截图起名上, 直接用路径+自定义的名字, 可以使用当前时间来作为名字这样可以反复调用查看结果
+
+#### 20210323自测结果
+
+```python
+from selenium import webdriver
+from selenium.webdriver.common.action_chains import ActionChains
+import os
+import time
+
+path = "C:\Program Files (x86)\Google\Chrome\Application\chromedriver.exe"
+driver = webdriver.Chrome(executable_path=path)
+driver.maximize_window()
+
+
+def screenshot(file_name=None):
+    if file_name is None:
+        project_path = os.path.dirname(os.path.dirname(os.getcwd()))
+        images_path = os.path.join(project_path, "images")
+        if not os.path.exists(images_path):
+            os.mkdir(images_path)
+        image_name = time.strftime("%Y%m%d-%H%M%S", time.localtime()) + ".png"
+        file_name = os.path.join(images_path, image_name)
+    driver.save_screenshot(file_name)
+
+
+try:
+    driver.get("https://www.jd.com")
+    phone = driver.find_element_by_link_text("手机")
+    ActionChains(driver).move_to_element(phone).perform()
+    time.sleep(1)
+    old_phone = driver.find_element_by_link_text("老人机")
+    old_phone.click()
+    handlers = driver.window_handles
+    index_handler = driver.current_window_handle
+    for handler in handlers:
+        if handler != index_handler:
+            driver.switch_to.window(handler)
+    screenshot()
+finally:
+    time.sleep(3)
+    driver.quit()
+```
+
+##### 存在的问题
 
 ### 2-7 获取登录后的cookies
 
