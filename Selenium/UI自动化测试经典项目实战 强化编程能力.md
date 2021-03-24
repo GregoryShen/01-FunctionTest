@@ -610,8 +610,8 @@ def screenshot(file_name=None):
         images_path = os.path.join(project_path, "images")
         if not os.path.exists(images_path):
             os.mkdir(images_path)
-        image_name = time.strftime("%Y%m%d-%H%M%S", time.localtime()) + ".png"
-        file_name = os.path.join(images_path, image_name)
+        image_name = time.strftime("%Y%m%d-%H%M%S", time.localtime())
+        file_name = os.path.join(images_path, image_name, ".png")
     driver.save_screenshot(file_name)
 
 
@@ -634,6 +634,8 @@ finally:
 ```
 
 ##### 存在的问题
+
+1. 在拼接最后的文件名时, 不应该使用 `os.path.join(images_path, image_name, ".png”)`, 因为这样会使得路径变为: `xxx/xxx/images/时间/.png`, 所以要先把 `.png` 用字符串合并的方式加到文件名上
 
 ### 2-7 获取登录后的cookies
 
