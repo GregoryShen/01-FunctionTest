@@ -886,7 +886,7 @@ driver.find_element_by_id("search_one").click()
 先在别的地方点一下
 
 ```python
-driver.find_element_by_class_name("form-lable").click()
+driver.find_element_by_class_name("form-label").click()
 ```
 
 补充一个面试题: 在driver操作中, `quit`和close方法有什么区别
@@ -931,6 +931,39 @@ driver.find_element_by_id("search_one").click()
 3. js的写法：`$().removeAttr` 这个是 JQuery 的写法，根据说明\$里写的是 selector，原作里写的是用的css的方式：`$('input[id=train_date]').removeAttr('readonly')`
 
 	我直接在\$里写的id，也可以定位到，但是不通用。
+
+```python
+from selenium import webdriver
+import time
+
+
+path = "C:\Program Files (x86)\Google\Chrome\Application\chromedriver.exe"
+driver = webdriver.Chrome(executable_path=path)
+driver.maximize_window()
+driver.get("https://www.12306.cn/index/")
+
+from_station = driver.find_element_by_id("fromStationText")
+from_station.click()
+from_station.send_keys("北京")
+driver.find_element_by_partial_link_text("北京南").click()
+time.sleep(1)
+to_station = driver.find_element_by_id("toStationText")
+to_station.click()
+to_station.send_keys("上海")
+driver.find_element_by_link_text("上海").click()
+time.sleep(1)
+date = driver.find_element_by_id("train_date")
+js = "document.getElementById('train_date').removeAttribute('readonly')"
+driver.execute_script(js)
+date.clear()
+date.send_keys("2021-03-26")
+time.sleep(2)
+driver.find_element_by_class_name("form-label").click()
+time.sleep(1)
+driver.find_element_by_id("search_one").click()
+```
+
+
 
 ## 第3章 实战电商平台商品信息浏览流程
 
