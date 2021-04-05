@@ -105,7 +105,7 @@ finally:
     driver.quit()
 ```
 
-#### 1022自测结果
+#### 20201022自测结果
 
 ```python
 from selenium import webdriver
@@ -124,7 +124,7 @@ input_element.send_keys("电脑")
 input_element.send_keys(Keys.RETURN)
 ```
 
-存在问题:
+##### 存在的问题
 
 1. 一开始找搜索框的`id`找的不对,导致定位错误.
 2. 找到输入框以后可以直接`send_keys`, 不需要先`click`
@@ -158,7 +158,7 @@ finally:
     driver.quit()
 ```
 
-##### 1019自测结果
+##### 20201019自测结果
 
 ```python
 # 使用类名定位的方式定位京东首页左侧"家用电器"
@@ -298,7 +298,7 @@ finally:
 
 除了单个元素定位外, 还有多个元素定位(`find_elements_by_xxx`), 返回的是list of WebElement
 
-#### 1025自测结果
+#### 20201025自测结果
 
 ```python
 from selenium import webdriver
@@ -377,7 +377,7 @@ finally:
 
 查看源代码: 查看`keys.py`中的具体内容
 
-#### 1023自测结果
+#### 20201023自测结果
 
 ```python
 from selenium import webdriver
@@ -635,7 +635,9 @@ finally:
 
 ##### 存在的问题
 
-1. 在拼接最后的文件名时, 不应该使用 `os.path.join(images_path, image_name, ".png”)`, 因为这样会使得路径变为: `xxx/xxx/images/时间/.png`, 所以要先把 `.png` 用字符串合并的方式加到文件名上
+1. ==在拼接最后的文件名时, 不应该使用 `os.path.join(images_path, image_name, ".png”)`, 因为这样会使得路径变为: `xxx/xxx/images/{时间}/.png`, 所以要先把 `.png` 用字符串合并的方式加到文件名上==
+
+20210404自测的时候也仍然有上述问题, 通过运行程序调整过来了
 
 ### 2-7 获取登录后的cookies
 
@@ -687,7 +689,7 @@ if __name__ == '__main__':
 
 然后把断点打在`login`函数的`save_cookies`哪一行, 以 debug 的方式运行, 因为中间需要手动拖动验证码
 
-#### 1030自测结果
+#### 20201030自测结果
 
 ```python
 from selenium import webdriver
@@ -734,13 +736,13 @@ finally:
     driver.quit()
 ```
 
-存在问题：
+##### 存在的问题
 
 1. 在获取cookies的时候，应该先获取，然后打开文件，也就是`cookies = driver.get_cookies()`应该放在with的外面
 2. ==在写入文件的时候应该用`json.dump(cookies, f)`存成json的格式==
 3. 没有把登录写成一个函数，写成函数的话，可以通过 `if __name__ == __main__`来调用
 
-#### 0219自测结果
+#### 20210219自测结果
 
 ```python
 from selenium import webdriver
@@ -814,7 +816,7 @@ if __name__ == '__main__':
   	get_url_with_cookies()
 ```
 
-#### 1030自测结果
+#### 20211030自测结果
 
 ```python
 def get_driver_with_cookies():
@@ -832,9 +834,75 @@ def get_driver_with_cookies():
         return driver
 ```
 
-存在问题：
+##### 存在的问题
 
 1. 在读取cookies的时候，应该先调用`readline()`方法读取到一个字符串，然后再loads进来。（但我直接调用好像也没啥问题）
+
+#### 20210404自测结果
+
+```python
+import os
+import time
+import json
+from selenium import webdriver
+
+"""
+使用 cookies 绕过登录的思路：
+首先获取cookies，并存储到本地文件中，然后带着cookies去访问资源
+"""
+path = os.path.join(os.path.dirname(os.getcwd()), "chromedriver")
+driver = webdriver.Chrome(executable_path=path)
+driver.maximize_window()
+
+
+def login():
+    driver.get("https://jd.com")
+    driver.find_element_by_class_name("link-login").click()
+    driver.find_element_by_link_text("账户登录").click()
+    driver.find_element_by_id("loginname").send_keys("GregoryShen")
+    driver.find_element_by_id("nloginpwd").send_keys("shenxin22019891")
+    driver.find_element_by_id("loginsubmit").click()
+    save_cookies_to_file()
+
+
+def save_cookies_to_file():
+    cookies_path = get_cookies_dir()
+    cookies_name = os.path.join(cookies_path, "jd.cookies.0404")
+    cookies = driver.get_cookies()
+    with open(cookies_name, "w") as f:
+        json.dump(cookies, f)
+
+
+def get_cookies_dir():
+    project_path = os.path.dirname(os.getcwd())
+    cookies_path = os.path.join(project_path, "cookies")
+    if not os.path.exists(cookies_path):
+        os.mkdir(cookies_path)
+    return cookies_path
+
+
+def get_url_with_cookies():
+    cookies_path = get_cookies_dir()
+    cookies_name = os.path.join(cookies_path, "jd.cookies.0404")
+    with open(cookies_name, "r") as f:
+        jd_cookies = json.loads(f.readline())
+    driver.get("https://jd.com")
+    time.sleep(1)
+    driver.delete_all_cookies()
+    time.sleep(1)
+    for cookie in jd_cookies:
+        driver.add_cookie(cookie)
+    driver.get("https://order.jd.com/center/list.action")
+
+
+if __name__ == '__main__':
+    # login()
+    get_url_with_cookies()
+```
+
+看下来好像也没啥问题
+
+就是注意在登录后不要退出, 要直接关闭浏览器, 如果退出的话, 那么之前保留的 cookies 就失效了.
 
 ### 2-9 js操作定位页面上的元素
 
@@ -862,8 +930,6 @@ to_element.click()
 time.sleep(2)
 to_element.send_keys("长春")
 driver.find_element_by_xpath("//*[text()='长春南']").click()
-
-
 ```
 
 ### 2-10 js定位操作
@@ -895,7 +961,7 @@ driver.find_element_by_class_name("form-label").click()
 
 quit是退出浏览器进程,close是关闭浏览器标签(close可以在句柄切换的时候用)
 
-#### 1102自测结果
+#### 20201102自测结果
 
 ```python
 from selenium import webdriver
@@ -924,7 +990,7 @@ driver.find_element_by_class_name("form-label").click()
 driver.find_element_by_id("search_one").click()
 ```
 
-存在的问题：
+##### 存在的问题
 
 1. 一开始出发站元素的id找的不对，后面经过调试才找对。
 
@@ -933,6 +999,8 @@ driver.find_element_by_id("search_one").click()
 3. js的写法：`$().removeAttr` 这个是 JQuery 的写法，根据说明\$里写的是 selector，原作里写的是用的css的方式：`$('input[id=train_date]').removeAttr('readonly')`
 
 	我直接在\$里写的id，也可以定位到，但是不通用。
+
+#### 20210324自测结果
 
 ```python
 from selenium import webdriver
@@ -964,6 +1032,49 @@ driver.find_element_by_class_name("form-label").click()
 time.sleep(1)
 driver.find_element_by_id("search_one").click()
 ```
+
+##### 存在的问题
+
+
+
+#### 20210404自测结果
+
+```python
+import time
+import os
+from selenium import webdriver
+
+
+path = os.path.join(os.path.dirname(os.getcwd()), "chromedriver")
+driver = webdriver.Chrome(executable_path=path)
+driver.maximize_window()
+
+driver.get("https://www.12306.cn/index/")
+from_station = driver.find_element_by_id("fromStationText")
+from_station.click()
+from_station.clear()
+from_station.send_keys("北京")
+time.sleep(1)
+from_station = driver.find_element_by_xpath("//*[text()='北京南']").click()
+time.sleep(1)
+to_station = driver.find_element_by_id("toStationText")
+to_station.click()
+to_station.clear()
+to_station.send_keys("深圳")
+time.sleep(1)
+to_station = driver.find_element_by_xpath("//*[text()='深圳北']").click()
+time.sleep(1)
+date = driver.find_element_by_id("train_date")
+js = 'document.getElementById("train_date").removeAttribute("readonly")'
+driver.execute_script(js)
+time.sleep(1)
+date.clear()
+date.send_keys("2021-04-28")
+driver.find_element_by_class_name("form-label").click()
+driver.find_element_by_id("search_one").click()
+```
+
+##### 存在的问题
 
 
 
