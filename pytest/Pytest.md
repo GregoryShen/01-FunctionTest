@@ -179,11 +179,13 @@ def teardown_module()
 
 ## fixture 是干什么用的
 
-fixture 是在测试函数运行前后,由 pytest 执行的外壳函数;代码可以定制,满足多变的测试需求;包括定义传入测试中的数据集(比如接口测试需要很多不同的测试数据源,可以通过 fixture 进行传入),配置测试系统的初始状态(比如在测试用例中需要验证数据是否插入了 mysql,因而需要连接mysql,这些步骤可以不在测试用例里实现,可以在 fixture 里实现),为==批量测试提供数据源==等等...
+Pytest 中有一个非常强大的功能叫做 fixture, 选择 Pytest 都是由于 fixture.
+
+fixture 是在测试函数运行前后,由 pytest 执行的外壳函数;代码可以定制,满足多变的测试需求;包括定义传入测试中的数据集(比如接口测试需要很多不同的测试数据源,可以通过 fixture 进行传入),配置测试前系统的初始状态(比如在测试用例中需要验证数据是否插入了 mysql,因而需要连接 mysql,这些步骤可以不在测试用例里实现,可以在 fixture 里实现),为==批量测试提供数据源==等等...
 
 fixture 是 pytest 用于将测试前后进行预备,清理工作的代码分离出核心测试逻辑的一种机制
 
-举例:
+## 举例
 
 ```python
 import pytest
@@ -267,7 +269,7 @@ fixture函数return了一个list, 测试函数将fixture函数进行传入, 相�
 
 ## 指定fixture 作用范围
 
-fixture 里面有个scope参数可以控制fixture的作用范围: session>module>class>function
+fixture 里面有个scope参数可以控制fixture的作用范围: session>module>def>function
 
 1. function 每一个函数或方法都会调用
 
@@ -414,6 +416,43 @@ pytest支持在多个完整测试参数化方法
 先讲第一种方法:
 
 ```python
+import pytest
+import requests
+
+par_to_test=[{
+      "case": "serach a word :haha",
+      "headers": {},
+      "querystring": {
+        "wd":"hah"
+      },
+      "payload": {},
+      "expected": {
+        "status_code":200
+      }
+    },
+{
+      "case": "serach a word2 :kuku",
+      "headers": {},
+      "querystring": {
+        "wd":"kuku"
+      },
+      "payload": {},
+      "expected": {
+        "status_code":200
+      } },
+ 
+{
+      "case": "serach a word3 :xiaoyulaoshi",
+      "headers": {},
+      "querystring": {
+        "wd":"xiaoyulaoshi"
+      },
+      "payload": {},
+      "expected": {
+        "status_code":200
+      } }
+]
+
 @pytest.fixture(params = par_to_test):
 def class_scope(request):
     return request.param
@@ -424,11 +463,9 @@ def test_baidu_search(class_scope):
     assert r.status_code == class_scope["expected"]["status_code"]
 ```
 
-request是pytest内建的 fixture 之一, 它代表的是 fixture 的调用状态, 当它发现 class_scope 这个 fixture 被调用了, 就`return request.param`, 就是返回`par_to_test`中的每一个字典.
+`test_baidu_search`是具体的测试函数, 测试函数引入了一个fixture叫做`class_scope`, 这个 fixture 就是返回测试数据的, 注意到`test_baidu_search`中的`data`,`headers`,`params`都是这个fixture`class_scope`所传入的数据, 用fixture传入数据的好处(为什么不直接遍历`par_to_test`): 让测试用例更简洁, 如果不通过 fixture 那就要在测试函数`test_baidu_search`中书写`for i in par_to_test`, 但是引入 fixture 直接就可以取测试数据的每一条, 它会自动遍历列表中的每个字典. 
 
-
-
-
+request是pytest内建的 fixture 之一, 它代表的是 fixture 的调用状态, 当它发现 class_scope 这个 fixture 被调用了, 就`return request.param`, 就是返回`par_to_test`中的每一个字典, 相当于每调用一次fixture, 就返回一组测试数据.
 
 # [pytest测试框架2-深入讲解pytest的配置文件](https://www.bilibili.com/video/BV1Gt411u7nb)
 
