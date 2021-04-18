@@ -20,6 +20,17 @@ def deco_function():
 def test_function(deco_function):
     print("执行测试用例")
 
+5. fixture 函数放在哪里合适
+1) 可以放在单独的测试文件里
+2) 如果希望多个测试文件共享 fixture,可以放在某个公共目录下新建一个 conftest.py 文件,将 fixture 放在里面
+
+6. fixture 通过哪个参数控制作用范围, 具体有哪些范围, 关系是什么?
+
+
+7. pytest 有哪几种参数化的方法
+
+8. 如何使用 fixture 来进行参数化, 请使用百度搜索接口作为示例
+
 
 Pytest测试框架2 - 深入讲解Pytest的配置文件
 
