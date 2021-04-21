@@ -1957,7 +1957,7 @@ if __name__ == '__main__':
 
 有很多元素没有常规的定位,这就给定位造成了一定的困难. 这时候Xpath和CSS Selector运用的熟练.
 
-打开console, 输入`$x(" “)`, 中间的部分就是xpath表达式,举例:
+打开console, 输入`$x(" ")`, 中间的部分就是xpath表达式,举例:
 
 `$x("/html")`
 
@@ -1975,11 +1975,13 @@ if __name__ == '__main__':
 
 相对定位: 就是在整个页面上进行查找
 
-举例:比如想要定位“账户登录”:
+举例:比如想要定位“账户登录”:, 对应的元素有一个`class`属性.
 
-如果不使用属性进行定位, 那就要向上一级一级找到具有唯一标识的元素, 比如找到id为content的元素,
+如果不使用属性进行定位, 那就要逐级向上找, 找到具有唯一标识的元素, 比如找到`id`为`content`的元素,
 
 `$x('//div[@id="content"]/div[2]/div[1]/div/div[3]')`
+
+`@`符后面跟的是属性的名称
 
 除了这种定位方式我们也可以直接指定class的属性值
 
@@ -2819,9 +2821,8 @@ time.sleep(3)
 # 隐性等待
 driver.implicitly_wait(10)
 # 隐性等待就是设置了一个最长的等待时间,假设在规定的时间内网页加载完成则执行下一步.否则就一直等到时间截
-# 止,然后执行下一步. 这里面有个弊端就是程序会一直等待程序加载完成,有的时候网页加载速度是很慢的,或者个别
-# js加载不出来,这个时候它就一直等待了.
-# 隐性等待只要设置一次,就围绕着driver的生命周期全都起作用,也就是说是一个全局设置
+# 止,然后执行下一步. 这里面有个弊端就是程序会一直等待整个页面加载完成(就是浏览器上面的小圈不转的时候才会 # 执行下一步),有的时候网页加载速度是很慢的,或者个别js加载不出来,这个时候它就一直等待了.
+# 隐性等待只要设置一次,就围绕着driver的生命周期全都起作用,也就是说是它一个全局设置
 
 # 显性等待
 from selenium.webdriver.support.wait import WebDriverWait
@@ -2835,6 +2836,30 @@ locator = (By.CSS_SELECTOR, ".login-tab.login-tab-r")
 element = WebDriverWait(driver, 10).until(EC.presence_of_element_located(locator))
 element.click()
 ```
+
+`WebDriverWait` 首先接受一个 `driver`, 然后后面也是设置一个最长的等待时间, 再往后是一个检查的条件, 检查 `locator` 定位的那个元素是否存在. 检查到这个元素存在了, 就开始执行 `element.click()`
+
+### 补充: 两种等待的区别
+
+#### [selenium的webdriver三种等待方式(显式等待WebDriverWait+implicitly_wait隐式等待+sleep强制等待)](https://blog.csdn.net/u013444182/article/details/86086029)
+
+隐式等待是等页面加载, 不是等元素!
+
+1. 显式等待
+
+   
+
+2. 隐式等待
+
+   
+
+3. 强制等待
+
+   
+
+#### [5-Selenium WebDriver三种等待--隐式等待-显式等待和流畅等待](https://blog.csdn.net/zbj18314469395/article/details/97266051)
+
+
 
 ### 6-2 Python 中的几个魔法方法
 
