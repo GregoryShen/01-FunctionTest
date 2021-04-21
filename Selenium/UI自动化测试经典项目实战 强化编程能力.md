@@ -2847,11 +2847,28 @@ element.click()
 
 1. 显式等待
 
-   
+	 一个显式等待是你定义的一段代码，用于等待某个条件发生然后再继续执行后续代码。显式等待是等待元素加载。
+
+	```python
+	from selenium import webdriver
+	from selenium.webdriver.support.ui import WebDriverWait
+	from selenium.webdriver.support import expected_conditions as ec
+	from selenium.webdriver.common.by import By
+	
+	
+	driver = webdriver.Chrome()
+	driver.get("http://www.jd.com")
+	try:
+	    element = WebDriverWait(driver, 10).until(ec.presence_of_element_located((By.ID, )))
+	```
+
+	
 
 2. 隐式等待
 
-   
+	 相当于设置全局的等待，在定位元素时，对所有元素设置超时时间。隐式等待是等待页面加载，而不是元素加载。（隐式等待就是针对页面的，显式等待是针对元素的）
+
+	隐式等待使得 WebDriver 在查找一个元素时，每隔一段特定的时间就会轮询一次DOM，如果element没有被马上发现的话
 
 3. 强制等待
 
