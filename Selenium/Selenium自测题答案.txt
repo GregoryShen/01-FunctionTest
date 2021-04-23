@@ -14,6 +14,9 @@ $x('//div[@class="login-tab login-tab-r"]')
 1. 通配符的符号是?
 2. 标签匹配从几开始?
 3. 不包含筛选的写法?(两种方式)
+场景为: 在jd商品详情页面的规格与包装下定位所有的右边部分内容但不包含问号(使用console定位)
+$x("//div[@class='Ptable-item'//dd[not(@class='Ptable-tips')]")
+$x("//div[@class='Ptable-item'//dd[not(contains(@class, 'Ptable-tips'))]")
 
 4-3 Xpath函数运算的简单使用
 1. 去除属性两边空格

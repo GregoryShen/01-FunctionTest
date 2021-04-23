@@ -2007,13 +2007,27 @@ if __name__ == '__main__':
 
 关于属性的演示:
 
-不包含筛选的写法:
+不包含筛选的写法:(例子为商品详情页面下「规格与包装」下的问号, 元素为`<dd class="Ptable-tips">`)
+
+思路: 首先定位到上级标签 `<div class="Ptable-item">`
+
+```javascript
+> $x('//div[@class="Ptable-item"]')
+```
+
+每一个 `<div class="Ptable-item">`下包含`<h3>`, 是左边的大标题, 右边整个在一个大的`<dl>`里, 右边每一横行在一个子`<dl>`里, 每个`<dl>`里包含`<dt>`(代表左边的文字), `<dd classs="Ptable-tips”>`(代表问号), `<dd>`(代表右边的文字), 所以可以直接在`//div[@class="Ptable-item”]`后面再使用一个相对路径过滤`<dd>`
+
+```javascript
+> $x('//div[@class="Ptable-item"]//dd')
+```
+
+可以得到所有的`<dd>`, 包含属性为`classs="Ptable-tips”`的`<dd>`. 把我们不想要的去掉, 就是写一个函数 `[not()]`, 小括号里边传入 `@class='Ptable-tips’`, 注意这里的格式是 ==**<u>@属性=值</u>**==
 
 ```javascript
 > $x('//div[@class="Ptable-item"]//dd[not(@class="Ptable-tips")]')
 ```
 
-或者:
+或者再使用`contains`函数, 但注意`contains`函数的格式为**<u>==contains(@属性, 值)==</u>**
 
 ```javascript
 > $x('//div[@class="Ptable-item"]//dd[not(contains(@class,"Ptable-tips"))]')
