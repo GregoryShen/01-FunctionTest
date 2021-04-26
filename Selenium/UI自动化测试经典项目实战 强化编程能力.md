@@ -5170,7 +5170,7 @@ def set_mysql_config(env):
 
 #### 1109自测结果
 
-basic_config.txt
+`basic_config.txt`
 
 ```shell
 UI_WAIT_TIME = 10
@@ -5178,7 +5178,7 @@ UI_WAIT_TIME = 10
 START_URL = "https://www.jd.com"
 ```
 
-my_log_config_1109.py
+`my_log_config_1109.py`
 
 ```python
 import logging.config
@@ -5191,7 +5191,7 @@ def set_log_config(name):
     return logger
 ```
 
-log.conf
+`log.conf`
 
 ```ini
 [loggers]
@@ -5271,7 +5271,7 @@ def set_my_mysql_config(env):
 
 #### 1110自测结果
 
-fields_1109.py
+`fields_1109.py`
 
 ```python
 class Field:
@@ -5295,7 +5295,7 @@ class TextField(Field):
         super(TextField, self).__init__(column_name, 'text')
 ```
 
-create_pool_1110.py
+`create_pool_1110.py`
 
 ```python
 from part_9.config.my_mysql_config_1109 import set_my_mysql_config
@@ -5315,7 +5315,7 @@ def create_pool():
                     charset=db_config['charset']).connection()
 ```
 
-orm.py
+`orm.py`
 
 ```python
 from part_9.orm.fields_1109 import Field, StringField, TextField
@@ -5361,7 +5361,7 @@ class Model(metaclass=ModelMetaclass):
         return rs
 ```
 
-jingdong_model.py
+`jingdong_model.py`
 
 ```python
 from part_9.orm.fields_1109 import StringField, TextField
@@ -5407,7 +5407,7 @@ class Goods(Model):
 
 #### 1111自测结果
 
-orm.py 继续完成select, update和delete方法
+`orm.py` 继续完成select, update和delete方法
 
 ```python
 def select(self, columns_list, where_list):
