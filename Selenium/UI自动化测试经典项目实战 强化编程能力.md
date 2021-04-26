@@ -5041,13 +5041,13 @@ logger.info("this is a wenjian test")
 
 ### 9-1 PO的简单解释和目录结构的说明
 
-面向对象思想在UI自动化框架中,也就是selenium,我们管它叫PageObject.在面向对象当中有一句话叫「一切皆对象」. PO模式主要的思想就是:把每个页面当作一个对象来进行封装.
+接下来这一章我们主要来学习一下面向对象思想的应用. 面向对象思想在UI自动化框架中,也就是selenium,我们管它叫 PageObject.在面向对象当中有一句话叫「一切皆对象」. PO模式主要的思想就是:把每个页面当作一个对象来进行封装.
 
 首先来看下京东整个页面的层级结构:
 
 首页->左侧有商品列表页->一级筛选条件->二级筛选条件-> 弹出二级菜单页面->商品详情页
 
-在京东的首页当中左侧有一个列表页面, 然后比如说一级的筛选我们选择“电脑”, 二级的筛选条件选择“笔记本”, 就会弹出来一个二级菜单页面,点击其中的一台电脑, 就会弹出来一个商品详情页面.
+打开浏览器首先输入https://www.jd.com, 就会弹出京东的首页. 在京东的首页当中左侧有一个列表页面, 然后比如说一级的筛选我们选择“电脑”, 二级的筛选条件选择“笔记本”, 就会弹出来一个二级菜单页面,点击其中的一台电脑, 就会弹出来一个商品详情页面, 仍然点击「规格与包装」.
 
 结论: 京东在商品的浏览这块一共有三个页面层次: 主页, 商品列表页, 商品详情页
 
@@ -5084,9 +5084,40 @@ test：测试代码（其实这个就是业务层了）
 1. 原课程中把ORM和Model分开放了，现在还没想好是不是要分开放，感觉数据库对象模型也算是ORM的一部分。（又：先按他写的来吧，分开放）
 2. 测试用例文件夹最好叫testcase，不要叫test，可能会冲突。
 
+#### 0425自测结果
+
+1. 列举项目的层级结构并说明每个文件夹的作用
+
+   ```ini
+   config 配置文件夹, 包括
+       mysql.py 数据库连接的配置
+       config.ini 一些常量的配置文件
+   orm 面向对象关系映射
+   	orm.py		面向对象关系映射
+   pages  页面对象
+   	basepage.py 	基础页面
+   	index.py		首页
+   	goods.py		商品列表页
+   	goods_info.py 	商品详情页
+   utils 工具文件夹
+       启动文件
+   testcase  测试用例文件夹
+   ```
+
+   
+
+
+2. 京东商品浏览的这一整套操作一共包含哪些页面层次？
+
+   一共包含三个页面层次, 首先是首页, 然后是商品列表页, 最后是商品详情页
+
+##### 存在的问题
+
+
+
 ### 9-2 目录内容的组织
 
-首先在`part_nine`文件夹下创建包`config`, 在`config`包中首先创建一个基本配置:`basic_config.py`(也可以叫`basic_setting.py`).这个基本配置或基本设置就是在整个过程中需要我们定义的一些比如driver的路径,之前写的很辛苦,现在写在配置文件里然后直接读配置文件就可以了.
+首先在`part_nine`文件夹下创建包`config`, 在`config`包中首先创建一个基本配置:`basic_config.py`(也可以叫`basic_setting.py`).这个基本配置或基本设置就是在整个过程中需要我们定义的一些比如`driver`的路径,之前写的很辛苦,现在写在配置文件里然后直接读配置文件就可以了.
 
 ```python
 # 页面元素最长等待时间
@@ -5102,9 +5133,9 @@ REMOTE_DRIVER_DICT = {
 }
 ```
 
-然后把之前`part_eight`创建的`logging_setting.py`和`logging.conf` 复制到当前的`part_nine`的`config`文件夹下
+然后把之前`part_eight`创建的`logging_setting.py`和`logging.conf` 复制到当前的`part_nine`的`config`文件夹下(记得把`logging_setting.py`下的`logger=get_logger()` `logger.info("info log")`这两句话去掉)
 
-还可以创建一个`mysql`的基本配置: `mysql_config.py`, 强调一下环境隔离
+还可以创建一个`mysql`的基本配置: `mysql_config.py`, (使用`env`强调一下环境隔离)
 
 ```python
 def set_mysql_config(env):
@@ -5685,9 +5716,52 @@ def create_pool(env="test"):
 
 捋下来正确的顺序应该是先建好fields字段，和创建数据库连接池，然后再新建元类，然后再新建Model类，然后在其中实现插入修改删除查找四种方法，最后新建Model，然后来进行测试。
 
+#### 0425自测结果
+
+1. 完成config文件夹的内容
+
+   * `my_mysql.py`
+
+     ```python
+     from pymysql import 
+     
+     # 根据传入的环境地址创建数据库连接
+     def create_my
+     ```
+
+     
+
+   * 日志的配置文件
+
+     1. 有一个日志配置文件
+     2. 有一个读取文件
+
+   * 常量的配置文件
+
+     `config.ini`
+
+     ```ini
+     # 最长等待时间
+     UI_WAIT_TIME = 10
+     
+     # 
+     EXECUTABLE_PATH = ''
+     
+     # 
+     
+     ```
+
+     
+
+     
+
+2. 完成model、orm、utils文件夹的内容
+
+   utils
+
 ### 9-3 浏览器引擎启动工具开发
 
-在`/part_nine/utils`下新建`browser_engine.py`. 浏览器启动主要提供两种启动方法,一种是本地启动,一种是远程启动
+继续向下写, 在 `utils` 中还有一个工具要写, 就是浏览器引擎. 在`/part_nine/utils`下新建`browser_engine.py`. 浏览器启动主要提供两种启动方法,一种是本地启动,一种是远程启动. 这个可以作为一个静态方法来写, 因为它是一个工具.
 
 ```python
 from selenium import webdriver
@@ -5709,7 +5783,7 @@ class BrowserEngine:
         return driver
       
     @staticmethod
-    def init_remote_driver():
+    def init_remote_driver ():
      	"""
      	初始化远程的driver, 具体启动哪些取决于在配置文件中的具体配置
      	详细配置在basic_config文件中
@@ -5819,6 +5893,36 @@ class BrowserEngine:
 1. 在添加options的时候参数写的是`options`, 但对于Chrome来说是`chrome_options`（udpate: `chrome_options`要被废弃了， 以后就只有`options`）
 2. 在循环迭代`remote_browser_dict`的时候忘了加`items()`,
 3. 注释的书写. 现在写注释写的不好
+
+#### 0425自测结果
+
+1. 在utils中完成浏览器引擎启动工具的开发，实现本地启动和远程启动
+
+新建 `start_engine.py`
+
+```python
+from selenium import webdriver
+fr
+
+from part9.config import basic_config
+
+
+class StartEngine:
+    
+    @staticmethod
+    def start_local_engine():
+        options = Option()
+        driver = webdriver(executable_path=basic_config.EXECUTABLE_PATH)
+        
+        
+    @staticmethod
+    def start_remote_engine():
+        options = Option()
+        driver = webdriver(executable_path=basic_config.REMOTE_DIRVER_DICT['linux'])
+        
+```
+
+
 
 ### 9-4 PageObject封装(1)
 
