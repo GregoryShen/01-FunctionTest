@@ -1,4 +1,4 @@
-# UI自动化测试经典项目实战 强化编程能力
+UI自动化测试经典项目实战 强化编程能力
 
 ## 第1章 Selenium 补充
 
@@ -2543,7 +2543,7 @@ def to_start(driver, name):
 from part_five.jingdong.my_cookies import *
 ```
 
-然后把启动浏览器那几句删掉,
+
 
 ```python
 # 然后把启动浏览器那几句删掉
@@ -3561,14 +3561,14 @@ def set_mysql_config(env):
 
 这样就实现了环境的配置隔离.
 
-在`part_seven`下创建`my_database.py`,真正去连接数据库
+在`part_seven`下创建`my_database.py`,真正去连接数据库(首先要安装`DBUtils`工具,用来创建数据库连接池 )
 
 ```python
 import pymysql
 from DBUtils.PooledDB import PooledDB
 from part_seven.config.mysql_config import set_mysql_config
 
-def create_pool():
+def create_pool(): 
   	db_config = set_mysql_config("dev")
     return PooledDB(pymysql,  # 代表用谁来创建这个连接池
                     5,	# 初始化缓存的最小线程数
