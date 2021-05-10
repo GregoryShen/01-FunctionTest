@@ -2201,19 +2201,42 @@ CSS指的是层叠样式表,它就是来修饰前端的样式的,CSS选择器就
 
 ### 4-7 回顾js定位写法及webdriver模块源代码初探
 
+document.
 
+当时写这, 我们
 
 ```javascript
 js = "$('input[id=train_date]').removeAttr('readonly')"
 ```
 
-w3c
+`'input[id=train_date]`会返回一个节点或标签,这个代码,在console里运行,直接就可以粘贴到这里,执行.学习xpath,cssSector就可以来调试.
+
+可以在任意一个`driver.find_element_by_*`点进去,可以进到一个webdriver的模块中,直接return一个find_element,综上总共都是基于find_element和find_elements.
+
+再来看一下find_element, 
+
+`w3c` 是一个定义某种互联网协议的组织,都是w3c来进行定义的.
+
+```python
+if self.w3c:
+    if by == By.ID:
+        by = By.CSS_SELECTOR
+        value = '[id="%s"]' % value
+    elif by == By.TAG_NAME:
+        by = By.CSS_SELECTOR
+    elif by == By.CLASS_NAME:
+        by = By.CSS_SELECTOR
+        value = ".%s" % value
+    elif by == By.NAME:
+        by = By.CSS_SELECTOR
+        value = '[name="%s"]' % value
+```
+
+默认是都会
 
 格式化 `By.CSS_SELECTOR`
 
-最终会去执行 `Commend.FIND_ELEMENT`
-
-驼峰命名法.
+最终会去执行 `Commend.FIND_ELEMENT`,所有大写去写的都是常量的意思.`findElement`驼峰命名法.
 
 回到上一个定位: `Option`+`command`+:arrow_left:
 
