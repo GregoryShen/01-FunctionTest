@@ -2899,8 +2899,6 @@ element.click()
 	    element = WebDriverWait(driver, 10).until(ec.presence_of_element_located((By.ID, )))
 	```
 
-	
-
 2. 隐式等待
 
 	 相当于设置全局的等待，在定位元素时，对所有元素设置超时时间。隐式等待是等待页面加载，而不是元素加载。（隐式等待就是针对页面的，显式等待是针对元素的）
@@ -3168,7 +3166,7 @@ el = driver.find_element(By.TAG_NAME, "p")
 assert el.text == "Hello from JavaScript!"
 ```
 
-<u>We pass in the condition</u> as a function reference that the wait will run repeatedly <u>until its return value is truthy</u>.(划线的部分是主体, 是说, 我们传入的条件是一个函数, wait将会反复执行这个函数直到这个函数的返回值是truthy, its指的是这个函数) A “truthful” return value is anything that evalutes to boolean true in the language at hand, such as a string, number, a boolean, an object(including a WebElement), or a populated(non-empty) sequence or list. That means an empty list evaluates to false. ==When the condition is truthful and the blocking wait is aborted, the return value from the condition becomes the return value of the wait.==(当传入的等待条件为真, 就不再继续等待了, 等待条件的返回值就变成了wait的返回值)
+<u>We pass in the condition</u> as a function reference that the wait will run repeatedly <u>until its return value is truthy</u>.(划线的部分是主体, 是说, 我们传入的条件是一个函数, wait将会反复执行这个函数直到这个函数的返回值是truthy, its指的是这个函数) A “truthful” return value is anything that evaluates to boolean true in the language at hand, such as a string, number, a boolean, an object(including a WebElement), or a populated(non-empty) sequence or list. That means an empty list evaluates to false. ==When the condition is truthful and the blocking wait is aborted, the return value from the condition becomes the return value of the wait.==(当传入的等待条件为真, 就不再继续等待了, 等待条件的返回值就变成了wait的返回值)
 
 With this knowledge, and because the wait utility ignores *no such element* errors by default, we can refactor our instructions to be more concise:
 
@@ -3214,9 +3212,9 @@ You can refer to the API documentation for each client binding to find an exhaus
 
 #### Implicit wait
 
-There is a second type fo wait that is distinct from explicit wait called implicit wait. By implicitly waiting, WebDriver polls the DOM for a certain duration when trying to find any element. This can be userful when certain elements on the webpage are not available immediately and need some time to load.
+There is a second type of wait that is distinct from explicit wait called implicit wait. By implicitly waiting, WebDriver polls the DOM for a certain duration when trying to find any element. This can be useful when certain elements on the webpage are not available immediately and need some time to load.
 
-Implicit waiting for elements to appear is disabled by default and will need to be manually enabled on a per-session basis. ==Mixing expllicit waits and implicit waits will cause unintended consequences, namely waits sleeping for the maximum time even if the element is available or condition is true.==
+Implicit waiting for elements to appear is disabled by default and will need to be manually enabled on a per-session basis. ==Mixing explicit waits and implicit waits will cause unintended consequences, namely waits sleeping for the maximum time even if the element is available or condition is true.==
 
 Warning: Do not mix implicit and explicit waits. Doing so can cause unpredictable wait times. For example, setting an implicit wait of 10 seconds and an explicit wait of 15 seconds could cause a timeout to occur after 20 seconds.
 
@@ -3301,7 +3299,7 @@ driver.get("http://www.google.com")
 driver.quit()
 ```
 
-### 补充: robotframework Wait Until Keyword Succeeds
+### 补充: robot-framework Wait Until Keyword Succeeds
 
 #### 官网: [Wait Until Keyword Succeeds](https://robotframework.org/robotframework/latest/libraries/BuiltIn.html)
 
@@ -3343,7 +3341,7 @@ Running the same keyword multiple times inside this keyword can create lots of o
 
 ### 7-1 类的创建与动态创建
 
-简单来介绍一下model的封装最后的效果: 现在连接数据库的时候都是直接写一些sql语句,学习完本章以后,大家以后在连接数据库的时候把底层架构封装完毕之后,咱们就正常来写一个类,直接调用里面的比如`insert`方法, `select`方法就可以完成对数据库的操作,以后不用写sql语句, 达到了这样的一个效果.
+简单来介绍一下model的封装最后的效果: 现在连接数据库的时候都是直接写一些SQL语句,学习完本章以后,大家以后在连接数据库的时候把底层架构封装完毕之后,咱们就正常来写一个类,直接调用里面的比如`insert`方法, `select`方法就可以完成对数据库的操作,以后不用写SQL语句, 达到了这样的一个效果.
 
 对象关系映射,要从Python基础知识的元类开始说起. 讲元类要先讲类的一个由来.
 
@@ -3729,7 +3727,7 @@ class TextField(Field):
 
 ```
 
-没有写IntegerField, 因为id字段也没有用到.
+没有写`IntegerField`, 因为id字段也没有用到.
 
 ### 7-5 Model 元类的开发
 
