@@ -2880,7 +2880,7 @@ element.click()
 
 #### [selenium的webdriver三种等待方式(显式等待WebDriverWait+implicitly_wait隐式等待+sleep强制等待)](https://blog.csdn.net/u013444182/article/details/86086029)
 
-隐式等待是等页面加载, 不是等元素!
+**==<u>隐式等待是等页面加载, 不是等元素!</u>==**
 
 1. 显式等待
 
@@ -2901,13 +2901,30 @@ element.click()
 
 2. 隐式等待
 
-	 相当于设置全局的等待，在定位元素时，对所有元素设置超时时间。隐式等待是等待页面加载，而不是元素加载。（隐式等待就是针对页面的，显式等待是针对元素的）
+    相当于设置全局的等待，在定位元素时，对所有元素设置超时时间。隐式等待是等待页面加载，而不是元素加载。（隐式等待就是针对页面的，显式等待是针对元素的）
 
-	隐式等待使得 WebDriver 在查找一个元素时，每隔一段特定的时间就会轮询一次DOM，如果element没有被马上发现的话
+    隐式等待使得 WebDriver 在查找一个元素时，每隔一段特定的时间就会轮询一次DOM，如果element没有被马上发现的话
+
+    默认值设置是 0
 
 3. 强制等待
 
-   
+   ```python
+   import time
+   time.sleep(10)
+   ```
+
+举个例子：
+
+你男朋友约你去电影院看电影的时候，在楼下等你：
+
+隐式等待：就是等你化好妆，三十分钟内能下楼就行，但是一定是先化好妆才能下来。
+
+显式等待：就不一样了。你男朋友隔五分钟打一次电话，问你好了没？然后说你先下来吧，到我车上化妆，然后人先下去，在车上继续化妆打扮，到电影院时候化妆完成。
+
+你说哪个省时间？
+
+当然是显式等待！你就是那个元素，化妆打扮是页面上其他元素。
 
 #### [5-Selenium WebDriver三种等待--隐式等待-显式等待和流畅等待](https://blog.csdn.net/zbj18314469395/article/details/97266051)
 
@@ -3131,7 +3148,7 @@ WebDriver can generally be said to have a blocking API. Because it is an out-of-
 
 An example could be that the user instructs the browser to navigate to a page, then gets a no such element error when trying to find an element.
 
-The WebDriver instructions might look innocent enouth:
+The WebDriver instructions might look innocent enough:
 
 ```python
 driver.navigate("file://race_condition.html")
@@ -3178,7 +3195,7 @@ el = WebDriverWait(driver).until(lambda d: d.find_element_by_tag_name("p"))
 assert el.text == "Hello from JavaScript!"
 ```
 
-In that example, we pass in an anonymour function(but we could also define it explicitly as we did earlier so it may be reused). The first and only argument that is passed to our condition is always a refernece to our driver object, WebDriver(called `d` in the example). ==In a multi-threaded environment, you should be careful to opreate on the driver reference passed in to the condition rather than the reference to the driver in the outer scope.==
+In that example, we pass in an anonymous function(but we could also define it explicitly as we did earlier so it may be reused). The first and only argument that is passed to our condition is always a refernece to our driver object, WebDriver(called `d` in the example). ==In a multi-threaded environment, you should be careful to opreate on the driver reference passed in to the condition rather than the reference to the driver in the outer scope.==
 
 Because the wait will swallow no such element errors that are raised when the element is not found, the condition will retry until the element is found. Then it will take the return value, a WebElement, and pass it back through to our script.
 
