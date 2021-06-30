@@ -30,15 +30,21 @@ EventFiringWebDriver
 
 [selenium文档:Event Firing WebDriver Support](https://selenium-python.readthedocs.io/api.html#module-selenium.webdriver.support.event_firing_webdriver)
 
-[selenium官网:evnet_firing_webdriver API](https://www.selenium.dev/selenium/docs/api/py/webdriver_support/selenium.webdriver.support.event_firing_webdriver.html)
+[selenium官网:event_firing_webdriver API](https://www.selenium.dev/selenium/docs/api/py/webdriver_support/selenium.webdriver.support.event_firing_webdriver.html)
 
 [Selenium WebDriver Event Listener(JAVA版)](https://www.toolsqa.com/selenium-webdriver/event-listener/)
 
-[Java的selenium:Class EventFiringWebDriver](https://www.selenium.dev/selenium/docs/api/java/org/openqa/selenium/support/events/EventFiringWebDriver.html)
+[Java的selenium: Class EventFiringWebDriver](https://www.selenium.dev/selenium/docs/api/java/org/openqa/selenium/support/events/EventFiringWebDriver.html)
 
 [Java的selenium事件支持](https://www.selenium.dev/selenium/docs/api/java/org/openqa/selenium/support/events/package-summary.html)
 
 [张挺的小例子:simpleWebtest](https://github.com/zhangting85/simpleWebtest)
+
+2021/6/28 新找的文章：
+
+[狠狠地聊一下UI自动化测试](https://www.jianshu.com/p/0fc9fc5f42e9)
+
+[自动化测试框架的设计思路](https://www.jianshu.com/p/242c8e069dc6)
 
 
 
