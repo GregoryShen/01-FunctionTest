@@ -1318,7 +1318,7 @@ def get_cookies_file():
   	return get_cookies_dir() + "jd.cookies"
 ```
 
-在1119自测的时候发现问题: 如果是从未获取过cookies的状态, 那么在进行cookies判断的时候,在获取cookies的时候,因为从未获取过cookies,所以cookies并未生成,所以是无法打开cooies文件的, 从而报错. imooc上已经有人提了这个问题并给了解决方法, 记录如下:
+在1119自测的时候发现问题: 如果是从未获取过cookies的状态, 那么在进行cookies判断的时候,在获取cookies的时候,因为从未获取过cookies,所以cookies并未生成,所以是无法打开cookies文件的, 从而报错. imooc上已经有人提了这个问题并给了解决方法, 记录如下:
 
 [京东是未登录状态执行时，如果jd.cookies文件不存在的话，执行是会报文件不存在的。加了判断处理，如图](https://coding.imooc.com/learn/questiondetail/199197.html)
 
@@ -1344,7 +1344,7 @@ def save_cookies_to_file():
 
 **<u>扩展: 除了这种方法, 还有哪些方法还可以判断文件是否存在?</u>**
 
-1. 使用os模块的os.path.exists
+1. 使用os模块的`os.path.exists`
 2. 使用try语句
 3. 使用pathlib模块
 
@@ -1543,7 +1543,7 @@ def to_goods_page():
 
 现在只剩下两个函数没有实现了`get_info_element_dict`, `save_goods_info`
 
-先要对页面结构进行分析, 选中`Ptable-itme`就选中了一块, `<h3>`就是左边的“主体”, 再往下, 两层`dl`,它用`<dl>`标签把一行一行的所有的信息都保存了, 再打开`<dl>`, 里面有一个`<dt>`还有一个`<dd>`, 对应的就是类似key和value, 其中还有带问号的,它占用了一个`<dd>`标签(`class`属性为`Ptable-tips`), 这不是我们要的, 要去掉.(思路是可以对比两个`<dd>`标签, 其中valve是没有class属性的, 所以就可以根据这个来做筛选, 将含有class属性的dd标签去掉)
+先要对页面结构进行分析, 选中`Ptable-itme`就选中了一块, `<h3>`就是左边的“主体”, 再往下, 两层`dl`,它用`<dl>`标签把一行一行的所有的信息都保存了, 再打开`<dl>`, 里面有一个`<dt>`还有一个`<dd>`, 对应的就是类似key和value, 其中还有带问号的,它占用了一个`<dd>`标签(`class`属性为`Ptable-tips`), 这不是我们要的, 要去掉.(思路是可以对比两个`<dd>`标签, 其中valve是没有class属性的, 所以就可以根据这个来做筛选, 将含有class属性的`dd`标签去掉)
 
 所以拿的顺序是: 首先拿`h3`标签的内容,然后拿`dt`和`dd`标签,拿`dd`的时候记得去掉问号的`dd`
 
@@ -2215,7 +2215,7 @@ document.
 js = "$('input[id=train_date]').removeAttr('readonly')"
 ```
 
-`'input[id=train_date]`会返回一个节点或标签,这个代码,在console里运行,直接就可以粘贴到这里,执行.学习xpath,cssSector就可以来调试.
+`'input[id=train_date]`会返回一个节点或标签,这个代码,在console里运行,直接就可以粘贴到这里,执行.学习xpath,CSS Selector就可以来调试.
 
 可以在任意一个`driver.find_element_by_*`点进去,可以进到一个webdriver的模块中,直接return一个find_element,综上总共都是基于find_element和find_elements.
 
@@ -3029,7 +3029,7 @@ def __new__(cls, *args, **kwargs):
 >
 > Called when the instance is about to be destroyed. This is also called a finalizer or (improperly) a destructor. If a base class has a `__del__()`, the derived class’s `__del__()` method, if any, must explicitly call it to ensure proper deletion of the base class part of the instance.
 >
-> It is possilbe (though not recommended!) for the `__del__()` method to postpone destruction of the instance by creating a new reference to it. This is called object resurrection. It is implementation-dependent whether `__del__()`is called a second time when a resurrected object is about to be destroyed; the current CPython implementation only calls it once.
+> It is possible (though not recommended!) for the `__del__()` method to postpone destruction of the instance by creating a new reference to it. This is called object resurrection. It is implementation-dependent whether `__del__()`is called a second time when a resurrected object is about to be destroyed; the current CPython implementation only calls it once.
 >
 > It is not guaranteed that `__del__()`methods are called for objects that still exist when the interpreter exits.
 >
@@ -3172,7 +3172,7 @@ To overcome the problem of race conditions between the browser and your WebDrive
 
 #### Explicit wait
 
-Explicit waits are available to Selenium clients for imperative, prodedural languages. They allow your code to halt program execution, or freeze the thread, until the condition you pass it resolves. The condition is called with a certain frequency until the timeout of the wait is elapsed. This means that for as long as the condition returns a falsy value, it will keep trying and waiting.
+Explicit waits are available to Selenium clients for imperative, procedural languages. They allow your code to halt program execution, or freeze the thread, until the condition you pass it resolves. The condition is called with a certain frequency until the timeout of the wait is elapsed. This means that for as long as the condition returns a falsy value, it will keep trying and waiting.
 
 Since explicit waits allow you to wait for a condition to occur, they make a good fit for synchronising the state between the browser and its DOM, and your WebDriver script.
 
@@ -3219,7 +3219,7 @@ WebDriverWait(driver, timeout=3).until(some_condition)
 
 #### Expected conditions
 
-Because it is quite a common occurrence to have to synchronise the DOM and your instructions, most clients also come with a set of predefined expected conditions. As might be obvious by the name, they are conditions that are predefined for frequent wait opreations.
+Because it is quite a common occurrence to have to synchronize the DOM and your instructions, most clients also come with a set of predefined expected conditions. As might be obvious by the name, they are conditions that are predefined for frequent wait operations.
 
 The conditions available in the different language bindings vary, but this is a non-exhaustive list of a few:
 
@@ -3267,11 +3267,11 @@ element = wait.until(EC.element_to_be_clickable((By.XPATH, "//div")))
 
 ### 补充: [Selenium 官网关于Page loading strategy的说明](https://www.selenium.dev/documentation/en/webdriver/page_loading_strategy/)
 
-Defines the current session’s page loading strategy. By default, when selenium WebDriver loads a page, it follows the normal pageLoadStrategy. It is always recommended to stop downloading addtional resources(like images, css, js)when the page loading takes lot of time.
+Defines the current session’s page loading strategy. By default, when selenium WebDriver loads a page, it follows the normal pageLoadStrategy. It is always recommended to stop downloading additional resources(like images, CSS, js)when the page loading takes lot of time.
 
-The document.readyState property of a document describes the loading state of the current document. By default, WebDriver will hold off on responding to a driver.get() or driver.navigate().to() call until the document ready state is complete.
+The `document.readyState` property of a document describes the loading state of the current document. By default, WebDriver will hold off on responding to a `driver.get()` or `driver.navigate().to()` call until the document ready state is complete.
 
-In SPA applications(like Angular, Recat, Ember) once the dynamic content is already loaded(i.e. the pageLoadStrategy status is COMPLETE), clicking on a link or performing some action within the page will not make a new request to the server as the content is dynamically loaded at the client side without a pul page refresh.
+In SPA applications(like Angular, React, Ember) once the dynamic content is already loaded(i.e. the pageLoadStrategy status is COMPLETE), clicking on a link or performing some action within the page will not make a new request to the server as the content is dynamically loaded at the client side without a pul page refresh.
 
 SPA applications can load many views dynamically without any server requests, so page load strategy will always show COMPLETE status until we do a new `driver.get()` and `driver.navigate().to()`
 
@@ -3340,7 +3340,7 @@ If the keyword does not succeed regardless of retries, this keyword fails. If th
 
 Examples:
 
-| Wait Until Keyword Succeeds | 2 min                       | 5 sec | My keyword | arugment   |
+| Wait Until Keyword Succeeds | 2 min                       | 5 sec | My keyword | argument   |
 | --------------------------- | --------------------------- | ----- | ---------- | ---------- |
 | ${result} =                 | Wait Until Keyword Succeeds | 3x    | 200ms      | My Keyword |
 
@@ -5062,7 +5062,7 @@ logger.info("this is a wenjian test")
 
 1. `qualname`和`propagate`是写在`logger`下面的，不是在`handler`下面，一开始记错了，后面才改对。
 2. `formatter` 下的`format`中的`name`是指自定义的`logger`的名字，`levelname`和`message`必须写成`levelname`和`message`，不能写成其他的
-3. :small_red_triangle: 在前面写formatter名字的时候写的是myFormatter，但是后面写的时候就误写成了MyFormatter，导致后面运行的时候报错。
+3. :small_red_triangle: 在前面写formatter名字的时候写的是`myFormatter`，但是后面写的时候就误写成了`MyFormatter`，导致后面运行的时候报错。
 4. 在调用logger的时候，应该使用`logger.info`来生成日志，而不是`logging`,这个地方前面思路不正确，因为已经生成了logger嘛，所以自然要用logger来做测试，如果用logging那就是root这个自动生成的logger了。而测试也无非是格式上的一个验证，还有输出到日志文件，看日志文件是否成成且格式是否正确。
 
 ### 8-6 从源代码层面分析日志配置文件的写法
@@ -5305,7 +5305,7 @@ def set_my_mysql_config(env):
 4. `my_log_config_1109.py`反而倒是写的没什么大问题，首先是名字，原作是`loggging_setting.py`和`logging.conf`，我写的是`my_log_config.py`和`log.conf`，然后函数命名的时候原作是`get_logger`，我写的是`set_log_config`。文件的名字还好了，但是函数的名字，应该说不记得应该要从日志的配置中获取什么了，其实是要从这个日志配置中获取到一个logger，而且这个logger是我们在配置文件中写的，指定了名字的。而且函数的参数虽然记得要传一个logger的name，但应该把默认的参数名也写上`name=“myAutoTest”`
 5. `my_log_config_1109.py`中文件的获取，因为是当前目录下，所以我那么写没有问题，但是不够标准，应该用`os.path.join(os.path.dirname(os.path.abspath(__file__)), "logging.conf")`来获取配置文件`logging.conf`
 6. `log.conf`中：
-	1. `handlers`的名字写的不对，handlers应该写自己定义的名字，所以要写成第一个字母小写的，然后StreamHandler应该是consoleHandler
+	1. `handlers`的名字写的不对，handlers应该写自己定义的名字，所以要写成第一个字母小写的，然后`StreamHandler`应该是`consoleHandler`
 	2. `[logger_root]`中应该是`handlers`，不是`handler`，而且应该是`fileHandler`,写到文件中，不是写到`StreamHandler`中
 	3. `[logger_myAutoTest]`中忘写`qualname`别名，`propagate`应该写成0，不是1
 	4. `[handler_StreamHandler]`中不是`formatters`，而是`formatter`，`encoding`不需要加引号
@@ -6131,11 +6131,11 @@ class BasePage:
 
 ##### 存在的问题
 
-1. 在`__init__`方法中只传了driver，没有传url
+1. 在`__init__`方法中只传了driver，没有传URL
 
-	> 为什么要在`__init__`中传driver和url呢？
+	> 为什么要在`__init__`中传driver和URL呢？
 	>
-	> ​		想了一下，答案应该是这样：drier当然是对应各种不同的浏览器驱动了，而url也是为了扩展适应性而传的，所以没有写死，而是根据传入的url来操作。（所以才没有从配置文件中读取）。而什么时候读取，是在实际测试页面的时候从配置文件中读取的。所以要区分出代码的功能和实际的业务。而至于为什么最长页面等待时间可以直接在代码中引用是因为这个本来就是一个selenium的常量，和业务无关。==所以要区分出业务层和页面层==
+	> ​		想了一下，答案应该是这样：drier当然是对应各种不同的浏览器驱动了，而URL也是为了扩展适应性而传的，所以没有写死，而是根据传入的URL来操作。（所以才没有从配置文件中读取）。而什么时候读取，是在实际测试页面的时候从配置文件中读取的。所以要区分出代码的功能和实际的业务。而至于为什么最长页面等待时间可以直接在代码中引用是因为这个本来就是一个selenium的常量，和业务无关。==所以要区分出业务层和页面层==
 
 2. `open`方法中url是从self中获取，不是从配置文件中读取
 
