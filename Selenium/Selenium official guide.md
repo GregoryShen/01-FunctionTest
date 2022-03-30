@@ -409,19 +409,515 @@ Note: The Opera driver does not support w3c syntax, so we recommend using chrome
 
 3. ###### Hard Coded Location
 
+   Similar to Option 2 above, you need to manually downloaded the driver. Specifying the location in the code itself has the advantage of not needing to figure out Environment Variables on your system, but has the drawback of making the code much less flexible.
    
+   **<u>Python</u>**
+   
+   ```python
+   service = Service(executable_path="/path/to/chromedriver")
+   driver = webdriver.Chrome(service=service)
+   ```
+   
+   **<u>CSharp</u>**
+   
+   ```c#
+   var driver = new ChromeDriver(@"C:\WebDriver\bin");
+   ```
 
 ##### Advanced Configuration
 
-
+More information on how you can change the driver behavior can be found on the [Configuring driver parameters](https://www.selenium.dev/documentation/webdriver/drivers/) page
 
 #### Open Browser
 
+Code examples for starting and stopping a session with each browser.
+
+Once you have a Selenium library installed, and your desired browser driver, you can start and stop a session with a browser.
+
+Typically, browsers are started with specific options that describe which capabilities the browser must support, and how the browser should behave during the session. Some capabilities are shared by all browsers, and some will be specific to the browser being used. This page will show examples of starting a browser with the default capabilities.
+
+After learning how to start a session, check out the next session on how to write your first Selenium script.
+
+##### Chrome
+
+By default, Selenium 4 is compatible with Chrome v75 and greater. Note that the version of the Chrome browser and the version of chromedriver must match the major version.
+
+In addition to the shared capabilities, there are specific Chrome capabilities that can be used.
+
+**<u>Python</u>**
+
+```python
+options = ChromeOptions()
+driver = webdriver.Chrome(options=options)
+
+driver.quit()
+```
+
+**<u>CSharp</u>**
+
+```c#
+var options = new ChromeOptions();
+var driver = new ChromeDriver(options);
+
+driver.Quit();
+```
+
+##### Edge
+
+Microsoft Edge is implemented with Chromium, with the earliest supported version of v79. Similar to Chrome, the major version number of edgedriver must match the major version of the Edge browser.
+
+**<u>Python</u>**
+
+```python
+options = EdgeOptions()
+driver = webdriver.Edge(options=options)
+
+driver.quit()
+```
+
+**<u>CSharp</u>**
+
+```c#
+var options = new EdgeOptions();
+var driver = new EdgeDriver(options);
+
+driver.Quit();
+```
+
+##### Firefox
+
+Selenium 4 requires Firefox 78 or greater. It is recommended to always use the latest version of geckodriver.
+
+**<u>Python</u>**
+
+```python
+options = FirefoxOptions()
+driver = webdriver.Firefox(options=options)
+
+driver.quit()
+```
+
+**<u>CSharp</u>**
+
+```c#
+var options = new FirefoxOptions();
+var driver = new FirefoxDriver(options);
+
+driver.Quit();
+```
+
+##### Internet Explorer
+
+no need to learn now
+
+##### Opera
+
+no need to learn now
+
+##### Safari
+
+###### Desktop
+
+Unlike Chromium and Firefox drivers, the safaridriver is installed with the Operating System. To enable automation on Safari, run the following command from the terminal:
+
+```bash
+safaridriver --enable
+```
+
+**<u>Python</u>**
+
+```python
+driver = webdriver.Safari();
+
+driver.quit()
+```
+
+**<u>CSharp</u>**
+
+```c#
+var options = new SafariOptions();
+var driver = new SafariDriver(options);
+
+driver.Quit();
+```
+
+###### Mobile
+
+Those looking to automate Safari on iOS should look to the [Appium project](https://appium.io/).
+
 #### First Script
 
-#### Upgrade to Selenium 4
+Step-by-step instructions for constructing a Selenium script
 
+Once you have Selenium installed and Drivers installed, you're ready to write Selenium code.
 
+##### Eight Basic Components
+
+Everything Selenium does is send the browser commands to do something or send requests for information. Most of what you'll do with Selenium is a combination of these basic commands:
+
+1. ###### Start the session
+
+   For more details on starting a session read our documentation on [opening and closing a browser](https://www.selenium.dev/documentation/webdriver/getting_started/open_browser/)
+
+   **<u>Python</u>**
+
+   ```python
+   driver = webdriver.Chrome()
+   ```
+
+   **<u>CSharp</u>**
+
+   ```c#
+   var driver = new ChromeDriver();
+   ```
+
+2. ###### Take action on browser
+
+   In this example we are [navigating](https://www.selenium.dev/documentation/webdriver/browser/navigation/) to a web page.
+
+   **<u>Python</u>**
+
+   ```python
+   driver.get("https://www.google.com")
+   ```
+
+   **<u>CSharp</u>**
+
+   ```c#
+   driver.Navigate().GoToUrl("https://www.google.com")
+   ```
+
+3. ###### Request browser information
+
+   There are a bunch of types of [information about the browser](https://www.selenium.dev/documentation/webdriver/browser/) you can request, including window handles, browser size/position, cookies, alerts, etc.
+
+   **<u>Python</u>**
+
+   ```python
+   driver.title # => "Google"
+   ```
+
+   **<u>CSharp</u>**
+
+   ```c#
+   driver.Title; // => "Google"
+   ```
+
+4. ###### Establish Waiting Strategy
+
+   Synchronizing the code with the current state of the browser is one of the biggest challenges with Selenium, and doing it well is an advanced topic.
+
+   Essentially you want to make sure that the element is on the page before you attempt to locate it and the element is in an interactable state before you attempt to interact with it.
+
+   An implicit wait is rarely the best solution, but it's the easiest to demonstrate here, so we'll use it as a placeholder.
+
+   Read more about [Waiting strategies](https://www.selenium.dev/documentation/webdriver/waits/)
+
+   **<u>Python</u>**
+
+   ```python
+   driver.implicitly_wait(0.5)
+   ```
+
+   **<u>CSharp</u>**
+
+   ```c#
+   driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromMilliseconds(500);
+   ```
+
+5. ###### Find an element
+
+   The majority of commands in most Selenium sessions are element related, and you can't interact with one without first [finding an element](https://www.selenium.dev/documentation/webdriver/elements/)
+
+   **<u>Python</u>**
+
+   ```python
+   search_box = driver.find_element(By.NAME, "q")
+   search_button = driver.find_element(By.NAME, "btnK")
+   ```
+
+   **<u>CSharp</u>**
+
+   ```c#
+   var searchBox = driver.FindElement(By.Name("q"));
+   var searchButton = driver.FindElement(By.Name("btnK"))
+   ```
+
+6. ###### Take action on element
+
+   There are only a handful of [actions to take on an element](https://www.selenium.dev/documentation/webdriver/elements/interactions/), but you will use them frequently.
+
+   **<u>Python</u>**
+
+   ```python
+   search_box.send_keys("Selenium")
+   search_button.click()
+   ```
+
+   **<u>CSharp</u>**
+
+   ```c#
+   searchBox.SendKeys("Selenium");
+   searchButton.Click();
+   ```
+
+7. ###### Request element information
+
+   Elements store a lot of [information that can be requested](https://www.selenium.dev/documentation/webdriver/elements/information/). Notice that we need to relocate the search box because the DOM has changed since we first located it.
+
+   **<u>Python</u>**
+
+   ```python
+   driver.find_element(By.NAME, "q").get_attribute("value") # => "Selenium"
+   ```
+
+   **<u>CSharp</u>**
+
+   ```c#
+   driver.FindElement(By.Name("q")).GetAttribute("value"); // => "Selenium"
+   ```
+
+8. ###### End the session
+
+   This ends the driver process, which by default closes the browser as well. No more commands can be sent to this driver instance.
+
+   **<u>Python</u>**
+   
+   ```python
+   driver.quit()
+   ```
+
+   **<u>CSharp</u>**
+   
+   ```c#
+   driver.Quit();
+   ```
+##### Putting everything together
+
+Let's combine these 8 things into a complete script.
+
+Follow the link at the bottom of the tab to see an example of the code as it would be executed with a test runner instead of a standalone file.
+
+**<u>Python</u>**
+
+   ```python
+   from selenium import webdriver
+   from selenium.webdriver.common.by import By
+   
+   driver = webdriver.Chrome()
+   driver.get("https://www.google.com")
+   driver.title	# => "Google"
+   driver.implicitly_wait(0.5)
+   search_box = driver.find_element(By.NAME, "q")
+   search_button = driver.find_element(By.NAME, "btnK")
+   
+   search_box.send_keys("Selenium")
+   search_box.click()
+   
+   driver.find_element(By.NAME, "q").get_attribute("value") # => "Selenium"
+   
+   driver.quit()
+   ```
+
+ **<u>CSharp</u>**
+
+   ```c#
+   using OpenQA.Selenium;
+   using OpenQA.Selenium.Chrome;
+   
+   class HelloSelenium{
+       static void Main() {
+           var driver = new ChromeDriver();
+           driver.Navigate().GoToUrl("https://www.google.com");
+           driver.Title;
+           driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromMilliseconds(500);
+           
+           var searchBox = driver.FindElement(By.Name("q"));
+           var searchButton = driver.FindElement(By.Name("btnK"))
+               
+           searchBox.SendKeys("Selenium");
+           searchButton.Click();
+           
+           driver.FindElement(By.Name("q")).GetAttribute("value");  // => "Selenium"
+           driver.Quit();
+           
+       }
+   }
+   ```
+
+#### [Upgrade to Selenium 4](https://www.selenium.dev/documentation/webdriver/getting_started/upgrade_to_selenium_4/)
+
+Upgrading to Selenium 4 should be a painless process if you are using one of the officially supported languages(Ruby, JavaScript, C#, Python and Java). There might be some cases where a few issues can happen, and this guide will help you to sort them out. We will go through the steps to upgrade your project dependencies and understand the major deprecations and changes the version upgrade brings.
+
+There are the steps we will follow to upgrade to Selenium 4:
+
+* Preparing our test code
+* Upgrading dependencies
+* Potential errors and deprecation messages
+
+Note: while Selenium 3.x versions were being developed, support for the W3C WebDriver standard was implemented. Both this new protocol and the legacy JSON Wire Protocol were supported. Around version 3.11, Selenium code became compliant with the level W3C 1 specification. The W3C compliant code in the latest version of Selenium 3 will work as expected in Selenium 4.
+
+##### Preparing our test code
+
+Selenium 4 removes for the legacy protocol and uses the W3C WebDriver standard by default under the hood. For most things, this implementation will not affect end users. The major exceptions are `Capabilities` and the `Actions` class.
+
+###### Capabilities
+
+If the test capabilities are not structured to be W3C compliant, may cause a session to not be started. Here is the list of W3C WebDriver standard capabilities:
+
+* `browserName`
+* `browserVersion`(replaces `version`)
+* `platformName`(replaces `platform`)
+* `acceptInsecureCerts`
+* `pageLoadStrategy`
+* `proxy`
+* `timeouts`
+* `unhandledPromptBehavior`
+
+An up-to-date list of standard capabilities can be found at [W3C WebDriver](https://www.w3.org/TR/webdriver1/#capabilities).
+
+Any capability that is not contained in the list above, needs to include a vendor prefix. This applies to browser specific capabilities as well as cloud vendor specific capabilities. For example, if your cloud vendor uses `build` and `name` capabilities for your tests, you need to wrap them in a `cloud:options` block(check with your cloud vendor for the appropriate prefix).
+
+###### Before
+
+**<u>Python</u>**
+
+```python
+caps = {}
+caps['browserName'] = 'firefox'
+caps['platform'] = 'Windows 10'
+caps['version'] = '92'
+caps['build'] = my_test_build
+caps['name'] = my_test_name
+driver = webdriver.Remote(cloud_url, desired_capabilities=caps)
+```
+
+**<u>CSharp</u>**
+
+```c#
+DesciredCapabilities caps = new DesiredCapabiliites();
+caps.SetCapability("browserName", "firefox");
+caps.SetCapability("platform", "Windows 10");
+caps.SetCapability("version", "92");
+caps.SetCapability("build", myTestBuild);
+caps.SetCapability("name", myTestName);
+var driver = new RemoteWebDriver(new Uri(CloudURL), caps)
+```
+
+###### after
+
+**<u>Python</u>**
+
+```python
+from selenium.webdriver.firefox.options import Options as FirefoxOptions
+options = FirefoxOptions()
+options.browser_version = '92'
+options.platform_name = 'Windows 10'
+cloud_options = {}
+cloud_options['build'] = my_test_build
+cloud_options['name'] = my_test_name
+options.set_capability('cloud:options', cloud_options)
+driver = webdriver.Remote(cloud_url, options=options)
+```
+
+**<u>CSharp</u>**
+
+```c#
+var browserOptions = new FirefoxOptions();
+browserOptions.PlatformName = "Windows 10";
+browserOptions.BrowserVersion = "92";
+var cloudOptions = new Dictionary<string, object>();
+cloudOptions.Add("build", myTestBuild);
+cloudOptions.Add("name", myTestName);
+browserOptions.AddAdditionalOption("cloud:options", cloudOptions);
+var driver = new RemoteWebDriver(new Uri(Cloud_URL), browserOptions);
+```
+
+###### Find element(s) utility methods in Java
+
+##### Upgrading dependencies
+
+Check the subsections below to install Selenium 4 and have your project dependencies upgraded.
+
+###### C#
+
+The place to get updates for Selenium 4 in C# is [NuGet](https://www.nuget.org/). Under the [`Selenium.WebDriver`](https://www.nuget.org/packages/Selenium.WebDriver/4.0.0) package you can get the instructions to update to the latest version. Inside of Visual Studio, through the NuGet Package Manager you can execute:
+
+```shell
+PM> Install-Package Selenium.WebDriver -Version 4.0.0
+```
+
+###### Python
+
+The most important change to use Python is the minimum required version. Selenium 4 will require a minimum Python 3.7 or higher. More details can be found at the [Python Package Index](https://pypi.org/project/selenium/4.0.0/). To upgrade from the command line, you can execute:
+
+```shell
+pip install selenium==4.0.0
+```
+
+##### Potential errors and deprecation messages
+
+Here is a set of code examples that will help to overcome the deprecation messages you might encounter after upgrading to Selenium 4.
+
+###### C#
+
+**`AddAdditionalCapability` is deprecated**
+
+Instead of it, `AddAdditionalOption` is recommended. Here is an example showing this:
+
+**Before**
+
+```c#
+var browserOptions = new ChromeOptions();
+browserOptions.PlatformName = 'Windows 10';
+browserOptions.BrowserVersion = 'latest';
+var cloudOptions = new Dictionary<string, object>();
+browserOptions.AddAdditionalOptionCapability("cloud:options", cloudOptions, true);
+```
+
+**After**
+
+```c#
+var browserOptions = new ChromeOptions();
+browserOptions.PlatformName = 'Windows 10';
+browserOptions.BrowserVersion = 'latest';
+var cloudOptions = new Dictionary<string, object>();
+browserOptions.AddAdditionalOptions("cloud:options", cloudOptions);
+```
+
+###### Python
+
+<u>executable_path has been deprecated, please pass in a Service object</u>
+
+In Selenium 4, you'll need to set the driver's `executable_path` from a Service object to prevent deprecation warmings.(Or don't set the path and instead make sure that the driver you need is on the System PATH).
+
+**Before**
+
+```python
+from selenium import webdriver
+options = webdriver.ChromeOptions()
+options.add_experimental_option("excludeSwitches", ["enable-automation"])
+options.add_experimental_option("useAutomationExtension", False)
+driver = webdriver.Chrome(executable_path=CHROMEDRIVER_PATH, options=options)
+```
+
+**After**
+
+```python
+from selenium import webdriver
+from selenium.webdriver.chrome.service import Service as ChromeService
+options = webdriver.ChromeOptions()
+options.add_experimental_option("excludeSwitches", ["enable_automation"])
+options.add_experimental_options("useAutomationExtension", False)
+service = ChromeService(executable_path=CHROMEDRIVER_PATH)
+driver = webdriver.Chrome(service=service, options=options)
+```
+
+##### Summary
+
+We wen through the major changes to be taken into consideration when upgrading to Selenium 4. Covering the different aspects to cover when test code is prepared for the upgrade, including suggestions on how to prevent potential issues that can show up when using the new version of Selenium. To finalize, we also covered a set of possible issues that you can be bump into after upgrading, and we shared potential fixes for those issues.
+
+*This was originally posted at https://saucelabs.com/resources/articles/how-to-upgrade-to-selenium-4*
 
 ### [Capabilities](https://www.selenium.dev/documentation/webdriver/capabilities/)
 
