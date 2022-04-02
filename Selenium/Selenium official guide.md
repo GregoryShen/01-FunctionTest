@@ -61,7 +61,7 @@ Documentation related to the legacy components of Selenium. Meant to be kept pur
 
 **<u>About this documentation</u>**
 
-## [Overview](https://www.selenium.dev/documentation/overview/)
+# [Overview](https://www.selenium.dev/documentation/overview/)
 
 Is Selenium for you? See an overview of the different project components.
 
@@ -81,18 +81,18 @@ Selenium Grid allows you to run test cases in different machines across differen
 
 After the development of the WebDriver tests, you may face the need of running your tests on multiple browser and operating system combinations. This is where Grid comes into the picture.
 
-### Components
+## [Components](https://www.selenium.dev/documentation/overview/components/)
 
 Building a test suite using WebDriver will require you to understand and effectively use a number of different components. As with everything in software, different people use different terms for the same idea. Below is a breakdown of how terms are used in this description.
 
-#### Terminology
+### Terminology
 
 * **API**: Application Programming Interface. This is the set of "commands" you use to manipulate WebDriver.
 * **Library**: A code module which contains the APIs and the code necessary to implement them. Libraries are specific to each language binding, eg .jar files for Java, .dll files for .NET, etc.
 * **Driver**: Responsible for controlling the actual browser. Most drivers are created by the browser vendors themselves. Drivers are generally executable modules that run on the system with the browser itself, not on the system executing the test suite.(Although those may be the same system.) NOTE: *Some people refer to the drivers as proxies*.
 * **Framework**: An additional library used as a support for WebDriver suites. These frameworks may be test frameworks such as JUnit or NUnit. They may also be frameworks supporting natural language features such as Cucumber or Robotium. Frameworks may also be written and used for things such as manipulating or configuring the system under test, data creation, test oracles, etc.
 
-#### The Parts and Pieces
+### The Parts and Pieces
 
 At its minimum, WebDriver talks to a browser through a driver. Communication is two way: WebDriver passes commands to the browser through the driver, and receives information back via the same route.
 
@@ -108,7 +108,7 @@ Remote communication can also take place using Selenium Server or Selenium Grid,
 
 ![](https://www.selenium.dev/images/documentation/webdriver/remote_comms_server.png)
 
-#### Where Frameworks fit in
+### Where Frameworks fit in
 
 WebDriver has one job and one job only: communicate with the browser via any of the methods above. WebDriver does not know a thing about testing: it does not know how to compare things, assert pass or fail, and it certainly does not know a thing about reporting or Given/When/Then grammer.
 
@@ -120,13 +120,13 @@ The test framework is responsible for running and executing your WebDriver and r
 
 Natural language framework/tools such as Cucumber may exist as part of that Test Framework box in the figure above, or they may wrap the Test Framework entirely in their own implementation.
 
-### [Details](https://www.selenium.dev/documentation/overview/details/)
+## [Details](https://www.selenium.dev/documentation/overview/details/)
 
 **A deeper look at Selenium**
 
 Selenium is an umbrella project for a range of tools and libraries that enable and support the automation of web browsers.
 
-#### Selenium controls web browsers
+### Selenium controls web browsers
 
 Selenium is many things but at its core, it is a toolset for web browser automation that uses the best techniques available to remotely control browser instances and emulate a user's interaction with the browser.
 
@@ -134,11 +134,11 @@ It allows users to simulate common activities performed by end-users; entering t
 
 Although used primarily for front-end testing of websites, Selenium is at its core a browser user agent library. The interfaces are ubiquitous to their application, which encourages composition with other libraries to suit your purpose.
 
-#### One interface to rule them all
+### One interface to rule them all
 
 One of the project's guiding principles is to support a common interface for all(major) browser technologies. Web browsers are incredibly complex, highly engineered applications, performing their operations in completely different ways but which frequently look the same while doing so. Even though the text is rendered in the same fonts, the images are displayed in the same place and the links take you to the same destination. What is happening underneath is as different as night and day. Selenium "abstracts" these differences, hiding their details and intricacies from the person writing the code. This allows you to write several lines of code to perform a complicated workflow, but these same lines will execute on Firefox, Internet Explorer, Chrome, and all other supported browsers.
 
-#### Tools and support
+### Tools and support
 
 Selenium's minimalist design approach gives it the versatility to be included as a component in bigger applications. The surrounding infrastructure provides under the Selenium umbrella gives you the tools to put together your grid of browsers so tests can be run on different browsers and multiple operating systems across a range of machines.
 
@@ -146,7 +146,7 @@ Imagine a bank of computers in your server room or data center all firing up bro
 
 It is an aim to help make this a reality for you, by providing users with tools and documentation to not only control browsers but to make it easy to scale and deploy such grids.
 
-#### Who uses Selenium
+### Who uses Selenium
 
 Many of the most important companies in the world have adopted Selenium for their browser-based testing, often replacing years-long efforts involving other proprietary tools. As it has grown in popularity, so have its requirements and challenges multiplied.
 
@@ -154,7 +154,7 @@ As the web becomes more complicated and new technologies are added to websites, 
 
 Another mission of the project is to encourage more volunteers to partake in this effort, and build a strong community so that the project can continue to keep up with emerging technologies and remain a dominant platform for functional test automation.
 
-## [WebDriver](https://www.selenium.dev/documentation/webdriver/)
+# [WebDriver](https://www.selenium.dev/documentation/webdriver/)
 
 WebDriver drives a browser natively, learn more about it.
 
@@ -196,7 +196,7 @@ A low-level interface for providing virtualized device input to the web browser.
 
 Set of packages and functionalities to simplify automation with Selenium.
 
-### [Get Started](https://www.selenium.dev/documentation/webdriver/getting_started/)
+## [Get Started](https://www.selenium.dev/documentation/webdriver/getting_started/)
 
 If you are new to Selenium, we have a few resources that can help you get up to speed right away.
 
@@ -919,65 +919,456 @@ We wen through the major changes to be taken into consideration when upgrading t
 
 *This was originally posted at https://saucelabs.com/resources/articles/how-to-upgrade-to-selenium-4*
 
-### [Capabilities](https://www.selenium.dev/documentation/webdriver/capabilities/)
+## [Capabilities](https://www.selenium.dev/documentation/webdriver/capabilities/)
 
-Shared
+**<u>Shared capabilities</u>**
 
-Chromium
+These capabilities are shared by all browsers.
 
-Firefox
+**<u>Capabilities specific to Chromium browsers</u>**
 
-Internet Explorer
+These capabilities are specific to Chromium based browsers.
 
-Safari
+**<u>Capabilities specific to Firefox browser</u>**
+
+These capabilities are specific to Firefox.
+
+<u>**Capabilities specific to Internet Explorer browser**</u>
+
+These capabilities are specific to Internet Explorer.
+
+**<u>Capabilities specific to Safari browser</u>**
+
+These capabilities are specific to Safari.
+
+### [Shared](https://www.selenium.dev/documentation/webdriver/capabilities/shared/)
+
+<u>These capabilities are shared by all browsers.</u>
+
+In order to create a new session by Selenium WebDriver, the local end should provide the basic capabilities to the remote end. The remote end uses the same set of capabilities to create a session and describes the current session features.
+
+WebDriver provides capabilities that each remote end will/should support the implementation. The following capabilities are supported by WebDriver:
+
+#### browserName
+
+This capability is used to set the `browserName` for a given session. If the specified browser is not installed at the remote end, the session creation will fail.
+
+#### browserVersion
+
+This capability is optional, this is used to set the available browser version at remote end. For example, if ask for Chrome version 75 on a system that only has 80 installed, the session creation will fail.
+
+#### pageLoadStrategy
+
+When navigating to a new page via URL, by default Selenium will wait until the Document's Ready State is "complete". The `document.readyState` property of a document describes the loading state of the current document. By default, WebDriver will hold off on completing a navigation method(e.g. `driver.navigate().get()`) until the document ready state is `complete`. This does not necessarily mean that the page has finished loading, especially for sites like Single Page Applications that use a lot of JavaScript to dynamically load content after the Ready State returns complete. Note also that this behavior does not apply to navigation that is a result of clicking an element or submitting a form.
+
+If a page takes a long time to load as a result of downloading assets(e.g images, css, js) that aren't important to the automation, you can change from the default parameter of `normal` to `eager` or `none` to speed up the session. This value applies to the entire session, so make sure that your waiting strategy is sufficient to minimize flakiness.
+
+The page load strategy queries the [`document.readyState`](https://developer.mozilla.org/en-US/docs/Web/API/Document/readyState) as described in the table below:
+
+| Strategy | Ready State |                            Notes                             |
+| :------: | :---------: | :----------------------------------------------------------: |
+|  normal  |  complete   |     Used by default, waits for all resources to download     |
+|  eager   | interactive | DOM access is ready, but other resources like images may still be loading |
+|   none   |     any     |               Does not block WebDriver at all                |
+
+##### normal
+
+This will make Selenium WebDriver to wait for the entire page is loaded. When set to normal, Selenium WebDriver waits until the [load](https://developer.mozilla.org/en-US/docs/Web/API/Window/load_event) event is returned.
+
+By default normal is set to browser if none is provided.
+
+**<u>Python</u>**
+
+```python
+from selenium import WebDriver
+from selenium.webdriver.chrome.options import Options
+options = Options()
+options.page_load_strategy = 'normal'
+driver = webdriver.Chrome(options=options)
+driver.get("http://www.google.com")
+driver.quit()
+```
+
+**<u>CSharp</u>**
+
+```c#
+using OpenQA.Selenium;
+using OpenQA.Selenium.Chrome;
+
+namespace pageLoadStrategy{
+    class pageLoadStrategy{
+        public static void Main(string[] args){
+            var chromeOptions = new ChromeOptions();
+            chromeOptions.PageLoadStrategy = PageLoadStrategy.Normal;
+            IWebDriver driver = new ChromeDriver(chromeOptions);
+            try{
+                driver.Navigate().GoToUrl("https://example.com");
+            } finally{
+                driver.Quit();
+            }
+        }
+    }
+}
+```
+
+##### eager
+
+This will make Selenium WebDriver to wait until the initial HTML document has been completely loaded and parsed, and discards loading of stylesheets, images and subsframes.
+
+When set to eager, Selenium WebDriver waits until [DOMContentLoaded](https://developer.mozilla.org/en-US/docs/Web/API/Document/DOMContentLoaded_event) event fire is returned.
+
+**<u>Python</u>**
+
+```python
+from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
+options = Options()
+options.page_load_strategy = 'eager'
+driver = webdriver.Chrome(options=options)
+driver.get("https://www.google.com")
+driver.quit()
+```
+
+**<u>CSharp</u>**
+
+```c#
+using OpenQA.Selenium;
+using OpenQA.Selenium.Chrome;
+
+namespace pageLoadStrategy{
+    class pageLoadStrategy{
+        public static void Main(string[] args){
+            var chromeOptions = new ChromeOptions();
+            chromeOptions.PageLoadStrategy = PageLoadStrategy.Eager;
+            IWebDriver driver = new ChromeDriver(chromeOptions);
+            try{
+                driver.Navigate().GoToUrl("https://example.com");
+            } finally{
+                driver.Quit();
+            }
+        }
+    }
+}
+```
+
+##### none
+
+When set to none Selenium WebDriver only waits until the initial page is downloaded.
+
+**<u>Python</u>**
+
+```python
+from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
+options = Options()
+options.page_load_strategy = 'none'
+driver = webdriver.Chrome(options=options)
+driver.get("https://www.google.com")
+driver.quit()
+```
+
+**<u>CSharp</u>**
+
+```c#
+using OpenQA.Selenium;
+using OpenQA.Selenium.Chrome;
+
+namespace pageLoadStrategy{
+    class pageLoadStrategy{
+        public static void Main(string[] args){
+            var chromeOptions = new ChromeOptions();
+            chromeOptions.PageLoadStrategy = PageLoadStrategy.None;
+            IWebDriver driver = new ChromeDriver(chromOptions);
+            try{
+                driver.Navigate().GoToUrl("https://example.com");
+            } finally{
+                driver.Quit();
+            }
+        }
+    }
+}
+```
+
+#### platformName
+
+This identifies the operating system at the remote-end, fetching the `platformName` returns the OS name.
+
+In cloud-based providers, setting `platformName` sets the OS at the remote-end.
+
+#### acceptInsecureCerts
+
+This capability checks whether an expired (or) invalid <u>TLS Certificate</u> is used while navigating during a session.
+
+If the capability is set to `false`, an [insecure certificate error](https://developer.mozilla.org/en-US/docs/Web/WebDriver/Errors/InsecureCertificate) will be returned as navigation encounters any domain certificate problems. If set to `true`, invalid certificate will be trusted by the browser.
+
+All self-signed certificates will be trusted by this capability by default. Once set, `acceptInsecureCerts` capability will have an effect for the entire session.
+
+#### timeouts
+
+A WebDriver <u>session</u> is imposed with a certain <u>session timeout</u> interval, during which the user can control the behavior of executing scripts or retrieving information from the browser.
+
+Each session timeout is configured with combination of different <u>timeouts</u> as described below:
+
+##### Script Timeout
+
+Specifies when to interrupt an executing script in a current browsing context. The default timeout <u>30,000</u> is imposed when a new session is created by WebDriver.
+
+##### Page Load Timeout
+
+Specified the time interval in which web page needs to be loaded in a current browsing context. The default timeout <u>300,000</u> is imposed when a new session is created by WebDriver. If page load limits a given/default time frame, the script will be stopped by `TimeoutException`.
+
+##### Implicit Wait Timeout
+
+This specifies the time to wait for the implicit element location strategy when locating elements. The default timeout <u>0</u> is imposed when a new session is created by WebDriver.
+
+#### unhandledPromptBehavior
+
+Specifies the state of current session's `user prompt handler`. Defaults to <u>dismiss and notify state</u>
+
+##### User Prompt Handler
+
+This defines what action must take when a user prompt encounters at the remote-end. This is defined by `unhandledPromptBehavior` capability and has the following states:
+
+* dismiss
+* accept
+* dismiss and notify
+* accept and notify
+* ignore
+
+#### setWindowRect
+
+This command alters the size and position of the current browsing context window. This command acts as setter to `getWindowRect` command which accepts width, height, x, y as optional arguments.
+
+During automation, the current browsing context will be associated with window states, which describe the visibility of the browser window. The window states are
+
+* maximized
+* minimized
+* normal
+* fullscreen
+
+Setting *Width* or *Height* does not guaranteed that the resulting window size will exactly match that which was requested. This is because some drivers may not be able to resize in single-pixel increments. Due to this, fetching the window state/details by `getWindowRect` may not match the values set in the browser.
+
+#### strictFileInteractability
+
+This new capability indicates if strict interactability checks should be applied to <u>input type=file</u> elements. As strict interactability checks are off by default, there is a change in behavior when using <u>Element Send Keys</u> with hidden file upload controls.
+
+#### proxy
+
+A proxy server acts as an intermediary for requests between a client and a server. In simple, the traffic flows through the proxy server on its way to the address you requested and back.
+
+A proxy server for automation scripts with Selenium could be helpful for:
+
+* Capture network traffic
+* Mock backend calls made by the website
+* Access the required website under complex network topologies or strict corporate restrictions/policies.
+
+If you are in a corporate environment, and a browser fails to connect to a URL, this is most likely because the environment needs a proxy to be accessed.
+
+Selenium WebDriver provides a way to proxy settings:
+
+**<u>Python</u>**
+
+```python
+from selenium import webdriver
+
+PROXY = "<HOST:PORT>"
+webdriver.DesiredCapabilites.FIREFOX['proxy'] = {
+    "httpProxy": PROXY,
+    "ftpProxy": PROXY,
+    "sslProxy": PROXY,
+    "proxyType": "MANUAL"
+}
+
+with webdriver.Firefox() as driver:
+    driver.get("https://selenium.dev")
+```
+
+**<u>CSharp</u>**
+
+```c#
+using OpenQA.Selenium;
+using OpenQA.Selenium.Chrome;
+
+public class ProxyTest{
+    publich static void Main(){
+        ChromeOptions options = new ChromeOptions()；
+        Proxy proxy = new Proxy();
+        proxy.Kind = ProxyKind.Manual;
+        proxy.IsAutoDetect = false;
+        proxy.SslProxy = "<HOST:PORT>";
+        options.Proxy = proxy;
+        options.AddArgument("ignore-certificate-errors");
+        IWebDriver driver = new ChromeDriver(options);
+        driver.Navigate().GoToUrl("https://www.selenium.dev/");
+    }
+}
+```
+
+
+### [Chromium](https://www.selenium.dev/documentation/webdriver/capabilities/chromium/)
+
+These Capabilities are specific to Chromium based browsers.
+
+These Capabilities apply to:
+
+* Chrome
+* Chromium
+* Edge
+
+### [Firefox](https://www.selenium.dev/documentation/webdriver/capabilities/firefox/)
+
+These capabilities are specific to Firefox.
+
+#### Define Capabilities using `FirefoxOptions`
+
+`FirefoxOptions` is the new way to define capabilities for the Firefox browser and should generally be used in preference to DesiredCapabilities.
+
+**<u>Python</u>**
+
+```python
+from selenium.webdriver.firefox.options import Options
+
+options = Options()
+options.headless = True
+driver = webdriver.Firefox(options=options)
+```
+
+**<u>CSharp</u>**
+
+```c#
+var options = new FirefoxOptions();
+options.Proxy.Kind = ProxyKind.Direct;
+var driver = new FirefoxDriver(options);
+```
+
+#### Setting a custom profile
+
+It is possible to create a custom profile for Firefox as demonstrated below.
+
+**<u>Python</u>**
+
+```python
+from selenium.webdriver.firefox.options import Options
+from selenium.webdriver.firefox.firefox_profile import FirefoxProfile
+
+options = Options()
+firefox_profile = FirefoxProfile()
+firefox_profile.set_preference("javascript.enabled", False)
+options.profile = firefox_profile
+```
+
+**<u>CSharp</u>**
+
+```c#
+var options = new FirefoxOptions();
+var profile = new FirefoxProfile();
+options.Profile = profile;
+var driver = new RemoteWebDriver(options);
+```
+
+### [Internet Explorer](https://www.selenium.dev/documentation/webdriver/capabilities/internet_explorer/)
+
+暂略
+
+### [Safari](https://www.selenium.dev/documentation/webdriver/capabilities/safari/)
+
+These capabilities are specific to Safari.
+
+## [Browser](https://www.selenium.dev/documentation/webdriver/browser/)
 
 
 
+### [Navigation](https://www.selenium.dev/documentation/webdriver/browser/navigation/)
 
 
-### Browser
 
-### Elements
+### [Alerts](https://www.selenium.dev/documentation/webdriver/browser/alerts/)
 
-### Remote WebDriver
 
-### Drivers
 
-### Waits
+### [Cookies](https://www.selenium.dev/documentation/webdriver/browser/cookies/)
 
-### Actions API
 
-### BiDirectional
 
-### Additional Features
+### [Frames](https://www.selenium.dev/documentation/webdriver/browser/frames/)
 
-## Grid
+
+
+### [Windows](https://www.selenium.dev/documentation/webdriver/browser/windows/)
+
+
+
+## [Elements](https://www.selenium.dev/documentation/webdriver/elements/)
+
+[Locators](https://www.selenium.dev/documentation/webdriver/elements/locators/)
+
+Finders
+
+Interactions
+
+Information
+
+Select Lists
+
+## [Remote WebDriver](https://www.selenium.dev/documentation/webdriver/remote_webdriver/)
+
+
+
+## [Drivers](https://www.selenium.dev/documentation/webdriver/drivers/)
+
+
+
+## [Waits](https://www.selenium.dev/documentation/webdriver/waits/)
+
+
+
+## [Actions API](https://www.selenium.dev/documentation/webdriver/actions_api/)
+
+Keyboard
+
+Mouse
+
+Wheel
+
+## [BiDirectional](https://www.selenium.dev/documentation/webdriver/bidirectional/)
+
+BiDi API
+
+Chrome DevTools
+
+## [Additional Features](https://www.selenium.dev/documentation/webdriver/additional_features/)
+
+colors
+
+ThreadGuard
+
+# Grid
 
 暂时不需要看
 
-## IE Driver Server
+# IE Driver Server
 
 不需要看
 
-## IDE
+# IDE
 
 不需要看
 
-## Test Practices
+# [Test Practices](https://www.selenium.dev/documentation/test_practices/)
 
-### Design Strategies
+## Design Strategies
 
-### Overview
+## Overview
 
-### Testing Types
+## Testing Types
 
-### Encouraged
+## Encouraged
 
-### Discouraged
+## Discouraged
 
-## Legacy
+# Legacy
 
 不需要看
 
-## About
+# About
 
