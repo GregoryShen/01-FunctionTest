@@ -1276,27 +1276,840 @@ These capabilities are specific to Safari.
 
 ## [Browser](https://www.selenium.dev/documentation/webdriver/browser/)
 
+### Get browser information
 
+#### Get title
+
+**<u>Python</u>**
+
+```python
+driver.title
+```
+
+**<u>CSharp</u>**
+
+```c#
+driver.Title;
+```
+
+#### Get current URL
+
+**<u>Python</u>**
+
+```python
+driver.current_url
+```
+
+**<u>CSharp</u>**
+
+```c#
+driver.Url;
+```
 
 ### [Navigation](https://www.selenium.dev/documentation/webdriver/browser/navigation/)
 
+#### Navigate to
 
+The first thing you will want to do after launching a browser is to open your website. This can be achieved in a single line:
+
+**<u>Python</u>**
+
+```python
+driver.get("https://selenium.dev")
+```
+
+**<u>CSharp</u>**
+
+```c#
+driver.Navigate().GoToUrl(@"https://selenium.dev");
+```
+
+#### Back
+
+Pressing the browser's back button:
+
+**<u>Python</u>**
+
+```python
+driver.back()
+```
+
+**<u>CSharp</u>**
+
+```c#
+driver.Navigate().Back();
+```
+
+#### Forward
+
+Pressing the browser's forward button:
+
+**<u>Python</u>**
+
+```python
+driver.forward()
+```
+
+**<u>CSharp</u>**
+
+```c#
+driver.Navigate().Forward();
+```
+
+#### Refresh
+
+Refresh the current page:
+
+**<u>Python</u>**
+
+```python
+driver.refresh()
+```
+
+**<u>CSharp</u>**
+
+```c#
+driver.Navigate().Refresh();
+```
 
 ### [Alerts](https://www.selenium.dev/documentation/webdriver/browser/alerts/)
 
+WebDriver provides an API for working with the three types of native popup messages offered by JavaScript. These popups are styled by the browser and offer limited customization.
 
+#### Alerts
+
+The simplest of these is referred to as an alert, which shows a custom message, and a single button which dismisses the alert, labelled in most browsers as OK. It can also be dismissed in most browsers by pressing the close button, but this will always do the same thing as the OK buton.
+
+WebDriver can get the text from the popup and accept or dismiss these alerts.
+
+**<u>Python</u>**
+
+```python
+# Click the link to activate the alert
+driver.find_element(By.LINK_TEXT, "See an example alert").click()
+
+# Wait for the alert to be displayed and store it in a variable
+alert = wait.until(expected_conditions.alert_is_present())
+
+# Store the alert text in a variable
+text = alert.text
+
+# Press the OK button
+alert.accept()
+```
+
+**<u>CSharp</u>**
+
+```c#
+//Click the link to activate the alert
+driver.FindElement(By.LinkText("See an example alert")).Click();
+
+//Wait for the alert to be displayed and store it in a variable
+IAlert alert = wait.Unti(ExpectedConditions.AlertIsPresent());
+
+//Store the alert text in a variable
+string text = alert.Text;
+
+//Press the OK button
+alert.Accept();
+```
+
+#### Confirm
+
+A confirm box is similar to an alert, except the user can also choose to cancel the message.
+
+This example also shows a different approach to storing an alert:
+
+**<u>Python</u>**
+
+```python
+# Click the link to activate the alert
+driver.find_element(By.LINK_TEXT, "See a sample confirm").click()
+
+# Wait for the alert to be displayed
+wait.until(exepcted_conditions.alert_is_present())
+
+# Store the alert in a variable for reuse
+alert = driver.swtich_to.alert
+
+# Store the alert text in a variable
+text = alert.text
+
+# Press the Cancel button
+alert.dismiss()
+```
+
+**<u>CSharp</u>**
+
+```c#
+//Click the link to activate the alert
+driver.FindElement(By.LinkText("See a sample confirm")).Click();
+
+//Wait for the alert to be displayed
+wait.Until(ExpectedConditions.AlertIsPresent());
+
+//Store the alert in a variable
+IAlert alert = driver.SwitchTo().Alert();
+
+//Store the alert in a variable for reuse
+string text = alert.Text;
+
+//Press the cancel button
+alert.Dismiss();
+```
+
+#### Prompt
+
+Prompts are similar to confirm boxes, except they also include a text input. Similar to working with form elements, you can use WebDriver's send keys to fill in a response. This will completely replace the placeholder text. Pressing the cancel button will not submit any text. See a sample prompt.
+
+**<u>Python</u>**
+
+```python
+# Click the link to activate the alert
+driver.find_element(By.LINK_TEXT, "See a sample prompt").click()
+
+# Wait for the alert to be displayed
+wait.until(expected_conditions.alert_is_present())
+
+# Store the alert in a variable for reuse
+alert = Alert(driver)
+
+# Type your message
+alert.send_keys("Selenium")
+
+# Press the OK button
+alert.accept()
+```
+
+**<u>CSharp</u>**
+
+```c#
+//Click the link to activate the alert
+driver.FindElement(By.LinkText("See a sample prompt")).Click();
+
+//Wait for the alert to be displayed and store it in a variable
+IAlert alert = wait.Until(ExpectedConditions.AlertIsPresent());
+
+//Type your message
+alert.SendKeys("Selenium");
+
+//Press the OK button
+alert.Accept();
+```
 
 ### [Cookies](https://www.selenium.dev/documentation/webdriver/browser/cookies/)
 
+A cookie is a small piece of data that is sent from a website and stored in your computer. Cookies are mostly used to recognize the user and load the stored information.
 
+WebDriver API provides a way to interact with cookies with built-in methods.
+
+#### Add Cookie
+
+It is used to add a cookie to the current browsing context. Add cookie only accepts a set of defined serializable JSON object. [Here](https://www.w3.org/TR/webdriver1/#cookies) is the link to the list of accepted JSON key values.
+
+First of all, you need to be on the domain that the cookie will be valid for. If you are trying to preset[^ 1] cookies before you start interacting with a site and your homepage is large/takes a while to load an alternative is to find a smaller page on the site (typically the 404 page is small, e.g. http://example.com/some404page)
+
+**<u>Python</u>**
+
+```python
+from selenium import webdriver
+
+driver = webdriver.Chrome()
+
+driver.get("http://www.example.com")
+
+# Adds the cookie into current browser context
+driver.add_cookie({"name": "key", "value": "value"})
+```
+
+**<u>CSharp</u>**
+
+```c#
+using OpenQA.Selenium;
+using OpenQA.Selenium.Chrome;
+
+namespace AddCookie {
+    class AddCookie {
+        public static void Main(string[] args){
+            IWebDriver driver = new ChromeDriver();
+            try{
+                //Navigate to Url
+                driver.Navigate().GoToUrl("https://example.com");
+                // Adds the cookie into current browser context
+                driver.Manage().Cookies.AddCookie(new Cookie("key", "value"));
+            } finally{
+                driver.Quit();
+            }
+        }
+    }
+}
+```
+
+#### Get Named Cookie
+
+It returns the serialized cookie data matching with the cookie name among all associated cookies.
+
+**<u>Python</u>**
+
+```python
+from selenium import webdriver
+
+driver = webdriver.Chrome()
+
+# Navigate to url
+driver.get("http://www.example.com")
+
+# Adds the cookie into current browser context
+driver.add_cookie({"name": "foo", "value": "bar"})
+
+# Get cookie details with named cookie 'foo'
+print(driver.get_cookie("foo"))
+```
+
+**<u>CSharp</u>**
+
+```c#
+using OpenQA.Selenium;
+using OpenQA.Selenium.Chrome;
+
+namespace GetCookieNamed{
+    class GetCookieNamed{
+        public static void Main(string[] args){
+            IWebDriver driver = new ChromeDriver();
+            try{
+                // Navigate to Url
+                driver.Navigate().GoToUrl("https://example.com");
+                driver.Manage().Cookies.AddCookie(new Cookie("foo", "bar"));
+                // Get cookie details with named cookie 'foo'
+                var cookie = driver.Manage().Cookies.GetCookieNamed("foo");
+                System.Console.WriteLine(cookie);
+            } finally{
+                driver.Quit();
+            }
+        }
+    }
+}
+```
+
+#### Get All Cookies
+
+It returns a 'successful serialized cookie data' for current browsing context. If browser is no longer available it returns error.
+
+**<u>Python</u>**
+
+```python
+from selenium import webdriver
+
+drivr = webdriver.Chrome()
+
+# Navigate to url
+driver.get("http://www.example.com")
+
+driver.add_cookie({"name": "test1", "value": "cookie1"})
+driver.add_cookie({"name": "test2", "value": "cookie2"})
+
+# Get all available cookies
+print(driver.get_cookies())
+```
+
+**<u>CSharp</u>**
+
+```c#
+using OpenQA.Selenium;
+using OpenQA.Selenium.Chrome;
+
+namespace GetAllCookies{
+    class GetAllCookies{
+        public static void Main(String[] args){
+            IWebDriver driver = new ChromeDriver();
+            try{
+                // Navigate to Url
+                driver.Navigate().GoToUrl("https://example.com");
+                driver.Manage().Cookies.AddCookie(new Cookie("test1", "cookie1"));
+                driver.Manage().Cookies.AddCookie(new Cookie("test2", "cookie2"));
+                
+                // Get All available cookies
+                var cookies = driver.Manage().Cookies.AllCookies;
+            } finally{
+                driver.Quit();
+            }
+        }
+    }
+}
+```
+
+#### Delete Cookie
+
+It deletes the cookie data matching with the provided cookie name.
+
+**<u>Python</u>**
+
+```python
+from selenium import webdriver
+driver = webdriver.Chrome()
+
+# Navigate to url
+driver.get("http://www.example.com")
+driver.add_cookie({"name": "test1", "value": "cookie1"})
+driver.add_cookie({"name": "test2", "value": "cookie2"})
+
+# Delete a cookie with name 'test1'
+driver.delete_cookie("test1")
+```
+
+**<u>CSharp</u>**
+
+```c#
+using OpenQA.Selenium;
+using OpenQA.Selenium.Chrome;
+
+namespace DeleteCookie{
+    class DeleteCookie{
+        public static void Main(string[] args){
+            IWebDriver driver = new ChromeDriver();
+            try{
+                // Navigate to Url
+                driver.Navigate().GoToUrl("https://example.com");
+                driver.Manage().Cookies.AddCookie(new Cookie("test1", "cookie1"));
+                var cookie
+            }
+        }
+    }
+}
+```
+
+#### Delete All Cookies
+
+It deletes all the cookies of the current browsing context.
+
+**<u>Python</u>**
+
+```python
+from selenium import webdriver
+driver = webdriver.Chrome()
+
+# Navigate to url
+driver.get("http://www.example.com")
+driver.add_cookie({"name": "test1", "value": "cookie1"})
+driver.add_cookie({"name": "test2", "value": "cookie2"})
+
+# Delete all cookies
+driver.delete_all_cookies()
+```
+
+**<u>CSharp</u>**
+
+```c#
+using OpenQA.Selenium;
+using OpenQA.Selenium.Chrome;
+
+namespace DeleteAllCookies{
+    class DeleteAllCookies{
+        public static void Main(string[] args){
+            IWebDriver driver = new ChromeDriver();
+            try{
+                // Navigate to Url
+                driver.Navigate().GoToUrl("https://example.com");
+                driver.Manage().Cookies.AddCookie(new Cookie("test1", "cookie1"));
+                driver.Manage().Cookies.AddCookie(new Cookie("test2", "cookie2"));
+                // deletes all cookies
+                driver.Manage().Cookies.DeleteAllCookies();
+            } finally{
+                driver.Quit();
+            }
+        }
+    }
+}
+```
+
+#### Same-Site Cookie Attribute
+
+It allows a user to instruct browsers to control whether cookies are sent along with the request initiated by third party sites. It is introduced to prevent CSRF(Cross-Site Request Forgery) attacks.
+
+Same-site cookie attribute accepts two parameters as instructions.
+
+##### Strict
+
+When the sameSite attribute is set as <u>Strict</u>, the cookie will not be sent along with requests initiated by third party websites.
+
+##### Lax
+
+When you set a cookie sameSite attribute to <u>Lax</u>, the cookie will be sent along with the GET request initiated by third party website.
+
+> Note: As of now this feature is landed in chrome(80+version), Firefox(79+version) and works with Selenium 4 and later versions.
+
+**<u>Python</u>**
+
+```python
+from selenium import webdriver
+
+driver = webdriver.Chrome()
+
+driver.get("http://example.com")
+# Adds the cookie into current browser context with sameSite 'Strict' (or) 'Lax'
+driver.add_cookie({"name": "foo", "value": "value", "sameSite": "Strict"})
+driver.add_cookie({"name": "foo1", "value": "value", "sameSite": "Lax"})
+cookie1 = driver.get_cookie('foo')
+cookie2 = driver.get_cookie('foo1')
+print(cookie1)
+print(cookie2)
+```
+
+**<u>CSharp</u>**
+
+```c#
+using OpenQA.Selenium;
+using OpenQA.Selenium.Chrome;
+
+namespace SameSiteCookie{
+    class SameSiteCookie{
+        static void Main(string[] args){
+            IWebDriver driver = new ChromeDriver();
+            try{
+                driver.Navigate().GoToUrl("http://www.example.com");
+                var cookie1Dictionary = new System.Collections.Generic.Dictionary<string, object>(){{"name", "test1"}, {"value", "cookie1"}, {"sameSite", "Strict"}};
+                var cookie1 = Cookie.FromDictionary(cookie1Dictionary);
+                var cookie2Dictionary = new System.Collections.Generic.Dictionary<string, object>(){{"name", "test2"}, {"value", "cookie2"}, {"sameSite", "Lax"}};
+                var cookie2 = Cookie.FromDictionary(cookie2Dictionary);
+                
+                driver.Manage().Cookies.AddCookie(cookie1);
+                driver.Manage().Cookies.AddCookie(cookie2);
+                
+                System.Console.WriteLine(cookie1.SameSite);
+                System.Console.WriteLine(cookie2.SameSite);
+            } finally{
+                driver.Quit();
+            }
+        }
+    }
+}
+```
 
 ### [Frames](https://www.selenium.dev/documentation/webdriver/browser/frames/)
 
+Frames are a now deprecated means of building a site layout from multiple documents on the same domain. You are unlikely to work with them unless you are working with an pre HTML5 webapp. Iframes allow the insertion of a document from an entirely different domain, and are still commonly used.
 
+If you need to work with frames or iframes, WebDriver allows you to work with them in the same way. Consider a button within an iframe. If we inspect the element using the browser development tools, we might see the following:
+
+```html
+<div id="modal">
+  <iframe id="buttonframe" name="myframe"  src="https://seleniumhq.github.io">
+   <button>Click here</button>
+ </iframe>
+</div>
+```
+
+If it was not for the iframe we would expect to click on the button using something like:
+
+**<u>Python</u>**
+
+```python
+# This won't work
+driver.find_element(By.TAG_NAME, 'button').click()
+```
+
+**<u>CSharp</u>**
+
+```c#
+// This won't work
+driver.FindElement(By.TagName("button")).Click();
+```
+
+However, if there are no buttons outside of the iframe, you might instead get a *no such element* error. This happens because Selenium is only aware of the elements in the top level document. To interact with the button, we will need to first switch to the frame, in a similar way to how we switch windows. WebDriver offers three ways of switching to a frame.
+
+#### Using a WebElement
+
+Switching using a WebElement is the most flexible option. You can find the frame using your preferred selector and switch to it.
+
+**<u>Python</u>**
+
+```python
+# Store iframe web element
+iframe = driver.find_element(By.CSS_SELECTOR, "#modal > iframe")
+
+# Switch to selected iframe
+driver.switch_to.frame(iframe)
+
+# Now click on button
+driver.find_element(By.TAG_NAME, 'button').click()
+```
+
+**<u>CSharp</u>**
+
+```c#
+// Store the web element
+IWebElement iframe = driver.FindElement(By.CssSelector("#modal>iframe"));
+
+// Switch to the frame
+driver.SwitchTo().Frame(iframe);
+
+// Now we can click the button
+driver.FindElement(By.TagName("button")).Click();
+```
+
+#### Using a name or ID
+
+If your frame or iframe has an id or name attribute, this can be used instead. If the name or ID is not unique on the page, then the first one found will be switched to.
+
+**<u>Python</u>**
+
+```python
+# Swtich frame by id
+driver.switch_to.frame('buttonframe')
+
+# Now click on the button
+driver.find_element(By.TAG_NAME, 'button').click()
+```
+
+**<u>CSharp</u>**
+
+```c#
+// Using the ID
+driver.SwitchTo().Frame("buttonframe");
+
+// Or using the name instead
+driver.SwitchTo().Frame("myframe");
+
+// Now we can click the button
+driver.FindElement(By.TagName("button")).Click();
+```
+
+#### Using an index
+
+It is also possible to use the index of the frame, such as can be queried using `window.frames` in JavaScript.
+
+**<u>Python</u>**
+
+```python
+# Switching to second iframe based on index
+iframe = driver.find_elements_by_tag_name('iframe')[1]
+
+# switch to selected iframe
+driver.switch_to.frame(iframe)
+```
+
+**<u>CSharp</u>**
+
+```c#
+// Switch to the second frame
+driver.SwitchTo().Frame(1);
+```
+
+#### Leaving a frame
+
+To leave an iframe or frameset, switch back to the default content like so:
+
+**<u>Python</u>**
+
+```python
+# switch back to default content
+driver.switch_to.default_content()
+```
+
+**<u>CSharp</u>**
+
+```c#
+// Return to the top level
+driver.SwitchTo().DefaultContent();
+```
 
 ### [Windows](https://www.selenium.dev/documentation/webdriver/browser/windows/)
 
+#### Windows and tabs
 
+##### Get window handle
+
+**<u>Python</u>**
+
+```python
+```
+
+**<u>CSharp</u>**
+
+```c#
+```
+
+##### Switching windows or tabs
+
+**<u>Python</u>**
+
+```python
+```
+
+**<u>CSharp</u>**
+
+```c#
+```
+
+##### Create new window (or) new tab and switch
+
+**<u>Python</u>**
+
+```python
+```
+
+**<u>CSharp</u>**
+
+```c#
+```
+
+##### Closing a window or tab
+
+**<u>Python</u>**
+
+```python
+```
+
+**<u>CSharp</u>**
+
+```c#
+```
+
+##### Quitting the browser at the end of a session
+
+**<u>Python</u>**
+
+```python
+```
+
+**<u>CSharp</u>**
+
+```c#
+```
+
+#### Window management
+
+##### Get window size
+
+**<u>Python</u>**
+
+```python
+```
+
+**<u>CSharp</u>**
+
+```c#
+```
+
+##### Set window size
+
+**<u>Python</u>**
+
+```python
+```
+
+**<u>CSharp</u>**
+
+```c#
+```
+
+##### Get window position
+
+**<u>Python</u>**
+
+```python
+```
+
+**<u>CSharp</u>**
+
+```c#
+```
+
+#### Set window position
+
+**<u>Python</u>**
+
+```python
+```
+
+**<u>CSharp</u>**
+
+```c#
+```
+
+##### Maximize window
+
+**<u>Python</u>**
+
+```python
+```
+
+**<u>CSharp</u>**
+
+```c#
+```
+
+##### Minimize window
+
+**<u>Python</u>**
+
+```python
+```
+
+**<u>CSharp</u>**
+
+```c#
+```
+
+##### Fullscreen window
+
+**<u>Python</u>**
+
+```python
+```
+
+**<u>CSharp</u>**
+
+```c#
+```
+
+##### TakeScreenshot
+
+**<u>Python</u>**
+
+```python
+```
+
+**<u>CSharp</u>**
+
+```c#
+```
+
+##### TakeElementScreenshot
+
+**<u>Python</u>**
+
+```python
+```
+
+**<u>CSharp</u>**
+
+```c#
+```
+
+##### Execute Script
+
+**<u>Python</u>**
+
+```python
+```
+
+**<u>CSharp</u>**
+
+```c#
+```
+
+##### Print Page
+
+**<u>Python</u>**
+
+```python
+```
+
+**<u>CSharp</u>**
+
+```c#
+```
 
 ## [Elements](https://www.selenium.dev/documentation/webdriver/elements/)
 
@@ -1371,4 +2184,8 @@ ThreadGuard
 不需要看
 
 # About
+
+
+
+[^ 1]: vt. 预先布置; 事先调整; 预先决定; 事先安排
 
