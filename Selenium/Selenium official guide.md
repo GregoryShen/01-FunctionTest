@@ -1919,196 +1919,489 @@ driver.SwitchTo().DefaultContent();
 
 ##### Get window handle
 
+WebDriver does not make the distinction between windows and tabs. If your site opens a new tab or window, Selenium will let you work with it using a window handle. Each window has a unique identifier which remains persistent in a single session. You can get the window handle of the current window by using:
+
 **<u>Python</u>**
 
 ```python
+driver.current_window_handle
 ```
 
 **<u>CSharp</u>**
 
 ```c#
+driver.CurrentWindowHandle;
 ```
 
 ##### Switching windows or tabs
 
+Clicking a link which opens in w new window will focus the new window or tab on screen, but WebDriver will now know which window the Operating System considers active. To work with the new window you will need to switch to it. If you have only two tabs or windows open, and you know which window you start with, by the process of elimination you can loop over both windows or tabs that WebDriver can see, and switch to the one which is not the original.
+
+However, Selenium 4 provides a new API [NewWindow](https://www.selenium.dev/documentation/webdriver/browser/windows/#create-new-window-or-new-tab-and-switch) which creates a new tab (or) new window and automatically switches to it.
+
 **<u>Python</u>**
 
 ```python
+from selenium import webdriver
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+
+with webdriver.Firefox() as driver:
+    # Open URL
+    driver.get("https://seleniumhq.github.io")
+    
+    # Setup wait for later
+    wait = WebDriverWait(driver, 10)
+    
+    # Store the ID of the original window
+    original_window = driver.current_window_handle
+    
+    # Check we don't have other windows open already
+    assert len(driver.window_handles) == 1
+    
+    # Click the link which opens in a new window
+    driver.find_element(By.LINK_TEXT, "new window").click()
+    
+    # Wait for the new window or tab
+    wait.until(EC.number_of_windows_to_be(2))
+    
+    # Loop through until we find a new window handle
+    for window_handle in driver.window_handles:
+        if window_handle != original_window:
+            driver.switch_to.window(window_handle)
+            break
+            
+    # Wait for the new tab to finish loading content
+    wait.until(EC.title_is("SeleniumHQ Browser Automation"))
 ```
 
 **<u>CSharp</u>**
 
 ```c#
+// Store the ID of the original window
+string originalWindow = driver.CurrentWindowHandle;
+
+// Check we don't have other windows open already
+Assert.AreEqual(driver.WindowHandles.Count, 1);
+
+// Click the link which opens in a new window
+driver.FindElement(By.LinkText("new window")).Click();
+
+// Wait for the new window or tab
+wait.Until(wd => wd.WindowHandles.Count == 2);
+
+// Loop through until we find a new window handle
+foreach(string window in driver.WindowHandles){
+    if(originalWindow != window){
+        driver.SwitchTo().Window(window);
+        break;
+    }
+}
+
+// Wait for the new tab to finish loading content
+wait.Unti(wd => wd.Title == "Selenium documentation");
 ```
 
 ##### Create new window (or) new tab and switch
 
+Creates a new window （or) tab and will focus the new window or tab on screen. You don't need to switch to work with the new window (or) tab. If you have more than two windows (or) tabs opened other than the new window, you can loop over both windows or tabs that WebDriver can see, and switch to the one which is not the original.
+
+> Note: This feature works with Selenium 4 and later versions.
+
 **<u>Python</u>**
 
 ```python
+# Opens a new tab and switches to new tab
+driver.switch_to.new_window('tab')
+
+# Opens a new window and switches to new window
+driver.switch_to.new_window('window')
 ```
 
 **<u>CSharp</u>**
 
 ```c#
+// Opens a new tab and switches to new tab
+driver.SwitchTo().NewWindow(WindowType.Tab)
+    
+// Opens a new window and switches to new window
+driver.SwitchTo().NewWindow(WindowType.Window)
 ```
 
 ##### Closing a window or tab
 
+When you are finished with a window or tab and it is not the last window or tab open in your browser, you should close it and switch back to the window you were using previously. Assuming you followed the code sample in the previous section you will have the previous window handle stored in a variable. Put this together and you will get:
+
 **<u>Python</u>**
 
 ```python
+# Close the tab or window
+driver.close()
+
+# Switch back to the old tab or window
+driver.switch_to.window(original_window)
 ```
 
 **<u>CSharp</u>**
 
 ```c#
+// Close the tab or window
+driver.Close();
+
+// Switch back to the old tab or window
+driver.SwitchTo().Window(originalWindow);
 ```
+
+Forgetting to switch back to another window handle after closing a window will leave WebDriver executing on the now closed page, and will trigger a *<u>No Such Window Exception</u>*. You must switch back to a valid window handle in order to continue execution.
 
 ##### Quitting the browser at the end of a session
 
+When you are finished with the browser session you should call quit, instead of close:
+
 **<u>Python</u>**
 
 ```python
+driver.quit()
 ```
 
 **<u>CSharp</u>**
 
 ```c#
+driver.Quit();
+```
+
+Quit will;
+
+* Close all the windows and tabs associated with that WebDriver session
+* Close the browser process
+* Close the background driver process
+* Notify Selenium Grid that the browser is no longer in use so it can be used by another session(if you are using Selenium Grid)
+
+Failure to call quit will leave extra background processes and ports running on your machine which could cause you problems later.
+
+Some test frameworks offer methods and annotations which you can hook into tear down at the end of a test.
+
+**<u>Python</u>**
+
+```python
+# unittest teardown
+# https://docs.python.org/3/library/unittest.html?highlight=teardown#unittest.TestCase.tearDown
+def tearDown(self):
+    self.driver.quit()
+```
+
+**<u>CSharp</u>**
+
+```c#
+/* 
+	Example using Visual Studio's UnitTesting
+	https://msdn.microsoft.com/en-us/library/microsoft.visualstudio.testtools.unittesting.aspx
+*/
+[TestCleanup]
+public void TearDown(){
+    driver.Quit();
+}
+```
+
+If not running WebDriver in a test context, you may consider using `try/finally` which is offered by most languages so that an exception will still clean up the WebDriver session.
+
+**<u>Python</u>**
+
+```python
+try:
+    # WebDriver code here...
+finally:
+    driver.quit()
+```
+
+**<u>CSharp</u>**
+
+```c#
+try{
+    // WebDriver code here...
+} finally{
+    driver.Quit();
+}
+```
+
+Python's WebDriver now supports the python context manager, which when using the `with` keyword can automatically quit the driver at the end of execution.
+
+```python
+with webdriver.Firefox() as driver:
+    # WebDriver code here...
+    
+# WebDriver will automatically quit after indentation
 ```
 
 #### Window management
 
+Screen resolution can impact how your web application renders, so WebDriver provides mechanisms for moving and resizing the browser window.
+
 ##### Get window size
+
+Fetches the size of the browser window in pixels.
 
 **<u>Python</u>**
 
 ```python
+# Access each dimension individually
+width = driver.get_window_size().get("width")
+height = driver.get_window_size().get("height")
+
+# Or store the dimensions and query them later
+size = driver.get_window_size()
+width1 = size.get("width")
+height1 = size.get("height")
 ```
 
 **<u>CSharp</u>**
 
 ```c#
+// Access each dimension individually
+int width = driver.Manage().Window.Size.Width;
+int height = driver.Manage().Window.Size.Height;
+
+// Or store the dimensions and query them later
+System.Drawing.Size size = driver.Manage().Window,Size();
+int width1 = size.Width;
+int height1 = size.Height;
 ```
 
 ##### Set window size
 
+Restores the window and sets the window size.
+
 **<u>Python</u>**
 
 ```python
+driver.set_window_size(1024, 768)
 ```
 
 **<u>CSharp</u>**
 
 ```c#
+driver.Manage().Window.Size = new Size(1024, 768);
 ```
 
 ##### Get window position
 
+Fetches the coordinates of the top left coordinate of the browser window.
+
 **<u>Python</u>**
 
 ```python
+# Access each dimension individually
+x = driver.get_window_position().get('x')
+y = driver.get_window_position().get('y')
+
+# Or store the dimensions and query them later
+position = driver.get_window_position()
+x1 = position.get('x')
+y1 = position.get('y')
 ```
 
 **<u>CSharp</u>**
 
 ```c#
+// Access each dimension individually
+int x = driver.Manage().Window.Position.X;
+int y = driver.Manage().Window.Position.Y;
+
+// Or store the dimensions and query them later
+Point position = driver.Manage().Window.Position;
+int x1 = position.X;
+int y1 = position.Y;
 ```
 
 #### Set window position
 
+Moves the window to the chosen position.
+
 **<u>Python</u>**
 
 ```python
+# Move the window to the top left of the primary monitor
+driver.set_window_position(0, 0)
 ```
 
 **<u>CSharp</u>**
 
 ```c#
+// Move the window to the top left of the primary monitor
+driver.Manage().Window.Position = new Point(0, 0);
 ```
 
 ##### Maximize window
 
+Enlarges[^ 2] the window. For most operating systems, the window will fill the screen, without blocking the operating system's own menus and toolbars.
+
 **<u>Python</u>**
 
 ```python
+driver.maximize_window()
 ```
 
 **<u>CSharp</u>**
 
 ```c#
+driver.Manage().Window.Maximize();
 ```
 
 ##### Minimize window
 
+Minimizes the window of current browsing context. The exact behavior of this command is specific to individual window managers.
+
+Minimize Window typically hides the window in the system tray.
+
+> Note: this feature works with Selenium 4 and later versions.
+
 **<u>Python</u>**
 
 ```python
+driver.minimize_window()
 ```
 
 **<u>CSharp</u>**
 
 ```c#
+driver.Manage().Window.Minimize();
 ```
 
 ##### Fullscreen window
 
+Fills the entire screen, similar to pressing F11 in most browsers.
+
 **<u>Python</u>**
 
 ```python
+driver.fullscreen_window()
 ```
 
 **<u>CSharp</u>**
 
 ```c#
+driver.Manage().Window().FullScreen();
 ```
 
 ##### TakeScreenshot
 
+Used to capture screenshot for current browsing context. The WebDriver endpoint [screenshot](https://www.w3.org/TR/webdriver/#dfn-take-screenshot) returns screenshot which is encoded in Base64 format.
+
 **<u>Python</u>**
 
 ```python
+from selenium import webdriver
+driver = webdriver.Chrome()
+driver.get("http://www.example.com")
+# Returns and base64 encoded string into image
+driver.save_screenshot('./image.png')
+driver.quit()
 ```
 
 **<u>CSharp</u>**
 
 ```c#
+using OpenQA.Selenium;
+using OpenQA.Selenium.Chrome;
+using OpenQA.Selenium.Support.UI;
+
+var driver = new ChromeDriver();
+driver.Navigate().GoToUrl("http://www.example.com");
+Screenshot screenshot = (driver as ITakeScreenshot).GetScreenshot();
+// Format values are Bmp, Gif, Jpeg, Png, Tiff
+screenshot.SaveAsFile("screenshot.png", ScreenshotImageFormat.Png); 
 ```
 
 ##### TakeElementScreenshot
 
+Used to capture screenshot of an element for current browsing context. The WebDriver endpoint [screenshot](https://www.w3.org/TR/webdriver/#take-element-screenshot) returns screenshot which is encoded in Base64 format.
+
 **<u>Python</u>**
 
 ```python
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+
+driver = webdriver.Chrome()
+driver.get("http://www.example.com")
+ele = driver.find_element(By.CSS_SELECTOR, 'h1')
+# Returns and base64 encoded string into image
+ele.screenshot('./image.png')
+driver.quit()
 ```
 
 **<u>CSharp</u>**
 
 ```c#
+using OpenQA.Selenium;
+using OpenQA.Selenium.Chrome;
+using OpenQA.Selenium.Support.UI;
+
+// WebDriver
+var driver = new ChromeDriver();
+driver.Navigate().GoToUrl("http://www.example.com");
+
+// Fetch element using FindElement
+var webElement = driver.FindElement(By.CssSelector("h1"));
+
+// Screenshot for the element
+var elementScreenshot = (webElement as ITakeScreenshot).GetScreenshot();
+elementScreenshot.SaveAsFile("screenshot_of_element.png");
 ```
 
 ##### Execute Script
 
+Executes JavaScript code snippet[^ 3] in the current context of a selected frame or window.
+
 **<u>Python</u>**
 
 ```python
+# Stores the header element
+header = driver.find_element(By.CSS_SELECTOR, "h1")
+
+# Executing JavaScript to capture innerText of header element
+driver.execute_script('return arguments[0].innerText', header)
 ```
 
 **<u>CSharp</u>**
 
 ```c#
+// creating ChromeDriver instance
+IWebDriver driver = new ChromeDriver();
+// Creating the JavaScriptExecutor interface object by Type casting
+IJavaScriptExecutor js = (IJavaScriptExecutor) driver;
+// Button Element
+IWebElement button = driver.FindElement(By.name("btnLogin"));
+// Executing JavaScript to click on element
+js.ExecuteScript("arguments[0].click();", button);
+// Get return value form script
+String text = (String)js.ExecuteScript("return arguments[0].innerText", button);
+// Executing JavaScript directly
+js.ExecuteScript("console.log('hello world')");
 ```
 
 ##### Print Page
 
+Prints the current page within the browser.
+
+> Note: This requires Chromium browsers to be in headless mode
+
 **<u>Python</u>**
 
 ```python
+from selenium.webdriver.common.print_page_options import PrintOptions
+
+print_options = PrintOptions()
+print_options.page_ranges = ['1-2']
+
+driver.get("printPage.html")
+base64code = driver.print_page(print_options)
 ```
 
 **<u>CSharp</u>**
 
 ```c#
+// code sample not available
 ```
 
 ## [Elements](https://www.selenium.dev/documentation/webdriver/elements/)
@@ -2129,7 +2422,7 @@ Select Lists
 
 ## [Drivers](https://www.selenium.dev/documentation/webdriver/drivers/)
 
-
+无
 
 ## [Waits](https://www.selenium.dev/documentation/webdriver/waits/)
 
@@ -2137,23 +2430,25 @@ Select Lists
 
 ## [Actions API](https://www.selenium.dev/documentation/webdriver/actions_api/)
 
-Keyboard
+### Keyboard
 
-Mouse
+### Mouse
 
-Wheel
+### Wheel
 
 ## [BiDirectional](https://www.selenium.dev/documentation/webdriver/bidirectional/)
 
-BiDi API
+### BiDi API
 
-Chrome DevTools
+### Chrome DevTools
 
 ## [Additional Features](https://www.selenium.dev/documentation/webdriver/additional_features/)
 
-colors
+### colors
 
-ThreadGuard
+### ThreadGuard
+
+不需要看
 
 # Grid
 
@@ -2169,15 +2464,45 @@ ThreadGuard
 
 # [Test Practices](https://www.selenium.dev/documentation/test_practices/)
 
-## Design Strategies
+Some 
 
-## Overview
+## [Design Strategies](https://www.selenium.dev/documentation/test_practices/design_strategies/)
 
-## Testing Types
 
-## Encouraged
 
-## Discouraged
+## [Overview](https://www.selenium.dev/documentation/test_practices/overview/)
+
+
+
+## [Testing Types](https://www.selenium.dev/documentation/test_practices/testing_types/)
+
+
+
+## [Encouraged](https://www.selenium.dev/documentation/test_practices/encouraged/)
+
+
+
+## [Discouraged](https://www.selenium.dev/documentation/test_practices/discouraged/)
+
+### Captchas
+
+### File downloads
+
+### HTTP response codes
+
+### [Gmail, email and Facebook](https://www.selenium.dev/documentation/test_practices/discouraged/gmail_email_and_facebook_logins/)
+
+
+
+### Test dependency
+
+### Performance testing
+
+### Link spidering
+
+### Two Factor Authentication
+
+
 
 # Legacy
 
@@ -2188,4 +2513,9 @@ ThreadGuard
 
 
 [^ 1]: vt. 预先布置; 事先调整; 预先决定; 事先安排
+
+[^ 2]: v. 扩大，增大; 放大; 详细说明
+[^ 3]: [ˈsnɪpɪt] n. 小片，片段; 不知天高地厚的年轻人
+
+
 
