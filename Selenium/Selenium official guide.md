@@ -1,3 +1,5 @@
+
+
 # [The Selenium Browser Automation Project](https://www.selenium.dev/documentation/)
 
 Selenium is an umbrella project for a range of tools and libraries that enable and support the automation of web browsers.
@@ -2406,15 +2408,402 @@ base64code = driver.print_page(print_options)
 
 ## [Elements](https://www.selenium.dev/documentation/webdriver/elements/)
 
-[Locators](https://www.selenium.dev/documentation/webdriver/elements/locators/)
+Identifying and working with element objects in the DOM.
 
-Finders
+The majority of most people's Selenium code involves working with web elements.
 
-Interactions
+### [Locators](https://www.selenium.dev/documentation/webdriver/elements/locators/)
 
-Information
+<u>Ways to identify one or more specific elements in the DOM.</u>
 
-Select Lists
+A locator is a way to identify elements on a page. It is the argument passed to the [Finding element](https://www.selenium.dev/documentation/webdriver/elements/finders/) methods.
+
+Check out our encouraged test practices for tips on [locators](https://www.selenium.dev/documentation/test_practices/encouraged/locators/), including which to use when and why to declare locators separately from the finding methods. 
+
+#### Traditional Locators
+
+Selenium provides support for these 8 traditional location strategies in WebDriver:
+
+|      Locator      |                         Description                          |
+| :---------------: | :----------------------------------------------------------: |
+|    class name     | Locates elements whose class name contains the search value(compound class names are not permitted) |
+|   css selector    |           Locates elements matching a CSS selector           |
+|        id         | Locates elements whose ID attribute matches the search value |
+|       name        | Locates elements whose NAME attribute matches the search value |
+|     link text     | Locates anchor elements whose visible text matches the search value |
+| partial link text | Locates anchor elements whose visible text contains the search value. If multiple elements are matching, only the first one will be selected. |
+|     tag name      |   Locates elements whose tag name matches the search value   |
+|       xpath       |        Locates elements matching an XPath expression         |
+
+#### Relative Locators
+
+Selenium 4 introduces Relative Locators(previously called as *<u>Friendly Locators</u>*). These locators are helpful when it is not easy to construct a locator for the desired element, but easy to describe spatially[^4] where the element is in relation to an element that does have an easily constructed locator.
+
+##### How it works
+
+Selenium uses the JavaScript function [`getBoundingClientRect()`](https://developer.mozilla.org/en-US/docs/Web/API/Element/getBoundingClientRect) to determine the size and position of elements on the page, and can use this information to locate neighboring elements.
+
+Relative locator methods can take as the argument for the point of origin, either a previously located element reference, or another locator. In these examples we'll be using locators only, but you could swap the locator in the final method with an element object and it will work the same.
+
+Let us consider the below example for understanding the relative locators.
+
+![](https://www.selenium.dev/images/documentation/webdriver/relative_locators.png)
+
+##### Available relative locators
+
+###### Above
+
+If the email text field element is not easily identifiable for some reason, but the password text field element is, we can locate the text field element using the fact that it is an "input" element "above" the password element.
+
+**<u>Python</u>**
+
+```python
+email_locator = locate_with(By.TAG_NAME, "input").above({By.ID: "password"})
+```
+
+**<u>CSharp</u>**
+
+```c#
+var emailLocator = RelativeBy.WithLocator(By.tagName("input")).Above(By.Id("password"));
+```
+
+###### Below
+
+If the password text field is not easily identifiable for some reason, but the email text field is, we can locate the text field element using the fact that it is an "input" element "below" the email element.
+
+**<u>Python</u>**
+
+```python
+password_locator = locate_with(By.TAG_NAME, "input").below({By.ID: "email"})
+```
+
+**<u>CSharp</u>**
+
+```c#
+var passwordLocator = RelativeBy.WithLocator(By.tagName("input")).Below(By.Id("email"));
+```
+
+###### Left of
+
+If the cancel button is not easily identifiable for some reason, but the submit button element is, we can locate the cancel button element using the fact that it is a "button" element to the "left of" the submit element.
+
+**<u>Python</u>**
+
+```python
+cancel_locator = locate_with(By.TAG_NAME, "button").to_left_of({By.ID: "submit"})
+```
+
+**<u>CSharp</u>**
+
+```c#
+var cancelLocator = RelativeBy.WithLocator(By.tagName("button")).LeftOf(By.Id("submit"));
+```
+
+###### Right of
+
+If the submit button is not easily identifiable for some reason, but the cancel button element is, we can locate the submit button element using the fact that it is a "button" element "to the right of" the cancel element.
+
+**<u>Python</u>**
+
+```python
+submit_locator = locate_with(By.TAG_NAME, "button").to_right_of({By.ID: "cancel"})
+```
+
+**<u>CSharp</u>**
+
+```c#
+var submitLocator = RelativeBy.WithLocator(By.tagName("button")).RightOf(By.Id("cancel"));
+```
+
+###### Near
+
+If the relative positioning is not obvious, or it varies based on window size, you can use the near method to identify an element an element that is at most 50px away from the provided locator. One great use case for this is to work with a form element that doesn't have an easily constructed locator, but its associated [input label element](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/label) does.
+
+**<u>Python</u>**
+
+```python
+email_locator = locate_with(By.TAG_NAME, "input").near({By.ID: "lbl-email"})
+```
+
+**<u>CSharp</u>**
+
+```c#
+var emailLocator = RelativeBy.WithLocator(By.tagName("input")).Near(By.Id("lbl-email"));
+```
+
+##### Chaining relative locators
+
+You can also chain locators if needed. Sometimes the element is most easily identified as being both above/below one element and right/left of another.
+
+**<u>Python</u>**
+
+```python
+submit_locator = locate_with(By.TAG_NAME, "button").below({By.ID: "email"}).to_right_of({By.ID: "cancel"})
+```
+
+**<u>CSharp</u>**
+
+```c#
+var submitLocator = RelativeBy.WithLocator(By.tagName("button")).Below(By.Id("email")).RightOf(By.Id("cancel"));
+```
+
+### [Finders](https://www.selenium.dev/documentation/webdriver/elements/finders/)
+
+> Locating the elements based on the provided locator values.
+
+One of the most fundamental aspects of using Selenium is obtaining element references to work with. Selenium offers a number of built-in locator strategies to uniquely identify an element. There are many ways to use the locators in very advanced scenarios. For the purposes of this documentation, let's consider this HTML snippet:
+
+```html
+<ol id="vegetables">
+ <li class="potatoes">…
+ <li class="onions">…
+ <li class="tomatoes"><span>Tomato is a Vegetable</span>…
+</ol>
+<ul id="fruits">
+  <li class="bananas">…
+  <li class="apples">…
+  <li class="tomatoes"><span>Tomato is a Fruit</span>…
+</ul>
+```
+
+#### First matching element
+
+Many locators will match multiple elements on the page. The singular find element method will return a reference to the first element found within a given context.
+
+##### Evaluating entire DOM
+
+When the find element method is called on the driver instance, it returns a reference to the first element in the DOM that matches with the provided locator. This value can be stored and used for future element actions. In our example HTML above, there are two elements that have a class name of "tomatoes" so this method will return the element in the "vegetables" list.
+
+**<u>Python</u>**
+
+```python
+vegetable = driver.find_element(By.CLASS_NAME, "tomatoes")
+```
+
+**<u>CSharp</u>**
+
+```c#
+var vegetable = driver.FindElement(By.ClassName("tomatoes"));
+```
+
+##### Evaluating a subset of the DOM
+
+Rather than finding a unique locator in the entire DOM, it is often useful to narrow the search to the scope of another located element. In the above example there are two elements with a class name of "tomatoes" and it is a little more challenging to get the reference for the second one.
+
+One solution is to locate an element with a unique attribute that is an ancestor[^5] of the desired element and not an ancestor of the undesired element, then call find element on that object:
+
+**<u>Python</u>**
+
+```python
+fruits = driver.find_element(By.ID, "fruits")
+fruit = fruits.find_elements_by_id("tomatoes")
+```
+
+**<u>CSharp</u>**
+
+```c#
+IWebElement fruits = driver.FindElement(By.Id("fruits"));
+IWebElement fruit = fruits.FindElement(By.Id("tomatoes"));
+```
+
+> <u>Java and C#</u>
+>
+> `WebDriver`, `WebElement` and `ShadowRoot` classes all implement a `SearchContext` interface, which is considered a <u>role-based interface</u>. Role-based interfaces allow you to determine whether a particular driver implementation supports a given feature. These interfaces are clearly defined and try to adhere to having only a single role of responsibility.
+
+##### Optimized locator
+
+A nested lookup might not be the most effective location strategy since it requires two separate commands to be issued to the browser.
+
+To improve the performance slightly, we can use either CSS or XPath to find this element in a single command. See the Locator strategy suggestions in our Encouraged test practices section.
+
+For this example, we'll use a CSS selector:
+
+**<u>Python</u>**
+
+```python
+fruit = driver.find_element_by_css_selector('#fruits .tomatoes')
+```
+
+**<u>CSharp</u>**
+
+```c#
+var fruit = driver.FindElement(By.CssSelector("#fruits .tomatoes"));
+```
+
+#### All matching elements
+
+There are several use cases for needing to get references to all elements that match a locator, rather than just the first one. The plural elements methods return a collection of element references. If there are no matches, an empty list is returned. In this case, references to all fruits and vegetable list items will be returned in a collection.
+
+**<u>Python</u>**
+
+```python
+plants = driver.find_elements(By.TAG_NAME, "li")
+```
+
+**<u>CSharp</u>**
+
+```c#
+IReadOnlyList<IWebElement> plants = driver.FindElements(By.TagName("li"));
+```
+
+##### Get element
+
+Often you get a collection of elements but want to work with a specific element, which means you need to iterate over the collection and identify the one you want.
+
+**<u>Python</u>**
+
+```python
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+
+driver = webdriver.Firefox();
+
+# Navigate to Url
+driver.get("https://www.example.com")
+
+# Get all the elements available with tag name 'p'
+elements = driver.find_elements(By.TAG_NAME, 'p')
+
+for e in elements:
+    print(e.text)
+```
+
+**<u>CSharp</u>**
+
+```c#
+using OpenQA.Selenium;
+using OpenQA.Selenium.Firefox;
+using System.Collections.Generic;
+
+namespace FindElementsExample{
+    class FindElementsExample{
+        public static void Main(string[] args){
+            IWebDriver driver = new FirefoxDriver();
+            try{
+                // Navigate to Url
+                driver.Navigate().GoToUrl("https://example.com");
+                // Get all the elements available with tag name 'p'
+                IList <IWebElement> elements = driver.FindElements(By.TagName("p"));
+                foreach(IWebElement e in elements){
+                    System.Console.WriteLIne(e.Text);
+                } 
+             }finally{
+              	driver.Quit();
+            }
+        }
+    }
+}
+```
+
+#### Find Elements From Element
+
+It is used to find the list of matching child WebElements within the context of parent element. To achieve this, the parent WebElement is chained with 'findElements' to access child elements.
+
+**<u>Python</u>**
+
+```python
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+
+driver = webdriver.Chrome()
+driver.get("https://www.example.com")
+
+# Get element with tag name 'div'
+element = driver.find_element(By.TAG_NAME, 'div')
+
+# Get all the elements available with tag name 'p'
+elements = element.find_elements(By.TAG_NAME, 'p')
+for e in elements:
+    print(e.text)
+```
+
+**<u>CSharp</u>**
+
+```c#
+using OpenQA.Selenium;
+using OpenQA.Selenium.Chrome;
+using System.Collections.Generic;
+
+namespace FindElementsFromElement{
+    class FindElementsFromElement{
+        public static void Main(string[] args){
+            IWebDriver driver = new ChromeDriver();
+            try{
+                driver.Navigate().GoToUrl("https://example.com");
+                // Get element with tag name 'div'
+                IWebElement element = driver.FindElement(By.TagName('div'));
+                // Get all the elements available with tag name 'p'
+                IList <IWebElement> elements = element.FindElements(By.TagName("p"));
+                foreach(IWebElement e in elements){
+                    System.Console.WriteLine(e.Text);
+                }
+            } finally{
+                driver.Quit();
+            }
+        }
+    }
+}
+```
+
+#### Get Active Element
+
+It is used to track (or) find DOM element which has the focus in the current browsing context.
+
+**<u>Python</u>**
+
+```python
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+
+driver = webdriver.Chrome()
+driver.get("https://www.google.com")
+driver.find_element(By.CSS_SELECTOR， '[name="q"]').send_keys("webElement")
+
+#　Get attribute of current active element
+attr = driver.switch_to.active_element.get_attribute("title")
+print(attr)
+```
+
+**<u>CSharp</u>**
+
+```c#
+using OpenQA.Selenium;
+using OpenQA.Selenium.Chrome;
+
+namespace ActiveElement{
+    class ActiveElement{
+        public static void Main(string[] args){
+            IWebDriver driver = new ChromeDriver();
+            try{
+                // Navigate to Url
+                driver.Navigate().GoToUrl("https://www.google.com");
+                driver.FindElement(By.CssSelector(["[name='q']"]).SendKeys("webElemen"));
+                // Get attribute of current active element
+                string attr = driver.SwitchTo().ActiveElement().GetAttribute("title");
+                System.Console.WriteLine(attr);
+            } finally{
+                driver.Quit();
+            }
+        }
+    }
+}
+```
+
+### [Interactions](https://www.selenium.dev/documentation/webdriver/elements/interactions/)
+
+
+
+### [Information](https://www.selenium.dev/documentation/webdriver/elements/information/)
+
+
+
+
+
+### [Select Lists](https://www.selenium.dev/documentation/webdriver/elements/select_lists/)
+
+
+
+
 
 ## [Remote WebDriver](https://www.selenium.dev/documentation/webdriver/remote_webdriver/)
 
@@ -2490,6 +2879,10 @@ Some
 
 ### HTTP response codes
 
+### [Locators](https://www.selenium.dev/documentation/test_practices/encouraged/locators/)
+
+
+
 ### [Gmail, email and Facebook](https://www.selenium.dev/documentation/test_practices/discouraged/gmail_email_and_facebook_logins/)
 
 
@@ -2517,5 +2910,5 @@ Some
 [^ 2]: v. 扩大，增大; 放大; 详细说明
 [^ 3]: [ˈsnɪpɪt] n. 小片，片段; 不知天高地厚的年轻人
 
-
-
+[^4]: ['speɪʃəlɪ] adv. 空间地，存在于空间地
+[^5]: [ˈænsestər]
