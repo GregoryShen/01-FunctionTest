@@ -2791,21 +2791,484 @@ namespace ActiveElement{
 
 ### [Interactions](https://www.selenium.dev/documentation/webdriver/elements/interactions/)
 
+> A high-level instruction set for manipulating form controls.
 
+There are only 5 basic commands that can be executed on an element:
+
+* [click](https://w3c.github.io/webdriver/#element-click) (applies to any element)
+* [send keys](https://w3c.github.io/webdriver/#element-send-keys) (only applies to text fields and content editable elements)
+* [clear](https://w3c.github.io/webdriver/#element-send-keys) (only applies to text fields and content editable elements)
+* submit (only applies to form elements)
+* select (see [Select List Elements](https://www.selenium.dev/documentation/webdriver/elements/select_lists/))
+
+#### Additional validations
+
+These methods are designed to closely emulate a user's experience, so, unlike the [Actions API](https://www.selenium.dev/documentation/webdriver/actions_api/), it attempts to perform two things before attempting the specified action.
+
+1. If it determines the element is outside the viewport, it scrolls the element into view, specifically it will align the bottom of the element with the bottom of the viewport.
+2. It ensures the element is [interactable](https://w3c.github.io/webdriver/#interactability) before taking the action. This could mean that the scrolling was unsuccessful, or that the element is not otherwise displayed. Determining if an element is displayed on a page was too difficult to [define directly in the webdriver specification](https://w3c.github.io/webdriver/#element-displayedness), so Selenium sends an execute command with a JavaScript atom that checks for things that would keep the element from being displayed. If it determines an element is not in the viewport, not displayed, not [keyboard-interactable](https://w3c.github.io/webdriver/#dfn-keyboard-interactable), or not [pointer-interactable](https://w3c.github.io/webdriver/#dfn-pointer-interactable), it returns an [element not interactable](https://w3c.github.io/webdriver/#dfn-element-not-interactable) error.
+
+#### Click
+
+The [element click command](https://w3c.github.io/webdriver/#dfn-element-click) is executed on the [center of the element](https://w3c.github.io/webdriver/#dfn-center-point). If the center of the element is [obscured](https://w3c.github.io/webdriver/#dfn-obscuring)[^ 6] for some reason, Selenium will return an [element click intercepted](https://w3c.github.io/webdriver/#dfn-element-click-intercepted) error.
+
+#### Send keys
+
+The [element send keys command](https://w3c.github.io/webdriver/#dfn-element-send-keys) types the provided keys into an [editable](https://w3c.github.io/webdriver/#dfn-editable) element. Typically, this means an element is an input element of a form with a `text` type or an element with a `content-editable` attribute. If it is not editable, an [invalid element state](https://w3c.github.io/webdriver/#dfn-invalid-element-state) error is returned.
+
+[Here](https://www.w3.org/TR/webdriver/#keyboard-actions) is the list of possible keystrokes[^ 7] that WebDriver supports.
+
+**<u>Python</u>**
+
+```python
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.common.keys import Keys
+
+driver = webdriver.Firefox()
+# Navigate to url
+driver.get("http://www.google.com")
+# Enter "webdriver" text and perform "ENTER" keyboard action
+driver.find_element(By.NAME, "q").send_keys("webdriver" + Keys.ENTER)
+```
+
+**<u>CSharp</u>**
+
+```c#
+using (var driver = new FirefoxDriver())
+{
+    // Navigate to Url
+    driver.Navigate().GoToUrl("https://google.com");
+    // Enter "webdriver" text and perform "ENTER" keyboard action
+    driver.FindElement(By.Name("q")).SendKeys("webdriver" + Keys.Enter);
+}
+```
+
+#### Clear
+
+The [element clear command](https://w3c.github.io/webdriver/#dfn-element-clear) resets the content of an element. This requires an element to be [editable](https://w3c.github.io/webdriver/#dfn-editable), and [resettable](https://w3c.github.io/webdriver/#dfn-resettable-elements). Typically, this means an element is an input element of a form with a `text` type or an element with a `content-editable` attribute. If these conditions are not met, an [invalid element state](https://w3c.github.io/webdriver/#dfn-invalid-element-state) error is returned.
+
+**<u>Python</u>**
+
+```python
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+driver = webdriver.Chrome();
+
+# Navigate to url
+driver.get("http://www.google.com")
+# Store 'SearchInput' element
+SearchInput = driver.find_element(By.NAME, "q")
+SearchInput.send_keys("selenium")
+# Clears the entered text
+SearchInput.clear()
+```
+
+**<u>CSharp</u>**
+
+```c#
+using OpenQA.Selenium;
+using OpenQA.Selenium.Chrome;
+using System;
+
+namespace SnippetProjectDelete{
+    class Program{
+        static void Main(String[] args){
+            IWebDriver driver = new ChromeDirver();
+            try{
+                // Navigate to Url
+                driver.Navigate().GoToUrl("https://www.google.com");
+                // Store 'SearchInput' element
+                IWebElement searchInput = driver.FindElement(By.Name('q'));
+                searchInput.SendKeys("selenium");
+                // Clears the entered text
+                searchInput.Clear();
+            } finally{
+                driver.Quit();
+            }
+        }
+    }
+} 
+```
+
+#### Submit
+
+In Selenium 4 this is no longer implemented with a separate endpoint and functions by executing a script. As such[^ 8], it is recommended not to use this method and to click the applicable form submission button instead.
 
 ### [Information](https://www.selenium.dev/documentation/webdriver/elements/information/)
 
+> What you can learn about an element.
 
+There are a number of details you can query about a specific element.
 
+#### Is Displayed
 
+This method is used to check if the connected element is displayed on a webpage. Returns a `Boolean` value, true if the connected element is displayed in the current browsing context else returns false.
+
+This functionality is [mentioned in](https://w3c.github.io/webdriver/#element-displayedness), but not defined by the w3c specification due to the [impossibility of covering all potential conditions](https://www.youtube.com/watch?v=hTa1KI6fQpg). As such, Selenium cannot expect drivers to implement this functionality directly, and now relies on executing a large JavaScript function directly. This function makes many approximations about an element's nature and relationship in the tree to return a value.
+
+**<u>Python</u>**
+
+```python
+# Navigate to the url
+driver.get("https://www.google.com")
+
+# Get boolean value for is element display
+is_button_visible = driver.find_element(By.CSS_SELECTOR, "[name='login']").is_displayed()
+```
+
+**<u>CSharp</u>**
+
+```c#
+// no sample atm
+```
+
+#### Is Enabled
+
+This method is used to check if the connected element is enabled or disabled on a webpage. Returns a boolean value, true if the connected element is enabled in the current browsing context else returns false.
+
+**<u>Python</u>**
+
+```python
+# Navigate to url
+driver.get("http://www.google.com")
+
+# Returns true if element is enabled else returns false
+value = driver.find_element(By.NAME, 'btnK').is_enabled()
+```
+
+**<u>CSharp</u>**
+
+```c#
+// Navigate to Url
+driver.Navigate().GoToUrl("https://google.com");
+
+// Store the WebElement
+IWebElement element = driver.FindElement(By.Name("btnK"));
+
+// Prints true if element is enabled else returns false
+System.Console.WriteLine(element.Enabled);
+```
+
+#### Is Selected
+
+This method determines if the referenced element is selected or not. This method is widely used on checkbox, radio buttons, input elements, and option elements.
+
+Returns a boolean value, true if referenced element is selected in the current browsing context else returns false.
+
+**<u>Python</u>**
+
+```python
+# Navigate to url
+driver.get("https://the-internet.herokuapp.com/checkboxes")
+
+# Returns true if element is checked else returns false
+value = driver.find_element(By.CSS_SELECTOR, "input[type='checkbox']:first-of-type").is_selected()
+```
+
+**<u>CSharp</u>**
+
+```c#
+// Navigate to Url
+driver.Navigate().GoToUrl("https://the-internet.herokuapp.com/checkboxes");
+// Returns true if element is checked else returns false
+bool value = driver.FindElement(By.CssSelector("input[type='checkbox']:last-fo-type")).Selected;
+```
+
+#### Tag Name
+
+It is used to fetch the [TagName](https://www.w3.org/TR/webdriver/#dfn-get-element-tag-name) of the referenced element which has the focus in the current browsing context.
+
+**<u>Python</u>**
+
+```python
+# Navigate to url
+driver.get("https://www.example.com")
+
+# Returns TagName of the element
+attr = driver.find_element(By.CSS_SELECTOR, "h1").tag_name
+```
+
+**<u>CSharp</u>**
+
+```c#
+// Navigate to Url
+driver.Navigate().GoToUrl("https://www.example.com");
+
+// Returns TagName of the element
+string attr = driver.FindElement(By.CssSelector("h1")).TagName;
+```
+
+#### Size and Position
+
+It is used to fetch the dimensions and coordinates of the referenced element.
+
+The fetched data body contain the following details:
+
+* X-axis position from the top-left corner of the element
+* Y-axis position from the top-left corner of the element
+* Height of the element
+* Width of the element
+
+**<u>Python</u>**
+
+```python
+# Navigate to url
+driver.get("https://www.example.com")
+# Returns height, width, x and y coordinates referenced element
+res = driver.find_element(By.CSS_SELECTOR, "h1").rect
+```
+
+**<u>CSharp</u>**
+
+```c#
+// Navigate to Url
+driver.Navigate().GoToUrl("https://example.com");
+
+var res = driver.FindElement(By.CssSelector("h1"));
+// Return x and y coordinates referenced element
+System.Console.WriteLine(res.Location);
+// Returns height, width
+System.Console.WriteLine(res.Size);
+```
+
+#### Get CSS Value
+
+Retrieves the value of specified computed style property of an element in the current browsing context.
+
+**<u>Python</u>**
+
+```python
+# Navigate to Url
+driver.get("https://www.example.com")
+
+# Retrieves the computed style property 'color' of linktext
+cssValue = driver.find_element(By.LINK_TEXT, "More information...").value_of_css_property('color')
+```
+
+**<u>CSharp</u>**
+
+```c#
+// Navigate to url
+driver.Navigate().GoToUrl("https://www.example.com");
+
+// Retrieves the computed style property 'color' of linktext
+String cssValue = driver.FindElement(By.LinkText("More information...")).GetCssValue("color");
+```
+
+#### Text Content
+
+Retrieves the rendered text of the specified element.
+
+**<u>Python</u>**
+
+```python
+# Navigate to url
+driver.get("https://www.example.com")
+
+# Retrieves the text of the element
+text = driver.find_element(By.CSS_SELECTOR, "h1").text
+```
+
+**<u>CSharp</u>**
+
+```c#
+// Navigate to url
+driver.Navigate().GoToUrl("https://www.example.com");
+
+// Retrieves the text of the element
+String text = driver.FindElement(By.CssSelector("h1")).Text;
+```
+
+#### Attributes and Properties
+
+Attribute
+
+DOM Attribute
+
+DOM Property
 
 ### [Select Lists](https://www.selenium.dev/documentation/webdriver/elements/select_lists/)
 
+> Select lists have special behaviors compared to other elements.
 
+Select elements can require quite a bit of boilerplate[^9] code to automate. To reduce this, and make your tests cleaner, there is a `Select` class in the Selenium support package. To use it, you will need the following import statement:
 
+**<u>Python</u>**
 
+```python
+from selenium.webdriver.support.select import Select
+```
+
+**<u>CSharp</u>**
+
+```c#
+using OpenQA.Selenium.Support.UI
+```
+
+You are then able to create a Select object using a WebElement that references a `<select>` element.
+
+**<u>Python</u>**
+
+```python
+select_element = driver.find_element(By.ID, 'selectElementID')
+select_object = Select(select_element)
+```
+
+**<u>CSharp</u>**
+
+```c#
+IWebElement selectElement = driver.FindElement(By.Id("selectElementID"));
+var selectObject = new SelectElement(selectElement);
+```
+
+The Select object will now give you a series of commands that allow you to interact with a `<select>` element. First of all, there are different ways of selecting an option from the `<select>`element.
+
+```html
+<select>
+    <option value=value1>Bread</option>
+    <option value=value2 selected>Milk</option>
+    <option value=value3>Cheese</option>
+</select>
+```
+
+There are three ways to select the first option from the above element:
+
+**<u>Python</u>**
+
+```python
+# Select an <option> based upon the <select> element's internal index
+select_object.select_by_index(1)
+
+# Select an <option> based upon its value attribute
+select_object.select_by_value('value1')
+
+# Select an <option> based upon its text
+select_object.select_by_visible_text('Bread')
+```
+
+**<u>CSharp</u>**
+
+```c#
+// Select an <option> based upon the <select> element's internal index
+selectObject.SelectByIndex(1);
+
+// Select an <option> based upon its value attribute
+selectObject.SelectByValue("value1");
+
+// Select an <option> based upon its text
+selectObject.SelectByText("Bread");
+```
+
+You can then check with options are selected by using:
+
+**<u>Python</u>**
+
+```python
+# Return a list[WebElement] of options that have been selected
+all_selected_options = select_object.all_selected_options
+
+# Return a WebElement referencing the first selection option found by walking down the DOM
+first_selected_option = select_object.first_selected_option
+```
+
+**<u>CSharp</u>**
+
+```c#
+// Return a List<WebElement> of options that have been selected
+var allSelectedOptions = selectObject.AllSelectedOptions;
+
+// Return a WebElement referencing the first selection option found by walking down the DOM
+var firstSelectedOption = selectObject.AllSelectedOptions.FirstOrDefault();
+```
+
+Or you may just be interested in what `<option>` elements the `<select>` element contains:
+
+**<u>Python</u>**
+
+```python
+# Return a list[WebElement] of options that the <select> element contains
+all_available_options = select_object.options
+```
+
+**<u>CSharp</u>**
+
+```c#
+// Return a IList<IWebElement> of options that the <select> element contains
+IList<IWebElement> allAvailableOptions = selectObject.Options;
+```
+
+If you want to deselect any elements, you now have four options:
+
+**<u>Python</u>**
+
+```python
+# Deselect an <option> based upon the <select> element's internal index
+select_object.deselect_by_index(1)
+
+# Deselect an <option> based upon its value attribute
+select_object.desclect_by_value('value1')
+
+# Deselect an <option> based upon its text
+select_object.deselect_by_visible_text('Bread')
+
+# Deselect all selected <option> elements
+select_object.deselect-all()
+```
+
+**<u>CSharp</u>**
+
+```c#
+// Deselect an <option> based upon the <select> element's internal index
+selectObject.DeselectByIndex(1);
+
+// Deselect an <option> based upon its value attribute
+selectObject.DeselectByValue("value1");
+
+// Deselect an <option> based upon its text
+selectObject.DeselectByText("Bread");
+
+// Deselect all selected <option> elements
+selectObject.DeselectAll();
+```
+
+Finally, some `<select>` elements allow you to select more than one option. You can find out if your `<select>` element is one of these by using:
+
+**<u>Python</u>**
+
+```python
+does_this_allow_multiple_selections = select_object.is_multiple
+```
+
+**<u>CSharp</u>**
+
+```c#
+bool doesThisAllowMultipleSelections = selectObject.IsMultiple;
+```
 
 ## [Remote WebDriver](https://www.selenium.dev/documentation/webdriver/remote_webdriver/)
+
+
+
+**<u>Python</u>**
+
+```python
+```
+
+**<u>CSharp</u>**
+
+```c#
+```
+
+Browser options
+
+Local file detector
+
+Tracing client requests
+
+Add the required dependencies
+
+Add/pass the required system properties while running the client
 
 
 
@@ -2814,6 +3277,16 @@ namespace ActiveElement{
 无
 
 ## [Waits](https://www.selenium.dev/documentation/webdriver/waits/)
+
+Explicit wait
+
+Options
+
+Expected conditions
+
+Implicit wait
+
+FluentWait
 
 
 
@@ -2910,5 +3383,9 @@ Some
 [^ 2]: v. 扩大，增大; 放大; 详细说明
 [^ 3]: [ˈsnɪpɪt] n. 小片，片段; 不知天高地厚的年轻人
 
-[^4]: ['speɪʃəlɪ] adv. 空间地，存在于空间地
-[^5]: [ˈænsestər]
+[^ 4]: ['speɪʃəlɪ] adv. 空间地，存在于空间地
+[^ 5]: [ˈænsestər]
+[^ 6]: vt. 使…模糊不清，掩盖; 隐藏; 使难理解 adj. 昏暗的，朦胧的; 晦涩的，不清楚的; 隐蔽的; 不著名的，无名的
+[^ 7]: n. 键击，按键
+[^ 8]: as the word is usually understood; in the exact sense of the word
+[^9]: n. 样板文件; 公式化，陈词滥调
