@@ -1,4 +1,4 @@
-
+**
 
 # [The Selenium Browser Automation Project](https://www.selenium.dev/documentation/)
 
@@ -1509,7 +1509,7 @@ WebDriver API provides a way to interact with cookies with built-in methods.
 
 It is used to add a cookie to the current browsing context. Add cookie only accepts a set of defined serializable JSON object. [Here](https://www.w3.org/TR/webdriver1/#cookies) is the link to the list of accepted JSON key values.
 
-First of all, you need to be on the domain that the cookie will be valid for. If you are trying to preset[^ 1] cookies before you start interacting with a site and your homepage is large/takes a while to load an alternative is to find a smaller page on the site (typically the 404 page is small, e.g. http://example.com/some404page)
+First of all, you need to be on the domain that the cookie will be valid for. If you are trying to preset[^1] cookies before you start interacting with a site and your homepage is large/takes a while to load an alternative is to find a smaller page on the site (typically the 404 page is small, e.g. http://example.com/some404page)
 
 **<u>Python</u>**
 
@@ -2235,7 +2235,7 @@ driver.Manage().Window.Position = new Point(0, 0);
 
 ##### Maximize window
 
-Enlarges[^ 2] the window. For most operating systems, the window will fill the screen, without blocking the operating system's own menus and toolbars.
+Enlarges[^2] the window. For most operating systems, the window will fill the screen, without blocking the operating system's own menus and toolbars.
 
 **<u>Python</u>**
 
@@ -2353,7 +2353,7 @@ elementScreenshot.SaveAsFile("screenshot_of_element.png");
 
 ##### Execute Script
 
-Executes JavaScript code snippet[^ 3] in the current context of a selected frame or window.
+Executes JavaScript code snippet[^3] in the current context of a selected frame or window.
 
 **<u>Python</u>**
 
@@ -2810,13 +2810,13 @@ These methods are designed to closely emulate a user's experience, so, unlike th
 
 #### Click
 
-The [element click command](https://w3c.github.io/webdriver/#dfn-element-click) is executed on the [center of the element](https://w3c.github.io/webdriver/#dfn-center-point). If the center of the element is [obscured](https://w3c.github.io/webdriver/#dfn-obscuring)[^ 6] for some reason, Selenium will return an [element click intercepted](https://w3c.github.io/webdriver/#dfn-element-click-intercepted) error.
+The [element click command](https://w3c.github.io/webdriver/#dfn-element-click) is executed on the [center of the element](https://w3c.github.io/webdriver/#dfn-center-point). If the center of the element is [obscured](https://w3c.github.io/webdriver/#dfn-obscuring)[^6] for some reason, Selenium will return an [element click intercepted](https://w3c.github.io/webdriver/#dfn-element-click-intercepted) error.
 
 #### Send keys
 
 The [element send keys command](https://w3c.github.io/webdriver/#dfn-element-send-keys) types the provided keys into an [editable](https://w3c.github.io/webdriver/#dfn-editable) element. Typically, this means an element is an input element of a form with a `text` type or an element with a `content-editable` attribute. If it is not editable, an [invalid element state](https://w3c.github.io/webdriver/#dfn-invalid-element-state) error is returned.
 
-[Here](https://www.w3.org/TR/webdriver/#keyboard-actions) is the list of possible keystrokes[^ 7] that WebDriver supports.
+[Here](https://www.w3.org/TR/webdriver/#keyboard-actions) is the list of possible keystrokes[^7] that WebDriver supports.
 
 **<u>Python</u>**
 
@@ -2893,7 +2893,7 @@ namespace SnippetProjectDelete{
 
 #### Submit
 
-In Selenium 4 this is no longer implemented with a separate endpoint and functions by executing a script. As such[^ 8], it is recommended not to use this method and to click the applicable form submission button instead.
+In Selenium 4 this is no longer implemented with a separate endpoint and functions by executing a script. As such[^8], it is recommended not to use this method and to click the applicable form submission button instead.
 
 ### [Information](https://www.selenium.dev/documentation/webdriver/elements/information/)
 
@@ -3248,47 +3248,365 @@ bool doesThisAllowMultipleSelections = selectObject.IsMultiple;
 
 ## [Remote WebDriver](https://www.selenium.dev/documentation/webdriver/remote_webdriver/)
 
+You can use WebDriver remotely the same way you would user it locally. The primary difference is that a remote WebDriver needs to be configured so that it can run your tests on a separate machine.
 
+A remote WebDriver is composed of two pieces: a client and a server. The client is your WebDriver test and the server is simply a Java servlet, which can be hosted in any modern JEE app server.
+
+To run a remote WebDriver client, we first need to connect to the RemoteWebDriver. We do this by pointing the URL to the address of the server running our tests. In order to customize our configuration, we set desired capabilities. Below is an example of instantiating a remote WebDriver object pointing to our remote web server, www.example.com, running our tests on Firefox.
 
 **<u>Python</u>**
 
 ```python
+from selenium import webdriver
+
+firefox_options = webdriver.FirefoxOptions()
+driver = webdriver.Remote(
+	command_executor='http://www.example.com',
+	options=firefox_options)
+driver.get("http://www.google.com")
+driver.quit()
 ```
 
 **<u>CSharp</u>**
 
 ```c#
+FireFoxOptions firefoxOptions = new FirefoxOptions();
+IWebDriver driver = new RemoteWebDriver(new Uri("http://www.example.com"), firefoxOptions);
+driver.Navigate().GoToUrl("http://www.google.com");
+driver.Quit();
 ```
 
-Browser options
+To further customize our test configuration, we can add other desired capabilities.
 
-Local file detector
+### Browser options
 
-Tracing client requests
+For example, suppose you wanted to run Chrome on Windows XP, using Chrome version 67:
 
-Add the required dependencies
+**<u>Python</u>**
 
-Add/pass the required system properties while running the client
+```python
+from selenium import webdriver
 
+chrome_options = webdriver.ChromeOptions()
+chrome_options.set_capability("browserVersion", "67")
+chrome_options.set_capability("platformName", "Windows XP")
+driver = webdriver.Remote(
+	command_executor='http://www.example.com',
+	options=chrome_options
+)
+driver.get("http://www.google.com")
+driver.quit()
+```
 
+**<u>CSharp</u>**
+
+```c#
+var chromeOptions = new ChromeOptions();
+chromeOptions.BrowserVersion = "67";
+chromeOptions.PlatformName = "Windows XP";
+IWebDriver driver = new RemoteWebDriver(new Uri("http://www.example.com"), chromeOptions);
+driver.Navigate().GoToUrl("http://www.google.com");
+driver.Quit();
+```
+
+### Local file detector
+
+The local file detector allows the transfer of files from the client machine to the remote server. For example, if a test needs to upload a file to a web application, a remote WebDriver can automatically transfer the file from the local machine to the remote web server during runtime. This allows the file to be uploaded from the remote machine running the test. It is not enabled by default and can be enabled in the following way:
+
+**<u>Python</u>**
+
+```python
+from selenium.webdriver.remote.file_detector import LocalFileDetector
+
+driver.file_detector = LocalFileDetector()
+```
+
+**<u>CSharp</u>**
+
+```c#
+var allowDetection = this.driver as IAllowsFileDetection;
+if (allowsDetection != null){
+    allowsDetection.FileDetector = new LocalFileDetector();
+}
+```
+
+Once the above code is defined, you can upload a file in your test in the following way:
+
+**<u>Python</u>**
+
+```python
+driver.get("http://sso.dev.saucelabs.com/test/guinea-file-upload")
+
+driver.find_element(By.ID, "myfile").send_keys("/Users/sso/the/local/path/to/darkbulb.jpg")
+```
+
+**<u>CSharp</u>**
+
+```c#
+driver.Navigate().GoToUrl("http://sso.dev.saucelabs.com/test/guinea-file-upload");
+IWebElement upload = driver.FindElement(By.Id("myfile"));
+upload.SendKeys(@"/Users/sso/the/local/path/to/darkbulb.jpg");
+```
+
+### Tracing client requests
+
+This feature is only available for Java client binding (Beta onwards). The Remote WebDriver client sends requests to the Selenium Grid server, which passes them to the WebDriver. Tracing should be enabled at the server and client-side to trace the HTTP requests end-to-end. Both ends should have a trace exporter setup pointing to the visualization framework. By default, tracing is enabled for both client and server. To set up the visualization framework Jaeger[^10] UI and Selenium Grid 4, please refer to [Tracing Setup](https://github.com/SeleniumHQ/selenium/blob/selenium-4.0.0-beta-1/java/server/src/org/openqa/selenium/grid/commands/tracing.txt) for the desired version.
+
+for client-side setup, follow the steps below.
+
+#### Add the required dependencies
+
+Installation of external libraries for tracing exporter can be done using Maven. Add the `opentelemetry-exporter-jaeger` and `grpc-netty` dependency in your project `pom.xml`:
+
+```xml
+<dependency>
+	<groupId>io.opentelemetry</groupId>
+    <artifactId>opentelemetry-exporter-jaeger</artifactId>
+    <version>1.0.0</version>
+</dependency>
+<dependency>
+	<groupId>io.grpc</groupId>
+    <artifactId>grpc-netty</artifactId>
+    <verion>1.35.0</verion>
+</dependency>
+```
+
+#### Add/pass the required system properties while running the client
+
+```java
+System.setProperty("otel.traces.exporter", "jaeger");
+System.setProperty("otel.exporter.jaeger.endpoint", "http://localhost:14250");
+System.setProperty("otel.resource.attributes", "service.name=selenium-java-client");
+
+ImmutableCapabilities capabilities = new ImmutableCapabilities("browserName", "chrome");
+
+WebDriver driver = new RemoteWebDriver(new URL("http://www.example.com"), capabilities);
+driver.get("http://www.google.com");
+driver.quit();
+```
+
+Please refer to [Tracing Setup](https://github.com/SeleniumHQ/selenium/blob/selenium-4.0.0-beta-1/java/server/src/org/openqa/selenium/grid/commands/tracing.txt) for more information on external dependencies versions required for the desired Selenium version.
+
+More information can be found at:
+
+* OpenTelemetry: [https://opentelemetry.io](https://opentelemetry.io/)
+* Configuring OpenTelemetry: https://github.com/open-telemetry/opentelemetry-java/tree/main/sdk-extensions/autoconfigure
+* Jaeger: [https://www.jaegertracing.io](https://www.jaegertracing.io/)
+* [Selenium Grid Observability](https://www.selenium.dev/documentation/grid/advanced_features/observability/)
 
 ## [Drivers](https://www.selenium.dev/documentation/webdriver/drivers/)
 
-无
+We learned how to [install drivers](https://www.selenium.dev/documentation/webdriver/getting_started/install_drivers/) in the Getting Started section.
+
+Selenium provides access to Service classes which are used to determine how the server is started.
 
 ## [Waits](https://www.selenium.dev/documentation/webdriver/waits/)
 
-Explicit wait
+WebDriver can generally be said to have a blocking API. Because it is an out-of-process library that instructs browser what to do, and because the web platform has an intrinsically asynchronous nature, WebDriver does not track the active, real-time state of the DOM. This comes with some challenges that we will discuss here.
 
-Options
+From experience, most intermittent[^11] issues that arise from use of Selenium and WebDriver are connected to <u>race conditions</u> that occur between the browser and the user's instructions. An example could be that the user instructs the browser to navigate to a page, then gets a <u>no such element</u> error when trying to find an element.
 
-Expected conditions
+Consider the following document:
 
-Implicit wait
+```html
+<!doctype html>
+<meta charset=utf-8>
+<title>Race Condition Example</title>
 
-FluentWait
+<script>
+	var initialised false;
+    window.addEventListener("load", function(){
+        var newElement = document.createElement("p");
+        newElement.textContent = "Hello from JavaScript!";
+        document.body.appendChild(newElement);
+        initialised = true;
+    });
+</script>
+```
 
+The WebDriver instructions might look innocent enough:
 
+**<u>Python</u>**
+
+```python
+driver.navigate("file://race_condition.html")
+el = driver.find_element(By.TAG_NAME, "p")
+assert el.text == "Hello from JavaScript!"
+```
+
+**<u>CSharp</u>**
+
+```c#
+driver.Navigate().GoToUrl("file://race_condition.html");
+IWebElement element = driver.FindElement(By.TagName("p"));
+assertEquals(element.Text, "Hello from JavaScript!");
+```
+
+The issue here is that the default [page load strategy](https://www.selenium.dev/documentation/webdriver/capabilities/shared/#pageloadstrategy) used in WebDriver listens for the `document.readyState` to change to "`complete`" before returning from the call to `navigate`. Because the `p` element is added after the document has completed loading, this WebDriver script might be intermittent. It "might" be intermittent because no guarantees can be made about elements or events that trigger asynchronously without explicitly waiting -- or blocking -- on those events.
+
+Fortunately, the normal instruction set available on the [WebElement](https://www.selenium.dev/documentation/webdriver/elements/) interface -- such as `WebElement.click` and `WebElement.sendKeys` -- are guaranteed to be synchronous, in that the function calls will not return (or the callback will not trigger in callback-style languages) until the command has been completed in the browser. The advanced user interaction APIs, Keyboard and Mouse, are exceptions as they are explicitly intended as "do what I say" asynchronous commands.
+
+Waiting is having the automated task execution elapse a certain amount of time before continuing with the next step.
+
+To overcome the problem of race conditions between the browser and your WebDriver script, most Selenium clients ship with a wait package. When employing a wait, you are using what is commonly referred to as an <u>explicit wait</u>.
+
+### Explicit wait
+
+Explicit waits are available to Selenium clients for imperative[^12], procedural languages. They allow your code to halt program execution, or freeze the thread, until the condition you pass it resolves. The condition is called with a certain frequency until the timeout of the wait is elapsed. This means that for as long as the condition returns a falsy value, it will keep trying and waiting.
+
+Since explicit waits allow you to wait for a condition to occur, they make a good fit for synchronizing the state between the browser and its DOM, and your WebDriver script.
+
+To remedy[^13] our buggy instruction set from earlier, we could employ[^14] a wait to have the `findElement` call wait until the dynamically added element from the script has been added to the DOM:
+
+**<u>Python</u>**
+
+```python
+from selenium.webdriver.support.ui import WebDriverWait
+
+def document_initialized(driver):
+    return driver.execute_script("return initialized")
+
+driver.navigate("file://race_condition.html")
+WebDriverWait(driver, timeout=10).until(document_initialized)
+el = driver.find_element(By.TAG_NAME, "p")
+assert el.text == "Hello from JavaScript!"
+```
+
+**<u>CSharp</u>**
+
+```c#
+driver = new ChromeDriver();
+driver.Url = "https://www.google.com/ncr";
+driver.FindElement(By.Name("q")).SendKeys("cheese" + Keys.Enter);
+
+WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
+IWebElement firstResult = wait.Until(e => e.FindElement(By.XPath("//a/h3")));
+
+Console.WriteLine(firstResult.Text);
+```
+
+We pass in the condition as a function reference that the wait will return repeatedly until its return value is truthy. A "truthful" return value is anything that evaluates to boolean true in the language at hand, such as a string, number, a boolean, an object(including a WebElement), or a populated(non-empty) sequence or list. That means an empty list evaluates to false. When the condition is truthful and the blocking wait is aborted, the return value from the condition becomes the return value of the wait.
+
+With this knowledge, and because the wait utility ignores <u>no such element</u> errors by default, we can refactor our instructions to be more concise:
+
+**<u>Python</u>**
+
+```python
+from selenium.webdriver.support.ui import WebDriverWait
+
+driver.navigate("file://race_condition.html")
+el = WebDriverWait(driver, timeout=3).until(lambda d: d.find_element_by_tag_name("p"))
+assert el.text == "Hello from JavaScript!"
+```
+
+**<u>CSharp</u>**
+
+```c#
+using (var driver = new FirefoxDriver()){
+    var foo = new WebDriverWait(driver, TimeSpan.FromSeconds(3)).until(drv => drv.FindElement(By.Name("q")));
+    Debug.Assert(foo.Text.Equals("Hello from JavaScript!"));
+}
+```
+
+In that example, we pass in an anonymous function(but we could also define it explicitly as we did earlier so it may be reused). The first and only argument that is passed to our condition is always a reference to our driver object, WebDriver. In a multi-threaded environment, you should be careful to operate on the driver reference passed in to the condition rather than the reference to the driver in the outer scope.
+
+Because the wait will swallow <u>no such element</u> errors that are raised when the element is not found, the condition will retry until the element is found. Then it will take the return value, a WebElement, and pass it back through to our script.
+
+If the condition fails, e.g. a truthful return value from the condition is never reached, the wait will throw/raise an error/exception called a <u>timeout error</u>.
+
+#### Options
+
+The wait condition can be customized to match your needs. Sometimes it is unnecessary to wait the full extent of the default timeout, as the penalty[^15] for not hitting a successful condition can be expensive.
+
+The wait lets you pass in an argument to override the timeout:
+
+**<u>Python</u>**
+
+```python
+WebDriverWait(driver, timeout=3).until(some_condition)
+```
+
+**<u>CSharp</u>**
+
+```c#
+new WebDriverWait(driver, TimeSpan.FromSeconds(3)).Until(ExpectedConditions.ElementToBeClickable(By.XPath("//a/h3")));
+```
+
+#### Expected conditions
+
+Because it is quite a common occurrence to have to synchronize the DOM and your instructions, most clients also come with a set of predefined <u>expected conditions</u>. As might be obvious by the name, they are conditions that are predefined for frequent wait operations.
+
+The conditions available in the different language bindings vary, but this is a non-exhaustive[^16] list of a few:
+
+* alert is present
+* element exists
+* element is visible
+* title contains
+* title is
+* element staleness
+* visible text
+
+You can refer to the API documentation for each client binding to find an exhaustive list of expected conditions.
+
+* Java's [org.openqa.selenium.support.ui.ExpectedConditions](https://seleniumhq.github.io/selenium/docs/api/java/org/openqa/selenium/support/ui/ExpectedConditions.html) class
+* Python's [selenium.webdriver.support.expected_conditions](https://seleniumhq.github.io/selenium/docs/api/py/webdriver_support/selenium.webdriver.support.expected_conditions.html?highlight=expected) class
+* .NET's [OpenQA.Selenium.Support.UI.ExpectedConditions](https://seleniumhq.github.io/selenium/docs/api/dotnet/html/T_OpenQA_Selenium_Support_UI_ExpectedConditions.htm) type
+* JavaScript's [selenium-webdriver/lib/until](https://seleniumhq.github.io/selenium/docs/api/javascript/module/selenium-webdriver/lib/until.html) module
+
+### Implicit wait
+
+There is a second type of wait that is distinct from explicit wait called <u>implicit wait</u>. By implicitly waiting, WebDriver polls the DOM for a certain duration when trying to find any element. This can be useful when certain elements on the webpage are not available immediately and need some time to load.
+
+Implicit waiting for elements to appear is disabled by default and will need to be manually enabled on a per-session basis. ==Mixing explicit waits and implicit waits will cause unintended consequences, namely waits sleeping for the maximum time even if the element is available or condition is true.==
+
+Warning: Do not mix implicit and explicit waits. Doing so can cause unpredictable wait times. For example, setting an implicit wait of 10 seconds and an explicit wait for 15 seconds could cause a timeout to occur after 20 seconds.
+
+An implicit wait is to tell WebDriver to poll the DOM for a certain amount of time when trying to find an element or elements if they are not immediately available. The default setting is 0, meaning disabled. Once set, the implicit wait is set for the life of the session.
+
+**<u>Python</u>**
+
+```python
+driver = Firefox()
+driver.implicitly_wait(10)
+driver.get("http://somedomain/url_that_delays_loading")
+my_dynamic_element = driver.find_element(By.ID, "myDynamicElement")
+```
+
+**<u>CSharp</u>**
+
+```c#
+IWebDriver driver = new ChromeDriver();
+driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(10);
+driver.Url = "http://somedomain/url_that_delays_loading";
+IWebElement dynamicElement = driver.FindElement(By.Name("dynamicElement"));
+```
+
+### FluentWait
+
+FluentWait instance defines the maximum amount of time to wait for a condition, as well as the frequency with which to check the condition.
+
+Users may configure the wait to ignore specific types of exceptions whilst[^17] waiting, such as `NoSuchElementException` when searching for an element on the page.
+
+**<u>Python</u>**
+
+```python
+driver = Firefox()
+driver.get("http://somedomain/url_that_delays_loading")
+wait = WebDriverWait(driver, timeout=10, poll_frequency=1, ignored_exceptions=[ElementNotVisibleException, ElementNotSelectableException])
+element = wait.until(EC.element_to_be_clickable((By.XPATH, "//div")))
+```
+
+**<u>CSharp</u>**
+
+```c#
+using (var driver = new FirefoxDriver()){
+    WebDriverWait wait = new WebDriverWait(driver, timeout: TimeSpan.FromSeconds(30)){
+        PollingInterval = TimeSpan.FromSeconds(5)
+    };
+    wait.IgnoreExceptionTypes(typeof(NoSuchElementException));
+    var foo = wait.Until(drv => drv.FindElement(By.Id("foo")));
+}
+```
 
 ## [Actions API](https://www.selenium.dev/documentation/webdriver/actions_api/)
 
@@ -3378,14 +3696,22 @@ Some
 
 
 
-[^ 1]: vt. 预先布置; 事先调整; 预先决定; 事先安排
+[^1]: vt. 预先布置; 事先调整; 预先决定; 事先安排
 
-[^ 2]: v. 扩大，增大; 放大; 详细说明
-[^ 3]: [ˈsnɪpɪt] n. 小片，片段; 不知天高地厚的年轻人
+[^2]: v. 扩大，增大; 放大; 详细说明
+[^3]: [ˈsnɪpɪt] n. 小片，片段; 不知天高地厚的年轻人
 
-[^ 4]: ['speɪʃəlɪ] adv. 空间地，存在于空间地
-[^ 5]: [ˈænsestər]
-[^ 6]: vt. 使…模糊不清，掩盖; 隐藏; 使难理解 adj. 昏暗的，朦胧的; 晦涩的，不清楚的; 隐蔽的; 不著名的，无名的
-[^ 7]: n. 键击，按键
-[^ 8]: as the word is usually understood; in the exact sense of the word
+[^4]: ['speɪʃəlɪ] adv. 空间地，存在于空间地
+[^5]: [ˈænsestər]
+[^6]: vt. 使…模糊不清，掩盖; 隐藏; 使难理解 adj. 昏暗的，朦胧的; 晦涩的，不清楚的; 隐蔽的; 不著名的，无名的
+[^7]: n. 键击，按键
+[^8]: as the word is usually understood; in the exact sense of the word
 [^9]: n. 样板文件; 公式化，陈词滥调
+[^10]: /ˈjeɪɡə $ -gər/
+[^11]: stopping and starting often over a period of time, but not regularly
+[^12]: extremely important and needing to be done or dealt with immediately. SYN: urgent, essential, pressing, vital
+[^13]: vt. (remedied, remedying, remedies) to deal with a problem or improve a bad situation. SYN: put right
+[^14]: to use a particular object, method, skill etc in order to achieve something. *employ a method/technique/tactic etc*. In everyday English, people usually say **use** a method rather than **employ** a method.
+[^15]: a punishment for breaking a law, rule, or legal agreement
+[^16]: adj. 详尽的，彻底的 extremely thorough and complete
+[^17]: conj. 在…期间; 与…同时; 然而; 尽管
