@@ -1,5 +1,3 @@
-**
-
 # [The Selenium Browser Automation Project](https://www.selenium.dev/documentation/)
 
 Selenium is an umbrella project for a range of tools and libraries that enable and support the automation of web browsers.
@@ -112,7 +110,7 @@ Remote communication can also take place using Selenium Server or Selenium Grid,
 
 ### Where Frameworks fit in
 
-WebDriver has one job and one job only: communicate with the browser via any of the methods above. WebDriver does not know a thing about testing: it does not know how to compare things, assert pass or fail, and it certainly does not know a thing about reporting or Given/When/Then grammer.
+WebDriver has one job and one job only: communicate with the browser via any of the methods above. WebDriver does not know a thing about testing: it does not know how to compare things, assert pass or fail, and it certainly does not know a thing about reporting or Given/When/Then grammar.
 
 This is where various frameworks come in to play. At a minimum you will need a test framework that matches the language binding, e.g. NUnit for .NET, JUnit for Java, Rspec for Ruby, etc.
 
@@ -3610,23 +3608,803 @@ using (var driver = new FirefoxDriver()){
 
 ## [Actions API](https://www.selenium.dev/documentation/webdriver/actions_api/)
 
-### Keyboard
+A low-level interface for providing virtualized device input to the web browser.
 
-### Mouse
+Unlike the high-level element interactions, which conducts additional validations, the Actions API provides granular[^18] control over input devices.
 
-### Wheel
+Selenium provides access to 3 input sources: key inputs for keyboard devices, pointer inputs for a mouse, pen or touch device, and a wheel inputs for scroll wheel support.
+
+### [Keyboard](https://www.selenium.dev/documentation/webdriver/actions_api/keyboard/)
+
+> A representation of any key input device for interacting with a web page.
+
+Keyboard represents a KeyBoard event. KeyBoard actions are performed by using low-level interface which allows us to provide virtualized device input to the web browser.
+
+#### Keys
+
+In addition to the keys represented by regular unicode, unicode values have been assigned to other keyboard keys for use with Selenium. Each language has its own way to reference these keys; the full list can be found [here](https://www.w3.org/TR/webdriver/#keyboard-actions).
+
+#### Key down
+
+The KeyDown is used to simulate action of depressing a key
+
+**<u>Python</u>**
+
+```python
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.common.keys import Keys
+
+driver = webdriver.Chrome()
+
+# Navigate to url
+driver.get("http://www.google.com")
+
+# Enter "webdriver" text and perform "ENTER" keyboard action
+driver.find_element(By.NAME, "q").send_keys("webdriver" + Keys.ENTER)
+
+# Perform action ctrl + A to select the page
+webdriver.ActionChains(driver).key_down(Keys.CONTROL).send_keys("a").perform()
+```
+
+**<u>CSharp</u>**
+
+```c#
+IWebDriver driver = new ChromeDriver();
+try
+{
+    // Navigate to Url
+    driver.Navigate().GoToUrl("https://google.com");
+    
+    // Enter "webdriver" text and perform "ENTER" keyboard action
+    driver.FindElement(By.Name("q")).SendKeys("webdriver" + Keys.Enter);
+    
+    // Perform action ctrl + A(modifer CONTROL + Alphabe A) to select the page
+    Actions actionProvider = new Actions(driver);
+    IAction keydown = actionProvider.KeyDown(Keys.Control).SendKeys("a").Build();
+    keydown.Perform();
+}
+finally
+{
+    driver.Quit();
+}
+```
+
+#### Key up
+
+The KeyUp is used to simulate key-up (or) key-release action.
+
+**<u>Python</u>**
+
+```python
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.common.keys import Keys
+
+driver = webdriver.Chrome()
+# Navigate to url
+driver.get("http://www.google.com")
+
+# Store google search box WebElement
+search = driver.find_element(By.NAME, "q")
+action = webdriver.ActionChains(driver)
+
+# Enter text "qwerty" with keyDown SHIFT key and after keyUp SHIFT key(QWERTYqwerty)
+actions.key_down(Keys.SHIFT).send_keys_to_element(search, "qwerty").key_up(Keys.SHIFT).send_keys("qwerty").perform()
+```
+
+**<u>CSharp</u>**
+
+```c#
+using OpenQA.Selenium;
+using OpenQA.Selenium.Chrome;
+using OpenQA.Selenium.Interactions;
+
+namespace HelloSelenium
+{
+    class HelloSelenium
+    {
+        public static void Main(string[] args)
+        {
+            IWebDriver driver = new ChromeDriver();
+            try
+            {
+                // Navigate to Url
+                driver.Navigate().GoToUrl("https://google.com");
+                Actions action = new Actions(driver);
+                
+                // Store google search box WebElement
+                IWebElement search = driver.FindElement(By.Name("q"));
+                
+                // Enters text "qwerty" with KeyDown SHIFT key and after keyUp SHIFT key(QWERTYqwerty)
+                action.KeyDown(Keys.Shift).SendKeys(search, "qwerty").KeyUp(Keys.Shift).SendKeys("qwerty").Perform();
+            }
+            finally
+            {
+                driver.Quit();
+            }
+        }
+    }
+}
+```
+
+#### Send keys
+
+This is a convenience method in the Actions API that combines keyDown and keyUp commands in one action. Executing this command differs slightly from using the element method.
+
+**<u>Python</u>**
+
+```python
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.chrome.service import Service
+from webdriver_manager.chrome import ChromeDriverManager
+
+driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()))
+driver.get("https://www.selenium.dev/selenium/docs/api/py/genindex.html")
+
+search = driver.find_element(By.NAME, "q")
+
+action = webdriver.ActionChains(driver)
+action.move_to_element(search).click().send_keys("send_keys", Keys.ENTER).perform()
+```
+
+**<u>CSharp</u>**
+
+```c#
+# Help us with a PR for code sample
+```
+
+### [Mouse](https://www.selenium.dev/documentation/webdriver/actions_api/mouse/)
+
+> A representation of any pointer device for interacting with a web page.
+
+#### Click and hold
+
+It will move to the element and clicks (without releasing) in the middle of the given element.
+
+**<u>Python</u>**
+
+```python
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+
+driver = webdriver.Chrome()
+# Navigate to url
+driver.get("http://www.google.com")
+# Store 'google search' button web element
+searchBtn = driver.find_element(By.LINK_TEXT, "Sign in")
+# Perform click-and-hold action on the element
+webdriver.ActionChains(driver).click_and_hold(searchBtn).perform()
+```
+
+**<u>CSharp</u>**
+
+```c#
+using OpenQA.Selenium;
+using OpenQA.Selenium.Chrome;
+using OpenQA.Selenium.Interactions;
+
+namespace SeleniumApp
+{
+    public class ClickAndHold
+    {
+        public static void Main(string[] args)
+        {
+            IWebDriver driver = new ChromeDriver();
+        	try
+            {
+                // Navigate to Url
+                driver.Navigate().GoToUrl("https://google.com");
+                // Store 'google search' button web element
+                IWebElement searchBtn = driver.FindElement(By.LinkText("Sign in"));
+                Actions actionProvider = new Actions(driver);
+                // Perform click-and-hold action on the elment
+                actionProvider.ChickAndHold(searchBtn).Build().Perform();
+            }
+            finally
+            {
+                driver.Quit();
+            }    
+        }
+    }
+}
+```
+
+#### Context click
+
+This method firstly performs a mouse-move to the location of the element and performs the context-click (right click) on the given element.
+
+**<u>Python</u>**
+
+```python
+from selenium import webdriver
+
+driver = webdriver.Chrome()
+
+# Navigate to url
+driver.get("http://www.google.com")
+# Store 'google search' button web element
+searchBtn = driver.find_element(By.LINK_TEXT, "Sign in")
+# Perform context-click action on the element
+webdriver.ActionChains(driver).context_click(searchBtn).perform()
+```
+
+**<u>CSharp</u>**
+
+```c#
+using OpenQA.Selenium;
+using OpenQA.Selenium.Chrome;
+using OpenQA.Selenium.Interactions;
+
+namespace SeleniumApp
+{
+    public class ContextClick
+    {
+        public static void Main(string[] args)
+        {
+            IWebDriver driver = new ChromeDriver();
+            try
+            {
+                // Navigate to Url
+                driver.Navigate().GoToUrl("https://google.com");
+                // Store 'google search' button web element
+                IWebElement searchBtn = driver.FindElement(By.LinkText("Sign in"));
+                Actions actionProvider = new Actions(driver);
+                // Perform context-click action on the element
+                actionProvider.ContextClick(searchBtn).Build().Perform();
+            }
+            finally
+            {
+                driver.Quit();
+            }
+        }
+    }
+}
+```
+
+#### Double click
+
+It will move to the element and performs a double-click in the middle of the given element.
+
+**<u>Python</u>**
+
+```python
+from selenium import webdriver
+
+driver = webdriver.Chrome()
+
+# Navigate to url
+driver.get("https://www.google.com")
+# Store 'google search' button web element
+searchBtn = driver.find_element(By.LINK_TEXT, "Sign in")
+# Perform double-click action on the element
+webdriver.ActionChains(driver).double_click(searchBtn).perform()
+```
+
+**<u>CSharp</u>**
+
+```c#
+using OpenQA.Selenium;
+using OpenQA.Selenium.Chrome;
+using OpenQA.Selenium.Interactions;
+
+namespace SeleniumApp
+{
+    public class DoubleClick
+    {
+        public static void Main(string[] args)
+        {
+            IWebDriver driver = new ChromeDriver();
+            try
+            {
+                // Navigate to url
+                driver.Navigate().GoToUrl("https://google.com");
+                // Store 'google search' button web element
+                IWebElement searchBtn = driver.FindElement(By.LinkText("Sign in"));
+                Actions actionProvider = new Actions(driver);
+                // Perform double-click action on the element
+                actionProvider.DoubleClick(searchBtn).Build().Perform();
+            }
+            finally
+            {
+                driver.Quit();
+            }
+        }
+    }
+}
+```
+
+#### Move to element
+
+This method moves the mouse to the middle of the element. ==The element is also scrolled into the view on performing this action.==
+
+**<u>Python</u>**
+
+```python
+from selenium import webdriver
+
+driver = webdriver.Chrome()
+# Navigate to url
+driver.get("http://www.google.com")
+# Store 'google search' button web element
+gmailLink = driver.find_element(By.LINK_TEXT, "Gmail")
+# Performs mouse move action onto the element
+webdriver.ActionChains(driver).move_to_element(gmailLink).perform()
+```
+
+**<u>CSharp</u>**
+
+```c#
+using OpenQA.Selenium;
+using OpenQA.Selenium.Chrome;
+using OpenQA.Selenium.Interactions;
+
+namespace SeleniumApp
+{
+    public class MoveToElement
+    {
+        public static void Main(string[] args)
+        {
+            IWebDriver driver = new ChromeDriver();
+            try
+            {
+                // Navigate to Url
+                driver.Navigate().GoToUrl("https://google.com");
+                // Store 'google search' button web element
+                IWebElement gmailLink = driver.FindElement(By.LinkText("Gmail"));
+                Actions actionProvider = new Actions(driver);
+                actionProvider.MoveToElement(gmailLink).Build().Perform();
+            }
+            finally
+            {
+                driver.Quit();
+            }
+        }
+    }
+}
+```
+
+#### Move by offset
+
+This method moves the mouse from its current position(or 0, 0) by the given offset. ==If the coordinates are outside the view window, then the mouse will end up outside the browser window.==
+
+**<u>Python</u>**
+
+```python
+from selenium import webdriver
+
+driver = webdriver.Chrome()
+
+# Navigate to url
+driver.get("http://www.google.com")
+# Store 'google search' button web element
+gmailLink = driver.find_element(By.LINK_TEXT, "Gmail")
+# Set x and y offset positions of element
+xOffset = 100
+yOffset = 100
+# Performs mouse move action onto the element
+webdriver.ActionChains(driver).move_by_offset(xOffset, yOffset).perform()
+```
+
+**<u>CSharp</u>**
+
+```c#
+using OpenQA.Selenium;
+using OpenQA.Selenium.Chrome;
+using OpenQA.Selenium.Interactions;
+
+namespace SeleniumApp
+{
+    public class MoveByOffset
+    {
+        public static void Main(string[] args)
+        {
+            IWebDriver driver = new ChromeDriver();
+            try
+            {
+                // Navigate to Url
+                driver.Navigate().GoToUrl("https://google.com");
+                // Store 'google search' button web element
+                IWebElement gmailLink = driver.FindElement(By.LinkText("Gmail"));
+                // Set x and y offset positions of element
+                int xOffset = 100;
+                int yOffset = 100;
+                Actions actionProvider = new Actions(driver);
+                // Perform mouse move action onto the offset position
+                actionProvider.MoveByOffset(xOffset, yOffset).Build().Perform();
+            }
+            finally
+            {
+                driver.Quit();
+            }
+        }
+    }
+}
+```
+
+#### dragAndDrop
+
+This method firstly performs a click-and-hold on the source element, moves to the location of the target element and then releases the mouse.
+
+**<u>Python</u>**
+
+```python
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+
+driver = webdriver.Chrome()
+# Navigate to url
+driver.get("https://corssbrowsertesting.github.io/drag-and-drop")
+# Store 'box A' as a source element
+sourceEle = driver.find_element(By.ID, "draggable")
+# Store 'box B' as a target element
+targetEle = driver.find_element(By.ID, "drappable")
+# Performs drag and drop action of sourceEle onto the targetEle
+webdriver.ActionChains(driver).drag_and_drop(sourceEle, targetEle).perform()
+```
+
+**<u>CSharp</u>**
+
+```c#
+using OpenQA.Selenium;
+using OpenQA.Selenium.Chrome;
+using OpenQA.Selenium.Interactions;
+
+namespace SeleniumApp
+{
+    public class DragAndDrop
+    {
+        public static void Main(string[] args)
+        {
+            IWebDriver driver = new ChromeDriver();
+            try
+            {
+                // Navigate to Url
+                driver.Navigate().GoToUrl("https://crossbrowsertesting.github.io/drag-and-drop");
+                // Store 'box A' as source element
+                IWebElement sourceEle = driver.FindElement(By.Id("draggable"));
+                // Store 'box B' as source element
+                IWebElement targetEle = driver.FindElement(By.Id("drappable"));
+                Actions actionProvider = new Actions(driver);
+                // Performs drag and drop action of sourceEle onto the targetEle
+                actionProvider.DragAndDrop(sourceEle, targetEle).Build().Perform();
+            }
+            finally
+            {
+                driver.Quit();
+            }
+        }
+    }
+}
+```
+
+#### dragAndDropBy
+
+This method firstly performs a click-and-hold on the source element, moves to the given offset and then releases the mouse.
+
+**<u>Python</u>**
+
+```python
+from selenium import webdriver
+
+driver = webdriver.Chrome()
+
+# Navigate to url
+driver.get("https://crossbrowsertesting.github.io/drag-and-drop")
+# Store 'box A' as source element
+sourceEle = driver.find_element(By.ID, "draggable")
+# Store 'box B' as target element
+targetEle = driver.find_element(By.ID, "droppable")
+targetEleXOffset = targetEle.location.get("x")
+targetEleYOffset = targetEle.location.get("y")
+# performs dragAndDropBy onto the target element offset position
+webdriver.ActionChains(driver).drag_and_drop_by_offset(sourceEle, targetEleXOffset, targetEleYOffset).perform()
+```
+
+**<u>CSharp</u>**
+
+```c#
+using OpenQA.Selenium;
+using OpenQA.Selenium.Chrome;
+using OPenQA.Selenium.Interactions;
+
+namespace SeleniumApp
+{
+    public class DragAndDropToOffset
+    {
+        public static void Main(string[] args)
+        {
+            IWebDriver driver = new ChromeDriver();
+            try
+            {
+                // Navigate to Url
+                driver.Navigate().GoToUrl("https://crossbrowsertesting.github.io/drag-and-drop");
+                // Store 'box A' as source element
+                IWebElement sourceEle = driver.FindElement(By.Id("draggable"));
+                // Store 'box B' as target element
+                IWebElement targetEle = driver.FindElement(By.Id("droppable"));
+                int targetEleXOffset = targetEle.Location.X;
+                int targetEleYOffset = targetEle.Location.Y;
+                Actions actionProvider = new Actions(driver);
+                // Performs drag and drop action of sourceEle onto the targetEle
+                actionProvider.DragAndDropToOffset(sourceEle, targetEleXOffset, targetEleYOffset).Build().Perform();
+            }
+            finally
+            {
+                driver.Quit();
+            }
+        }
+    }
+}
+```
+
+#### release
+
+This action releases the depressed left mouse button. If WebElement is passed, it will release depressed left mouse button on the given WebElement.
+
+**<u>Python</u>**
+
+```python
+from selenium import webdriver
+
+driver = webdriver.Chrome()
+# Navigate to url
+driver.get("https://corssbrowsertesting.github.io/drag-and-drop")
+# Store 'box A' as source element
+sourceEle = driver.find_element(By.ID, "draggable")
+# Store 'box B' as target element
+targetEle = driver.find_element(By.ID, "droppable")
+# Performs dragAndDropBy onto the target element offset position
+webdriver.ActionChains(driver).click_and_hold(sourceEle).move_to_element(targetEle).perform()
+# Performs release event
+webdriver.ActionChains(driver).release().perform()
+```
+
+**<u>CSharp</u>**
+
+```c#
+using OpenQA.Selenium;
+using OpenQA.Selenium.Chrome;
+using OpenQA.Selenium.Interactions;
+
+namespace SeleniumApp
+{
+    public class MoveByOffset
+    {
+        public static void Main(string[] args)
+        {
+            IWebDriver driver = new ChromeDriver();
+            try
+            {
+                // Navigate to Url
+                driver.Navigate().GoToUrl("https://google.com");
+                // Store 'google search' button web element
+                IWebElement gmailLink = driver.FindElement(By.LinkText("Gmail"));
+                // Set x and y offset positions of element
+                int xOffset = 100;
+                int yOffset = 100;
+                Actions actionProvider = new Actions(driver);
+                // Performs mouse move action onto the offset position
+                actionProvider.MoveByOffset(xOffset, yOffset).Build().Perform();
+            }
+            finally
+            {
+                driver.Quit();
+            }
+        }
+    }
+}
+```
+
+### [Wheel](https://www.selenium.dev/documentation/webdriver/actions_api/wheel/)
+
+> A representation of a scroll wheel input device for interacting with a web page.
+
+#### Scroll to element
+
+Scrolls to the element by scroll the viewport[^19]. This way the element is at the bottom.
+
+**<u>Python</u>**
+
+```python
+from selenium import webdriver
+from selenium.webdriver import ActionChains
+from selenium.webdriver.common.by import By
+
+driver = webdriver.Chrome()
+driver.get("https://crossbrowsertesting.github.io/selenium_example_page.html")
+element = driver.find_element(By.ID, "closepopup")
+
+ActionChains(driver).scroll(0, 0, 0, 0, origin=element).perform()
+driver.quit()
+```
+
+**<u>CSharp</u>**
+
+```c#
+// placeholder
+```
+
+#### Scroll by given amount from element
+
+Scrolls to the element by scrolling the viewport. This way the element is at the bottom. Scrolls the viewport further by the given amount i.e. horizontal and vertical offsets.
+
+**<u>Python</u>**
+
+```python
+from selenium import webdriver
+form selenium.webdriver import ActionChains
+from selenium.webdriver.common.by import By
+
+driver = webdriver.Chrome()
+driver.set_window_size(500, 400)
+driver.get("https://crossbrowsertesting.github.io/selenium_example_page.html")
+
+element = driver.find_element(By.LINK_TEXT, "Go To Page 2")
+ActionChains(driver).scroll(0, 0, 0, 300, origin=element).perform()
+driver.quit()
+```
+
+**<u>CSharp</u>**
+
+```c#
+// placeholder
+```
+
+#### Scroll by given amount
+
+Scrolls the viewport by the given amount i.e. horizontal and vertical offsets.
+
+**<u>Python</u>**
+
+```python
+from selenium import webdriver
+from selenium.webdriver import ActionChains
+
+driver = webdriver.Chrome()
+driver.set_window_size(500, 400)
+driver.get("https://crossbrowsertesting.github.io/selenium_example_page.html")
+
+ActionChains(driver).scroll(0, 0, 0, 200).perform()
+driver.quit()
+```
+
+**<u>CSharp</u>**
+
+```c#
+// placeholder
+```
+
+#### Scroll from an offset of origin (viewport) by given amount
+
+The origin is the where the cursor is placed before the scroll is executed. For example, the position on the screen where the cursor is before scrolling a mouse wheel. For origin as viewport, the origin offset is calculated from the upper left corner of the viewport. Starting from this origin, the viewport is scrolled by the given amount i.e. horizontal and vertical offsets.
+
+**<u>Python</u>**
+
+```python
+from selenium import webdriver
+from selenium.webdriver import ActionChains
+from selenium.webdriver.common.by import By
+
+driver = webdriver.Chrome()
+driver.set_window_size(600, 600)
+driver.get("https://crossbrowsertesting.github.io/selenium_example_page.html")
+
+textarea = driver.find_element(By.NAME, "textarea")
+textarea.send_keys("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" +
+                   "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb" +
+                   "cccccccccccccccccccccccccccccccc" +
+                   "dddddddddddddddddddddddddddddddd" +
+                   "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee")
+
+ActionChains(driver).scroll(20, 200, 0, -50).perform()
+driver.quit()
+```
+
+**<u>CSharp</u>**
+
+```c#
+// placeholder
+```
+
+#### Scroll from an offset of origin (element) by given amount
+
+The origin is the where the cursor is placed before the scroll is executed. For example, the position on the screen where the cursor is before scrolling a mouse wheel. For origin as element, the origin offset is calculated from the center of the element. Starting from this origin, the viewport is scrolled by the given amount i.e. horizontal and vertical offsets.
+
+**<u>Python</u>**
+
+```python
+from selenium import webdriver
+from selenium.webdriver import ActionChains
+from selenium.webdriver.common.by import By
+
+driver = webdriver.Chrome()
+driver.get("https://crossbrowsertesting.github.io/selenium_example_page.html")
+
+textarea = driver.find_element(By.NAME, "textarea")
+submit = driver.find_element(By.ID, "submitbtn")
+
+textarea.send_keys("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" +
+                   "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb" +
+                   "cccccccccccccccccccccccccccccccc" +
+                   "dddddddddddddddddddddddddddddddd" +
+                   "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee")
+
+ActionChains(driver).scroll(0, -50, 0, -50, origin=submit).perform()
+driver.quit()
+```
+
+**<u>CSharp</u>**
+
+```c#
+// placeholder
+```
 
 ## [BiDirectional](https://www.selenium.dev/documentation/webdriver/bidirectional/)
 
-### BiDi API
+Selenium is working with browser vendors to create the [WebDriver BiDirectional Protocol](https://w3c.github.io/webdriver-bidi/) as a means to provide a stable, cross-browser API that uses the bidirectional functionality useful for both browser automation generally and testing specifically. Before now, users seeking this functionality have had to rely on with all of its frustrations and limitations.
 
-### Chrome DevTools
+The traditional WebDriver model of strict request/response command will be supplemented 
+
+### [BiDi API](https://www.selenium.dev/documentation/webdriver/bidirectional/bidi_api/)
+
+
+
+#### Register Basic Auth
+
+
+
+#### Mutation Observation
+
+
+
+#### Listen to `console.log` events
+
+
+
+#### Listen to JS Exceptions
+
+
+
+#### Network Interception
+
+
+
+
+
+### [Chrome DevTools](https://www.selenium.dev/documentation/webdriver/bidirectional/chrome_devtools/)
+
+
+
+#### Emulate Geo Location
+
+
+
+#### Emulate Geo Location with the Remote WebDriver
+
+
+
+#### Override Device Mode
+
+
+
+#### Collect Performance Metrics
+
+
+
+
 
 ## [Additional Features](https://www.selenium.dev/documentation/webdriver/additional_features/)
 
-### colors
 
-### ThreadGuard
+
+### [colors](https://www.selenium.dev/documentation/webdriver/additional_features/colors/)
+
+
+
+### [ThreadGuard](https://www.selenium.dev/documentation/webdriver/additional_features/thread_guard/)
 
 不需要看
 
@@ -3715,3 +4493,5 @@ Some
 [^15]: a punishment for breaking a law, rule, or legal agreement
 [^16]: adj. 详尽的，彻底的 extremely thorough and complete
 [^17]: conj. 在…期间; 与…同时; 然而; 尽管
+[^18]: [ˈɡrænjələr] adj. 颗粒状的 consisting of granules
+[^19]: *(computing)* an area inside a frame on a screen, for viewing information
