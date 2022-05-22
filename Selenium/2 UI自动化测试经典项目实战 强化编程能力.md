@@ -26,7 +26,7 @@ UI自动化测试经典项目实战 强化编程能力
 
 EventFiringWebDriver
 
-[github上的例子: screenshot-listener.py](https://gist.github.com/billagee/080e21842bafb8b22586)
+[GitHub上的例子: screenshot-listener.py](https://gist.github.com/billagee/080e21842bafb8b22586)
 
 [selenium文档:Event Firing WebDriver Support](https://selenium-python.readthedocs.io/api.html#module-selenium.webdriver.support.event_firing_webdriver)
 
