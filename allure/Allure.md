@@ -786,7 +786,43 @@ Steps in fixtures are shown in separate trees for setup and teardown.
 
 #### Attachments
 
+Reports can display many different types of provided attachments that can complement a test, step or fixture result. Attachments can be created either with invocation of `allure.attach(body, name, attachment_type, extension)`:
 
+1. `body` - raw content to be written into the file.
+2. `name` - a string with name of the file
+3. `attachment_type` - one of the `allure.attachment_type` values
+4. `extension` - is provided will be used as an extension for the created file.
+
+or `allure.attach.file(source, name, attachment_type, extension)`:
+
+1.  `source` - a string containing path to the file.
+
+(other arguments are the same)
+
+```python
+import allure
+import pytest
+
+
+@pytest.fixture
+def attach_file_in_module_scope_fixture_with_finalizer(request):
+    allure.attach('A text attachment in module scope fixture', 'blah blah blah', allure.attachment_type.TEXT)
+    def finalizer_module_scope_fixture():
+        allure.attach('A text attachment in module scope finalizer', 'blah blah blah blah',
+                      allure.attachment_type.TEXT)
+    request.addfinalizer(finalizer_module_scope_fixture)
+    
+def test_with_attachments_in_fixture_and_finalizer(attach_file_in_module_scope_finalizer):
+    pass
+
+def test_multiple_attachments():
+    allure.attach.file('./data/totally_open_source_kitten.png', attachment_type=allure.attachment_type.PNG)
+    allure.attach('<head></head><body> a page </body>', 'Attach with HTML type', allure.attachment_type.HTML)
+```
+
+Attachments are shown in the context of a test entity they belong to. Attachments of HTML type are rendered and displayed on the report page. This is a convenient way to provide some customization for your own representation of a test result.
+
+![](https://docs.qameta.io/allure/images/pytest_attachments.png)
 
 #### Descriptions
 
