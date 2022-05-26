@@ -1,12 +1,12 @@
 # [The Selenium Browser Automation Project](https://www.selenium.dev/documentation/)
 
-Selenium is an umbrella project for a range of tools and libraries that enable and support the automation of web browsers.
+Selenium is an umbrella[^0-1] project for a range of tools and libraries that enable and support the automation of web browsers.
 
-It provides extensions to emulate user interaction with browsers, a distribution server for scaling browser allocation, and the infrastructure for implementations of the W3C WebDriver specification that lets you write interchangeable code for all major web browsers.
+It provides extensions to emulate[^0-2] user interaction with browsers, a distribution server for scaling browser allocation, and the infrastructure for implementations of the W3C WebDriver specification that lets you write interchangeable[^0-3] code for all major web browsers.
 
 This project is made possible by volunteer contributors who have put in thousands of hours of their own time, and made the source code freely available for anyone to use, enjoy, and improve.
 
-Selenium brings together browser vendors, engineers, and enthusiasts to further an open discussion around automation of the web platform. The project organizes an annual conference to teach and nurture the community.
+Selenium brings together browser vendors, engineers, and enthusiasts[^0-4] to further an open discussion around automation of the web platform. The project organizes an annual conference to teach and nurture the community.
 
 At the core of Selenium is WebDriver, an interface to write instruction sets that can be run interchangeably in many browsers. Once you've installed everything, only a few lines of code get you inside a browser. You can find a more comprehensive example in Writing your first Selenium script
 
@@ -61,7 +61,7 @@ Documentation related to the legacy components of Selenium. Meant to be kept pur
 
 **<u>About this documentation</u>**
 
-# [Overview](https://www.selenium.dev/documentation/overview/)
+# [1 Overview](https://www.selenium.dev/documentation/overview/)
 
 Is Selenium for you? See an overview of the different project components.
 
@@ -81,12 +81,11 @@ Selenium Grid allows you to run test cases in different machines across differen
 
 After the development of the WebDriver tests, you may face the need of running your tests on multiple browser and operating system combinations. This is where Grid comes into the picture.
 
-## [Components](https://www.selenium.dev/documentation/overview/components/)
+## [1-1 Components](https://www.selenium.dev/documentation/overview/components/)
 
 Building a test suite using WebDriver will require you to understand and effectively use a number of different components. As with everything in software, different people use different terms for the same idea. Below is a breakdown of how terms are used in this description.
 
 ### Terminology
-
 * **API**: Application Programming Interface. This is the set of "commands" you use to manipulate WebDriver.
 * **Library**: A code module which contains the APIs and the code necessary to implement them. Libraries are specific to each language binding, eg .jar files for Java, .dll files for .NET, etc.
 * **Driver**: Responsible for controlling the actual browser. Most drivers are created by the browser vendors themselves. Drivers are generally executable modules that run on the system with the browser itself, not on the system executing the test suite.(Although those may be the same system.) NOTE: *Some people refer to the drivers as proxies*.
@@ -120,7 +119,7 @@ The test framework is responsible for running and executing your WebDriver and r
 
 Natural language framework/tools such as Cucumber may exist as part of that Test Framework box in the figure above, or they may wrap the Test Framework entirely in their own implementation.
 
-## [Details](https://www.selenium.dev/documentation/overview/details/)
+## [1-2 Details](https://www.selenium.dev/documentation/overview/details/)
 
 **A deeper look at Selenium**
 
@@ -154,7 +153,7 @@ As the web becomes more complicated and new technologies are added to websites, 
 
 Another mission of the project is to encourage more volunteers to partake in this effort, and build a strong community so that the project can continue to keep up with emerging technologies and remain a dominant platform for functional test automation.
 
-# [WebDriver](https://www.selenium.dev/documentation/webdriver/)
+# [2 WebDriver](https://www.selenium.dev/documentation/webdriver/)
 
 WebDriver drives a browser natively, learn more about it.
 
@@ -196,7 +195,7 @@ A low-level interface for providing virtualized device input to the web browser.
 
 Set of packages and functionalities to simplify automation with Selenium.
 
-## [Get Started](https://www.selenium.dev/documentation/webdriver/getting_started/)
+## [2-1 Get Started](https://www.selenium.dev/documentation/webdriver/getting_started/)
 
 If you are new to Selenium, we have a few resources that can help you get up to speed right away.
 
@@ -208,7 +207,7 @@ The Selenium framework ties all of these pieces together through a user-facing i
 
 Selenium setup is quite different from the setup of other commercial tools. Before you can stat writing Selenium code, you have to install the language bindings libraries for your language of choice, the browser you want to use, and the driver for that browser.
 
-#### Install Library
+### 2-1-1 Install Library
 
 Setting up the Selenium library for your favorite programming language.
 
@@ -251,7 +250,7 @@ For more info about `nuget.config` [click here](https://docs.microsoft.com/en-us
 
 Now go back to vscode, press Ctrl-Shift-P, and type "NuGet Add Package", and enter the required Selenium packages such as `Selenium.WebDriver`. Press enter and select the version. Now you can use the examples in the documentation related to C# with vscode.
 
-#### Install Drivers
+### 2-1-2 Install Drivers
 
 Setting up your system to allow a browser to be automated.
 
@@ -428,7 +427,7 @@ Note: The Opera driver does not support w3c syntax, so we recommend using chrome
 
 More information on how you can change the driver behavior can be found on the [Configuring driver parameters](https://www.selenium.dev/documentation/webdriver/drivers/) page
 
-#### Open Browser
+### 2-1-3 Open Browser
 
 Code examples for starting and stopping a session with each browser.
 
@@ -545,7 +544,7 @@ driver.Quit();
 
 Those looking to automate Safari on iOS should look to the [Appium project](https://appium.io/).
 
-#### First Script
+### [2-1-4 First Script](https://www.selenium.dev/documentation/webdriver/getting_started/first_script/)
 
 Step-by-step instructions for constructing a Selenium script
 
@@ -745,7 +744,7 @@ Follow the link at the bottom of the tab to see an example of the code as it wou
    }
    ```
 
-#### [Upgrade to Selenium 4](https://www.selenium.dev/documentation/webdriver/getting_started/upgrade_to_selenium_4/)
+### [2-1-5 Upgrade to Selenium 4](https://www.selenium.dev/documentation/webdriver/getting_started/upgrade_to_selenium_4/)
 
 Upgrading to Selenium 4 should be a painless process if you are using one of the officially supported languages(Ruby, JavaScript, C#, Python and Java). There might be some cases where a few issues can happen, and this guide will help you to sort them out. We will go through the steps to upgrade your project dependencies and understand the major deprecations and changes the version upgrade brings.
 
@@ -919,7 +918,7 @@ We wen through the major changes to be taken into consideration when upgrading t
 
 *This was originally posted at https://saucelabs.com/resources/articles/how-to-upgrade-to-selenium-4*
 
-## [Capabilities](https://www.selenium.dev/documentation/webdriver/capabilities/)
+## [2-2 Capabilities](https://www.selenium.dev/documentation/webdriver/capabilities/)
 
 **<u>Shared capabilities</u>**
 
@@ -941,7 +940,7 @@ These capabilities are specific to Internet Explorer.
 
 These capabilities are specific to Safari.
 
-### [Shared](https://www.selenium.dev/documentation/webdriver/capabilities/shared/)
+### [2-2-1 Shared](https://www.selenium.dev/documentation/webdriver/capabilities/shared/)
 
 <u>These capabilities are shared by all browsers.</u>
 
@@ -1205,7 +1204,7 @@ public class ProxyTest{
 ```
 
 
-### [Chromium](https://www.selenium.dev/documentation/webdriver/capabilities/chromium/)
+### [2-2-2 Chromium](https://www.selenium.dev/documentation/webdriver/capabilities/chromium/)
 
 These Capabilities are specific to Chromium based browsers.
 
@@ -1215,7 +1214,7 @@ These Capabilities apply to:
 * Chromium
 * Edge
 
-### [Firefox](https://www.selenium.dev/documentation/webdriver/capabilities/firefox/)
+### [2-2-3 Firefox](https://www.selenium.dev/documentation/webdriver/capabilities/firefox/)
 
 These capabilities are specific to Firefox.
 
@@ -1266,15 +1265,15 @@ options.Profile = profile;
 var driver = new RemoteWebDriver(options);
 ```
 
-### [Internet Explorer](https://www.selenium.dev/documentation/webdriver/capabilities/internet_explorer/)
+### [2-2-4 Internet Explorer](https://www.selenium.dev/documentation/webdriver/capabilities/internet_explorer/)
 
 暂略
 
-### [Safari](https://www.selenium.dev/documentation/webdriver/capabilities/safari/)
+### [2-2-5 Safari](https://www.selenium.dev/documentation/webdriver/capabilities/safari/)
 
 These capabilities are specific to Safari.
 
-## [Browser](https://www.selenium.dev/documentation/webdriver/browser/)
+## [2-3 Browser](https://www.selenium.dev/documentation/webdriver/browser/)
 
 ### Get browser information
 
@@ -2404,7 +2403,7 @@ base64code = driver.print_page(print_options)
 // code sample not available
 ```
 
-## [Elements](https://www.selenium.dev/documentation/webdriver/elements/)
+## [2-4 Elements](https://www.selenium.dev/documentation/webdriver/elements/)
 
 Identifying and working with element objects in the DOM.
 
@@ -3244,7 +3243,7 @@ does_this_allow_multiple_selections = select_object.is_multiple
 bool doesThisAllowMultipleSelections = selectObject.IsMultiple;
 ```
 
-## [Remote WebDriver](https://www.selenium.dev/documentation/webdriver/remote_webdriver/)
+## [2-5 Remote WebDriver](https://www.selenium.dev/documentation/webdriver/remote_webdriver/)
 
 You can use WebDriver remotely the same way you would user it locally. The primary difference is that a remote WebDriver needs to be configured so that it can run your tests on a separate machine.
 
@@ -3392,13 +3391,13 @@ More information can be found at:
 * Jaeger: [https://www.jaegertracing.io](https://www.jaegertracing.io/)
 * [Selenium Grid Observability](https://www.selenium.dev/documentation/grid/advanced_features/observability/)
 
-## [Drivers](https://www.selenium.dev/documentation/webdriver/drivers/)
+## [2-6 Drivers](https://www.selenium.dev/documentation/webdriver/drivers/)
 
 We learned how to [install drivers](https://www.selenium.dev/documentation/webdriver/getting_started/install_drivers/) in the Getting Started section.
 
 Selenium provides access to Service classes which are used to determine how the server is started.
 
-## [Waits](https://www.selenium.dev/documentation/webdriver/waits/)
+## [2-7 Waits](https://www.selenium.dev/documentation/webdriver/waits/)
 
 WebDriver can generally be said to have a blocking API. Because it is an out-of-process library that instructs browser what to do, and because the web platform has an intrinsically asynchronous nature, WebDriver does not track the active, real-time state of the DOM. This comes with some challenges that we will discuss here.
 
@@ -3606,7 +3605,7 @@ using (var driver = new FirefoxDriver()){
 }
 ```
 
-## [Actions API](https://www.selenium.dev/documentation/webdriver/actions_api/)
+## [2-8 Actions API](https://www.selenium.dev/documentation/webdriver/actions_api/)
 
 A low-level interface for providing virtualized device input to the web browser.
 
@@ -5234,53 +5233,264 @@ Once these abstractions have been built and duplication in your tests identified
 
 ## [6-2 Overview](https://www.selenium.dev/documentation/test_practices/overview/)
 
+First, start by asking yourself whether or not you really need to use a browser. Odds are that, at some point, if you are working on a complex web application, you will need to open a browser and actually test it.
 
+Functional end-user tests such as Selenium tests are expensive to run, however. Furthermore, they typically require substantial infrastructure to be in place to be run effectively. It is a good rule to always ask yourself what you want to test can be done using more lightweight test approaches such as unit tests or with a lower-level approach.
+
+Once you have made the determination that you are in the web browser testing business, and you have your Selenium environment ready to begin writing tests, you will generally perform some combination of three steps:
+
+* Set up the data
+* Perform a discrete set of actions
+* Evaluate the results
+
+You will want to keep these steps as short as possible; one or two operations should be enough most of the time. Browser automation has the reputation of being "flaky[^6-2-1]", but in reality, that is because users frequently demand too much of it. In later chapters, we will return to techniques you can use to mitigate[^6-2-2] apparent intermittent problems in tests, in particular on how to [overcome race conditions](https://www.selenium.dev/documentation/webdriver/waits/) between the browser and WebDriver.
+
+By keeping your tests short and using the web browser only when you have absolutely no alternative, you can have many tests with minimal flake.
+
+A distinct advantage of Selenium tests is their inherent ability to test all components of the application, from backend to frontend, from a user's perspective. So in other words, whilst functional tests may be expensive to run, they also encompass[^6-2-3] large business-critical portions at one time.
 
 ### Testing requirements
 
+As mentioned before, Selenium tests can be expensive to run. To what extent[^6-2-4] depends on the browser you are running the tests against, but historically browsers' behavior has varied so much that it has often been a stated goal to cross-test against multiple browsers.
 
+Selenium allows you to run the same instructions against multiple browsers on multiple operating systems, but the enumeration of all the possible browsers, their different versions, and the many operating systems they run on will quickly become a non-trivial undertaking[^6-2-5].
 
 ### Let's start with an example
 
+Larry has written a website which allows users to order their custom unicorns.
 
+The general workflow (what we will call the "happy path") is something like this:
+
+* Create an account
+* Configure the unicorn
+* Add it to the shopping cart
+* Check out and pay
+* Give feedback about the unicorn
+
+It would be tempting to write one grand[^6-2-6] Selenium script to perform all these operations -- many will try. Resist the temptation! Doing so will result in a test that
+
+* takes a long time
+* will be subject to some common issues around page rendering timing issues
+* is such that if it fails, it will not give you a concise, "glanceable" method for diagnosing what went wrong.
+
+The preferred strategy for testing this scenario would be to break it down to a series of independent, speedy tests, each of which has one "reason" to exist.
+
+Let us pretend you want to test the second step:  Configuring your unicorn. It will perform the following actions:
+
+* Create an account
+* Configure a unicorn
+
+Note that we are skipping the rest of these steps, we will test the rest of the workflow in other small, discrete test cases after we are done with this one.
+
+To start, you need to create an account. Here you have some choices to make:
+
+* Do you want to use an existing account?
+* Do you want to create a new account?
+* Are there any special properties of such a user that need to be taken into account before configuration begins?
+
+Regardless of how you answer this question, the solution is to make it part of the "set up the data" portion of the test. If Larry exposed an API that enables you (or anyone) to create and update user accounts, be sure to use that to answer this question. If possible, you want to launch the browser only after you have a user "in hand", whose credentials you can just log in with.
+
+If each test for each workflow begins with the creation of a user account, many seconds will be added to the execution of each test. Calling an API and talking to a database are quick, "headless" operations that don't require the expensive process of opening a browser, navigating to the right pages, clicking and waiting for the forms to be submitted, etc.
+
+Ideally, you can address this set-up phase in one line of code, which will execute before any browser is launched:
+
+**<u>Python</u>**
+
+```python
+# Create a user who has read-only permissions -- they can configure a unicorn,
+# but they do not have payment information set up, nor do they have 
+# administrative privileges. At the time the user is created, its email
+# address and password are randomly generated -- you don't even need to
+# know them.
+user = user_factory.create_common_user() # This method is defined elsewhere.
+
+# Log in as this user.
+# Logging in on this site takes you to your personal "My Account" page, so the
+# AccountPage object is returned by the loginAs method, allowing you to then
+# perform actions from the AccountPage.
+account_page = login_as(user.get_email(), user.get_password())
+```
+
+**<u>CSharp</u>**
+
+```c#
+// Create a user who has read-only permissions--they can configure a unicorn,
+// but they do not have payment information set up, nor do they have
+// administrative privileges. At the time the user is created, its email
+// address and password are randomly generated--you don't even need to
+// know them.
+User user = UserFactory.CreateCommonUser(); // This method is defined elsewhere
+
+// Log in as this user.
+// Logging in on this site takes you to your personal "My Account" page, so the
+// AccountPage object is returned by the loginAs method, allowing you to then
+// perform actions from the AccountPage.
+AccountPage accountPage = LoginAs(user.Email, user.Password);
+```
+
+As you can imagine, the `UserFactory` can be extended to provide methods such as `createAdminUser()`, and `createUserWithPayment()`. The point is, these two lines of code do not distract you from the ultimate purpose of this test: configuring a unicorn.
+
+The intricacies[^6-2-7] of the <u>Page Object model</u> will be discussed in later chapters, but we will introduce the concept here:
+
+Your tests should be composed of actions, performed from the user's point of view, within the context of pages in the site. These pages are stored as objects, which will contain specific information about how the web page is composed and how actions are performed -- very little of which should concern you as a tester.
+
+What kind of unicorn do you want? You might want pink, but not necessarily. Purple has been quite popular lately. Does she need sunglasses? Star tattoos? Those choices, while difficult, are your primary concern as a tester -- you need to ensure that your order fulfillment center sends out the right unicorn to the right person, and that starts with these choices.
+
+Notice that nowhere in that paragraph do we talk about buttons, fields, drop-downs, radio buttons, or web forms. Neither should your tests! You want to write your code like the user trying to solve their problem. Here is one way of doing this (continuing from the previous example): adornment[^6-2-8]
+
+**<u>Python</u>**
+
+```python
+# The Unicorn is a top-level Object -- it has attributes, which are set here.
+# This only stores the values; it does not fill not any web forms or interact
+# with the browser in any way.
+sparkles = Unicorn("Sparkles", UnicornColors.PURPLE, UnicornAccessories.SUNGLASSES, UnicornAdornments.STAR_TATTOOS)
+
+# Since we're already "on" the account page, we have to use it to get to the
+# actual place where you configure unicorns. Calling the "Add Unicorn" method
+# takes us there.
+add_unicorn_page = account_page.add_unicorn()
+
+# now that we're on the AddUnicornPage, we will pass the "sparkles" object to
+# its createUnicorn() method. This method will take Sparkles' attributes,
+# fill out the form, and click submit.
+unicorn_confirmation_page = add_unicorn_page.create_unicorn(sparkles)
+```
+
+**<u>CSharp</u>**
+
+```c#
+// The Unicorn is a top-level Object--it has attributes, which are set here. 
+// This only stores the values; it does not fill out any web forms or interact
+// with the browser in any way.
+Unicorn sparkles = new Unicorn("Sparkles", UnicornColors.Purple, UnicornAccessories.Sunglasses, UnicornAdornments.StarTattos);
+
+// Since we are already "on" the account page, we have to use it to get to the
+// actual place where you configure unicorns. Calling the "Add Unicorn" method
+// takes us there.
+AddUnicornPage addUnicornPage = accountPage.AddUnicorn();
+
+// Now that we're on the AddUnicornPage, we will pass the "sparkles" object to
+// its createUnicorn() method. This method will take Sparkles' attributes,
+// fill out the form, and click submit.
+UnicornConfirmationPage unicornConfirmationPage = addUnicornPage.CreateUnicorn(sparkles);
+```
+
+Now that you have configured your unicorn, you need to move on to step 3: making sure it actually worked.
+
+intact[^6-2-9]
+
+**<u>Python</u>**
+
+```python
+# The exists() method from UnicornConfirmationPage will take the Sparkles
+# object--a specification of the attributes you want to see, and compare
+# them with the fields on the page.
+assert unicorn_confirmation_page.exists(sparkles), "Sparkles should have been created, with all attributes intact"
+```
+
+**<u>CSharp</u>**
+
+```c#
+// The exists() method from UnicornConfirmationPage will take the Sparkles
+// object -- a specification of the attributes you want to see, and compare
+// them with the fields on the page.
+Assert.True(unicornConfirmationPage.Exists(sparkles), "Sparkles should have been created, with all attributes intact");
+```
+
+Note that the tester still has not done anything but talk about unicorns in this code -- no buttons, no locators, no browser controls.  This method of ==modelling== the application allows you to keep these test-level commands in place and unchanging, even if Larry decides next week that he no longer likes Ruby-on-Rails and decides to re-implement the entire site in the latest Haskell bindings with a Fortran front-end.
+
+Your page objects will require some small maintenance in order to conform[^6-2-10] to the site redesign, but these tests will remain the same. Taking this basic design, you will want to keep going through our workflows with the fewest browser-facing steps possible. Your next workflow will involve adding a unicorn to the shopping cart. You will probably want many iterations of this test in order to make sure the cart is keeping its state properly: Is there more than one unicorn in the cart before you start? How many can fit in the shopping cart? If you create more than one with the same name and/or features, will it break? Will it only keep the existing one or will it add another?
+
+Each time you move through the workflow, you want to try to avoid having to create an account, login as the user, and configure the unicorn. Ideally, you will be able to create an account and pre-configure a unicorn via the API or database. Then all you have to do is log in as the user, locate Sparkles, and add her to the cart.
 
 ### To automate or not to automate?
 
+Is automation always advantageous[^6-2-11]? When should one decide to automate test cases?
 
+It is not always advantageous to automate test cases. There are times when manual testing may be more appropriate. For instance, if the application's user interface will change considerably in the near future, then any automation might need to be rewritten anyway. Also, sometimes there simply is not enough time to build test automation. For the short term, manual testing may be more effective. If an application has a very tight deadline, there is currently no test automation available, and it's imperative that the testing gets done within that time frame, then manual testing is the best solution.
 
 ## [6-3 Testing Types](https://www.selenium.dev/documentation/test_practices/testing_types/)
 
 ### Acceptance testing
 
+This type of testing is done to determine if a feature or system meets the customer expectations and requirements. This type of testing generally involves the customer's cooperation or feedback, being a validation activity that answers the question:
 
+<u>Are we building the ***right*** product?</u>
+
+For web applications, the automation of this testing can be done directly with Selenium by simulating user expected behavior. This simulation could be done by record/playback or through the different supported languages as explained in this documentation. Note:
+
+Acceptance testing is a subtype of *functional testing*, which some people might also refer to.
 
 ### Functional testing
 
+This type of testing is done to determine if a feature or system functions properly without issues. It checks the system at different levels to ensure that all scenarios are covered and that the system does what it's supposed to do. It's a verification activity that answers the question:
 
+<u>Are we building the product ***right***?</u>
+
+This generally includes: the tests work without errors (404, exceptions,...), in a usable way (correct redirections), in an accessible way and matching its specifications (see acceptance testing above).
+
+For web applications, the automation of this testing can be done directly with Selenium by simulation expected returns.
+
+This simulation could be done by record/playback or through the different supported languages as explained in this documentation.
 
 ### Performance testing
 
+As its name indicates, performance tests are done to measure how well an application is performing.
 
+There are two main sub-types for performance testing:
 
-### Load testing
+#### Load testing
 
+Load testing is done to verify how well the application works under different defined loads (usually a particular number of users connected at once).
 
+#### Stress testing
 
-### Stress testing
+Stress testing is done to verify how well the application works under stress (or above the maximum supported load).
 
+Generally, performance tests are done by executing some Selenium written tests simulating different users hitting a particular function on the web app and retrieving some meaningful measurements.
 
+This is generally done by other tools that retrieve the metrics. One such tool is JMeter.
+
+For a web application, details to measure include throughput, latency, data loss, individual component loading times...
+
+Note 1: All browsers have a performance tab in their developers' tools section (accessible by pressing F12)
+
+Note 2: is a subtype of non-functional testing as this is generally measured per system and not per function/feature.
 
 ### Regression testing
 
+This testing is generally done after change, fix or feature addition.
 
+To ensure that the change has not broken any of the existing functionality, some already executed tests are executed again.
+
+The set of re-executed tests can be full or partial and can include several different types, depending on the application and development team.
 
 ### Test driven development (TDD)
 
+Rather than a test type per se[^6-3-1], TDD is an iterative development methodology in which tests drive the design of a feature.
 
+Each cycle starts by creating a set of unit tests that the feature should eventually pass (they should fail their first time executed).
+
+After this, development takes place to make the tests pass. The tests are executed again, starting another cycle and this process continues until all tests are passing.
+
+This aims to speed up the development of an application based on the fact that defects are less costly the earlier they are found.
 
 ### Behavior-driven development (BDD)
 
+BDD is also an iterative development methodology based on the above TDD, in which the goal is to involve all the parties in the development of an application.
 
+Each cycle starts by creating some specifications (which should fail). Then create the failing unit tests (which should also fail) and then do the development.
+
+This cycle is repeated until all types of tests are passing.
+
+In order to do so, a specification language is used. It should be understandable by all parties and simple, standard and explicit. Most tools use *Gherkin* as this language.
+
+The goal is to be able to detect even more errors than TDD, by targeting potential acceptance errors too and make communication between parties smoother.
+
+A set of tools are currently available to write the specifications and match them with code functions, such as *Cucumber* or *SpecFlow*.
+
+A set of tools are built on top of Selenium to make this process even faster by directly transforming the BDD specifications into executable code. Some of these are *JBehave*, *Capybara*[^6-3-2] and *Robot Framework*.
 
 ## [6-4 Encouraged](https://www.selenium.dev/documentation/test_practices/encouraged/)
 
@@ -5334,19 +5544,19 @@ Note: this page has merged contents from multiple sources, including the [Seleni
 
 
 
-### 6-4-3 Generating application state
+### [6-4-3 Generating application state](https://www.selenium.dev/documentation/test_practices/encouraged/generating_application_state/)
 
 
 
-### 6-4-4 Mock external services
+### [6-4-4 Mock external services](https://www.selenium.dev/documentation/test_practices/encouraged/mock_external_services/)
 
 
 
-### 6-4-5 Improved reporting
+### [6-4-5 Improved reporting](https://www.selenium.dev/documentation/test_practices/encouraged/improved_reporting/)
 
 
 
-### 6-4-6 Avoid sharing state
+### [6-4-6 Avoid sharing state](https://www.selenium.dev/documentation/test_practices/encouraged/avoid_sharing_state/)
 
 
 
@@ -5354,15 +5564,15 @@ Note: this page has merged contents from multiple sources, including the [Seleni
 
 
 
-### 6-4-8 Test independency
+### [6-4-8 Test independency](https://www.selenium.dev/documentation/test_practices/encouraged/test_independency/)
 
 
 
-### 6-4-9 Consider using a fluent API
+### [6-4-9 Consider using a fluent API](https://www.selenium.dev/documentation/test_practices/encouraged/consider_using_a_fluent_api/)
 
 
 
-### 6-4-10 Fresh browser per test 
+### [6-4-10 Fresh browser per test](https://www.selenium.dev/documentation/test_practices/encouraged/fresh_browser_per_test/)
 
 
 
@@ -5370,15 +5580,15 @@ Note: this page has merged contents from multiple sources, including the [Seleni
 
 
 
-### 6-5-1 Captchas
+### [6-5-1 Captchas](https://www.selenium.dev/documentation/test_practices/discouraged/captchas/)
 
 
 
-### 6-5-2 File downloads
+### [6-5-2 File downloads](https://www.selenium.dev/documentation/test_practices/discouraged/file_downloads/)
 
 
 
-### 6-5-3 HTTP response codes
+### [6-5-3 HTTP response codes](https://www.selenium.dev/documentation/test_practices/discouraged/http_response_codes/)
 
 
 
@@ -5386,19 +5596,19 @@ Note: this page has merged contents from multiple sources, including the [Seleni
 
 
 
-### 6-5-5 Test dependency
+### [6-5-5 Test dependency](https://www.selenium.dev/documentation/test_practices/discouraged/test_dependency/)
 
 
 
-### 6-5-6 Performance testing
+### [6-5-6 Performance testing](https://www.selenium.dev/documentation/test_practices/discouraged/performance_testing/)
 
 
 
-### 6-5-7 Link spidering
+### [6-5-7 Link spidering](https://www.selenium.dev/documentation/test_practices/discouraged/link_spidering/)
 
 
 
-### 6-5-8 Two Factor Authentication
+### [6-5-8 Two Factor Authentication](https://www.selenium.dev/documentation/test_practices/discouraged/two_factor_authentication/)
 
 
 
@@ -5410,11 +5620,16 @@ Note: this page has merged contents from multiple sources, including the [Seleni
 
 
 
-[^1]: vt. 预先布置; 事先调整; 预先决定; 事先安排
 
+
+
+[^0-1]: something which covers or includes a wide range of different parts
+[^0-2]: to do something or behave in the same way as someone else, especially because you admire them  SYN: imitate
+[^0-3]: things that are interchangeable can be used instead of each other
+[^0-4]: /ɪnˈθjuːziæst $ ɪnˈθuː-/
+[^1]: vt. 预先布置; 事先调整; 预先决定; 事先安排
 [^2]: v. 扩大，增大; 放大; 详细说明
 [^3]: [ˈsnɪpɪt] n. 小片，片段; 不知天高地厚的年轻人
-
 [^4]: ['speɪʃəlɪ] adv. 空间地，存在于空间地
 [^5]: [ˈænsestər]
 [^6]: vt. 使…模糊不清，掩盖; 隐藏; 使难理解 adj. 昏暗的，朦胧的; 晦涩的，不清楚的; 隐蔽的; 不著名的，无名的
@@ -5432,11 +5647,22 @@ Note: this page has merged contents from multiple sources, including the [Seleni
 [^18]: [ˈɡrænjələr] adj. 颗粒状的 consisting of granules
 [^19]: *(computing)* an area inside a frame on a screen, for viewing information
 [^2-9-0-1]: adj. 双向的 reactive or functioning or allowing movement in two usually opposite directions
-
-
 [^2-9-0-2]: vt. 增补，补充  to add something, especially to what you earn or eat, in order to increase it to an acceptable level
-
 [^2-9-0-3]: Customer data platform (CDP) definition. A customer data platform (CDP) is packaged software that creates a comprehensive customer database accessible by other systems to analyze, track, and manage customer interactions.
 [^6-0-1]: adj. 沉思的; 体贴的; 缜密思考过的，深思熟虑的 3 well planned and carefully thought about
 [^6-1-1]: v. 撒播; 散开; （使）分散 if someone scatters a lot of things, or if they scatter, they are thrown or dropped over a wide area in an irregular way
 [^6-1-2]: n. 序; 绪言; （法令、文件等的）序文; 前言 a statement at the beginning of a book, document, or talk, explaining what it is about
+[^6-2-1]: adj. 薄片的; 成片的; 薄而易剥落的; <美俚>极古怪的 *informal especially* <u>American English</u> a flaky person is slightly strange or often forgets things
+[^6-2-2]: vt.使缓和，使减轻; 使平息 vi.减轻，缓和下来 to make a situation or the effects of something less unpleasant, harmful, or serious
+[^6-2-3]: vt.围绕，包围; 包含或包括某事物; 完成 to include a wide range of ideas, subjects, etc
+[^6-2-4]: n.程度; 大小; 范围 how large, important, or serious something is, especially something such as a problem or injury
+[^6-2-5]: n.企业; 事业; 殡仪事业; 保证 an important job, piece of work, or activity that you are responsible for
+[^6-2-6]: adj.宏伟的; 壮丽的; 不可一世的; 快乐的; 了不起的; 总括的; 大的 aiming or intended to achieve something impressive
+[^6-2-7]: n. 错综复杂; （因复杂而产生的）难以理解; （常复数）错综复杂的事物 *the intricacies of something*: the complicated details of something
+[^6-2-8]: n. 装饰，装饰品 something that you use to decorate something
+
+[^6-2-9]: adj. 完整无缺的，未经触动的，未受损伤的; 原封不动的; 完好无缺; 完好无损 not broken, damaged, or spoiled
+[^6-2-10]: v. 遵守，符合; 一致; 顺应（大多数人或社会）to obey a law, rule etc
+[^6-2-11]: [ˌædvənˈteɪdʒəs] adj.有利的; 有好处的 helpful and likely to make you successful
+[^6-3-1]: adv. 本身，本质上 used to say that something is being considered alone, not with other connected things
+[^6-3-2]: [ˌkæpəˈberə] n.水豚（产于南美洲湖泊溪流间的啮齿动物）
