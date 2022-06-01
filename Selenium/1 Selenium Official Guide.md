@@ -2,7 +2,7 @@
 
 Selenium is an umbrella[^0-1] project for a range of tools and libraries that enable and support the automation of web browsers.
 
-It provides extensions to emulate[^0-2] user interaction with browsers, a distribution server for scaling browser allocation, and the infrastructure for implementations of the W3C WebDriver specification that lets you write interchangeable[^0-3] code for all major web browsers.
+It provides extensions to emulate[^0-2] user interaction with browsers, a distribution server for scaling browser allocation, and the infrastructure for implementations of the [W3C WebDriver specification](https://www.w3.org/TR/webdriver/) that lets you write interchangeable[^0-3] code for all major web browsers.
 
 This project is made possible by volunteer contributors who have put in thousands of hours of their own time, and made the source code freely available for anyone to use, enjoy, and improve.
 
@@ -3245,11 +3245,11 @@ bool doesThisAllowMultipleSelections = selectObject.IsMultiple;
 
 ## [2-5 Remote WebDriver](https://www.selenium.dev/documentation/webdriver/remote_webdriver/)
 
-You can use WebDriver remotely the same way you would user it locally. The primary difference is that a remote WebDriver needs to be configured so that it can run your tests on a separate machine.
+You can use WebDriver remotely the same way you would use it locally. The primary difference is that a remote WebDriver needs to be configured so that it can run your tests on a separate machine.
 
-A remote WebDriver is composed of two pieces: a client and a server. The client is your WebDriver test and the server is simply a Java servlet, which can be hosted in any modern JEE app server.
+==A remote WebDriver is composed of two pieces: a client and a server.== <u>The client is your WebDriver test and the server is simply a Java servlet, which can be hosted in any modern JEE app server.</u>
 
-To run a remote WebDriver client, we first need to connect to the RemoteWebDriver. We do this by pointing the URL to the address of the server running our tests. In order to customize our configuration, we set desired capabilities. Below is an example of instantiating a remote WebDriver object pointing to our remote web server, www.example.com, running our tests on Firefox.
+To run a remote WebDriver client, we first need to connect to the RemoteWebDriver. We do this by **pointing the URL to the address of the server running our tests**. In order to customize our configuration, we set desired capabilities. Below is an example of instantiating a remote WebDriver object pointing to our remote web server, www.example.com, running our tests on Firefox.
 
 **<u>Python</u>**
 
@@ -3347,7 +3347,7 @@ upload.SendKeys(@"/Users/sso/the/local/path/to/darkbulb.jpg");
 
 ### Tracing client requests
 
-This feature is only available for Java client binding (Beta onwards). The Remote WebDriver client sends requests to the Selenium Grid server, which passes them to the WebDriver. Tracing should be enabled at the server and client-side to trace the HTTP requests end-to-end. Both ends should have a trace exporter setup pointing to the visualization framework. By default, tracing is enabled for both client and server. To set up the visualization framework Jaeger[^10] UI and Selenium Grid 4, please refer to [Tracing Setup](https://github.com/SeleniumHQ/selenium/blob/selenium-4.0.0-beta-1/java/server/src/org/openqa/selenium/grid/commands/tracing.txt) for the desired version.
+This feature is only available for Java client binding (Beta onwards). The Remote WebDriver client sends requests to the Selenium Grid server, which passes them to the WebDriver. Tracing should be enabled at the server and client-side to trace the HTTP requests end-to-end. Both ends should have a trace exporter setup pointing to the visualization framework. By default, tracing is enabled for both client and server. To set up the visualization framework Jaeger[^2-5-1] UI and Selenium Grid 4, please refer to [Tracing Setup](https://github.com/SeleniumHQ/selenium/blob/selenium-4.0.0-beta-1/java/server/src/org/openqa/selenium/grid/commands/tracing.txt) for the desired version.
 
 for client-side setup, follow the steps below.
 
@@ -3401,7 +3401,7 @@ Selenium provides access to Service classes which are used to determine how the 
 
 WebDriver can generally be said to have a blocking API. Because it is an out-of-process library that instructs browser what to do, and because the web platform has an intrinsically asynchronous nature, WebDriver does not track the active, real-time state of the DOM. This comes with some challenges that we will discuss here.
 
-From experience, most intermittent[^11] issues that arise from use of Selenium and WebDriver are connected to <u>race conditions</u> that occur between the browser and the user's instructions. An example could be that the user instructs the browser to navigate to a page, then gets a <u>no such element</u> error when trying to find an element.
+From experience, most intermittent[^2-7-1] issues that arise from use of Selenium and WebDriver are connected to <u>race conditions</u> that occur between the browser and the user's instructions. An example could be that the user instructs the browser to navigate to a page, then gets a <u>no such element</u> error when trying to find an element.
 
 Consider the following document:
 
@@ -3449,11 +3449,11 @@ To overcome the problem of race conditions between the browser and your WebDrive
 
 ### Explicit wait
 
-Explicit waits are available to Selenium clients for imperative[^12], procedural languages. They allow your code to halt program execution, or freeze the thread, until the condition you pass it resolves. The condition is called with a certain frequency until the timeout of the wait is elapsed. This means that for as long as the condition returns a falsy value, it will keep trying and waiting.
+Explicit waits are available to Selenium clients for imperative[^2-7-2], procedural languages. They allow your code to halt program execution, or freeze the thread, until the condition you pass it resolves. The condition is called with a certain frequency until the timeout of the wait is elapsed. This means that for as long as the condition returns a falsy value, it will keep trying and waiting.
 
 Since explicit waits allow you to wait for a condition to occur, they make a good fit for synchronizing the state between the browser and its DOM, and your WebDriver script.
 
-To remedy[^13] our buggy instruction set from earlier, we could employ[^14] a wait to have the `findElement` call wait until the dynamically added element from the script has been added to the DOM:
+To remedy[^2-7-3] our buggy instruction set from earlier, we could employ[^2-7-4] a wait to have the `findElement` call wait until the dynamically added element from the script has been added to the DOM:
 
 **<u>Python</u>**
 
@@ -3513,7 +3513,7 @@ If the condition fails, e.g. a truthful return value from the condition is never
 
 #### Options
 
-The wait condition can be customized to match your needs. Sometimes it is unnecessary to wait the full extent of the default timeout, as the penalty[^15] for not hitting a successful condition can be expensive.
+The wait condition can be customized to match your needs. Sometimes it is unnecessary to wait the full extent of the default timeout, as the penalty[^2-7-5] for not hitting a successful condition can be expensive.
 
 The wait lets you pass in an argument to override the timeout:
 
@@ -3533,7 +3533,7 @@ new WebDriverWait(driver, TimeSpan.FromSeconds(3)).Until(ExpectedConditions.Elem
 
 Because it is quite a common occurrence to have to synchronize the DOM and your instructions, most clients also come with a set of predefined <u>expected conditions</u>. As might be obvious by the name, they are conditions that are predefined for frequent wait operations.
 
-The conditions available in the different language bindings vary, but this is a non-exhaustive[^16] list of a few:
+The conditions available in the different language bindings vary, but this is a non-exhaustive[^2-7-6] list of a few:
 
 * alert is present
 * element exists
@@ -3582,7 +3582,7 @@ IWebElement dynamicElement = driver.FindElement(By.Name("dynamicElement"));
 
 FluentWait instance defines the maximum amount of time to wait for a condition, as well as the frequency with which to check the condition.
 
-Users may configure the wait to ignore specific types of exceptions whilst[^17] waiting, such as `NoSuchElementException` when searching for an element on the page.
+Users may configure the wait to ignore specific types of exceptions whilst[^2-7-7] waiting, such as `NoSuchElementException` when searching for an element on the page.
 
 **<u>Python</u>**
 
@@ -5641,7 +5641,7 @@ There is a lot of flexibility in how the page objects may be designed, but there
 
 ==Page objects themselves should never make verifications or assertions.== This is part of your test and should always be within the test's code, never in an page object. ==The page object will contain the representation of the page, and the services the page provides via methods== but no code related to what is being tested should be within the page object.
 
-==There is one, single, verification which can, and should, be within the page object and that is to verify that the page, and possibly critical elements on the page, were loaded correctly.== This verification should be done while instantiating the page object. In the examples above, both the SignInPage and Homepage constructors check the expected page is available and ready for requests from the test.
+==There is one, single, verification which can, and should, be within the page object and that is to verify that the page, and possibly critical elements on the page, were loaded correctly.== This verification should be done while instantiating the page object. In the examples above, both the SignInPage and HomePage constructors check the expected page is available and ready for requests from the test.
 
 A page object does not necessarily need to represent all the parts of a page itself. The same principles used for page objects can be used to create "<u>**Page Component Objects**" that represent discrete chunks of the page and can be included in page objects.</u> These component objects can provide references to the elements inside those discrete chunks, and methods to leverage[^6-4-1-3] the functionality provided by them. You can even nest component objects inside other component objects for more complex pages. If a page in the AUT has multiple components, or common components used throughout the site (e.g. a navigation bar), then it may improve maintainability and reduce code duplication.
 
@@ -5861,71 +5861,209 @@ It bears[^6-4-2-4] repeating: one of your primary goals should be writing an API
 
 ### [6-4-3 Generating application state](https://www.selenium.dev/documentation/test_practices/encouraged/generating_application_state/)
 
-
+Selenium should not be used to prepare a test case. All repetitive[^6-4-3-1] actions and preparations for a test case, should be done through other methods. For example, most web UIs have authentication (e.g. a login form). Eliminating logging in via web browser before every test will improve both the speed and stability[^6-4-3-2] of the test. A method should be created to gain access to the AUT[^6-4-3-3] (e.g. using an API to login and set a cookie). Also, creating methods to pre-load data for testing should not be done using Selenium. As mentioned previously, existing APIs should be leveraged to create data for the AUT.
 
 ### [6-4-4 Mock external services](https://www.selenium.dev/documentation/test_practices/encouraged/mock_external_services/)
 
-
+Eliminating the dependencies on external services will greatly improve the speed and stability of your tests.
 
 ### [6-4-5 Improved reporting](https://www.selenium.dev/documentation/test_practices/encouraged/improved_reporting/)
 
+Selenium is not designed to report on the status of test cases run. Taking advantage of the built-in reporting capabilities of unit test frameworks is a good start. Most unit test frameworks have reports that can generate xUnit or HTML formatted reports. ==xUnit reports are popular for importing results to a Continuous Integration (CI) server== like Jenkins, Travis, Bamboo, etc. Here are some links for more information regarding report outputs for several languages.
 
+[NUnit 3 Console Runner](https://github.com/nunit/docs/wiki/Console-Runner)
+
+[NUnit 3 Console Command Line](https://github.com/nunit/docs/wiki/Console-Command-Line)
+
+[xUnit getting test results in TeamCity](https://xunit.net/docs/getting-test-results-in-teamcity)
+
+[xUnit getting test results in CruiseControl.NET](https://xunit.net/docs/getting-test-results-in-ccnet)
+
+[xUnit getting test results in Azure DevOps](https://xunit.net/docs/getting-test-results-in-azure-devops)
 
 ### [6-4-6 Avoid sharing state](https://www.selenium.dev/documentation/test_practices/encouraged/avoid_sharing_state/)
 
+Although mentioned in several places it is worth mentioning again. Ensure tests are isolated from one another.
 
+* Do not share test data. Imagine several tests that each query the database for valid orders before picking one to perform an action on. Should two tests pick up the same order you are likely to get unexpected behavior.
+* Clean up stale[^6-4-6-1] data in the application that might be picked up by another test e.g. invalid order records.
+* Create a new WebDriver instance per test. This helps ensure test isolation and makes parallelization simpler.
 
 ### [6-4-7 Locators](https://www.selenium.dev/documentation/test_practices/encouraged/locators/)
 
+> When to use which locators and how best to manage them in your code.
 
+Take a look at examples of the <u>supported locator strategies</u>.
+
+In general, if HTML IDs are available, unique, and consistently predictable, they are the preferred method for locating an element on a page. They tend to work very quickly, and forego[^6-4-7-1] much processing that comes with complicated DOM traversals.
+
+If unique IDs are unavailable, a well-written CSS selector is the preferred method of locating an element. XPath works as well as CSS selectors, but the syntax is complicated and frequently difficult to debug. Though XPath selectors are very flexible, they are typically not performance tested by browser vendors and tend to be quite slow.
+
+Selection strategies based on `linkText` and `partialLinkText` have drawbacks in that they only work on link elements. Additionally, they call down to [`querySelectorAll`](https://www.w3.org/TR/webdriver/#link-text)  selectors internally in WebDriver.
+
+Tag name can be a dangerous way to locate elements. There are frequently multiple elements of the same tag present on the page. This is mostly useful when calling the `findElements(By)` method which returns a collection of elements.
+
+The recommendation is to keep your locators as compact and readable as possible. Asking WebDriver to traverse the DOM structure is an expensive operation, and the more you can narrow the scope of your search, the better. 
 
 ### [6-4-8 Test independency](https://www.selenium.dev/documentation/test_practices/encouraged/test_independency/)
 
+Write each test as its own unit. Write the tests in a way that will not be reliant on other tests to complete:
 
+Let us say there is a content management system with which you can create some custom content which then appears on your website as a module after publishing, and it may take some time to sync between the CMS and the application.
+
+A wrong way of testing your module is that the content is created and published in one test, and then checking the module in another test. This is not feasible[^6-4-8-1] as the content may not be available immediately for the other test after publishing.
+
+Instead, you can create a stub[^6-4-8-2] content which can be turned on and off within the affected test, and use that for validating the module. However, for content creation, you can still have a separate test.
 
 ### [6-4-9 Consider using a fluent API](https://www.selenium.dev/documentation/test_practices/encouraged/consider_using_a_fluent_api/)
 
+Martin Fowler coined[^6-4-9-1] the term "[Fluent API](https://www.martinfowler.com/bliki/FluentInterface.html)". Selenium already implements something like this in their `FluentWait` class, which is meant as an alternative to the standard `Wait` class. You could enable the Fluent API design pattern in your page object and then query the Google search page with a code snippet like this one:
 
+```java
+driver.get("http://www.google.com/webhp?hl=en&amp;tab=ww");
+GoogleSearchPage gsp = new GoogleSearchPage();
+gsp.withFluent().setSearchString().clickSearchButton();
+```
+
+The Google page object class with this fluent behavior might look like this:
+
+```java
+public class GoogleSearchPage extends LoadableComponent<GoogleSearchPage>{
+    private final WebDriver driver;
+    private GSPFluentInterface gspfi;
+    
+    public class GSPFluentInterface{
+        private GoogleSearchPage gsp;
+        
+        public GSPFluentInterface(GoogleSearchPage googleSearchPage){
+            gsp = googleSearchPage;
+        }
+        
+        public GSPFluentInterface clickSearchButton(){
+            gsp.searchButton.click();
+            return this;
+        }
+        
+        public GSPFluentInterface setSearchString(String sstr){
+            clearAndType(gsp.searchField, sstr);
+            return this;
+        }
+    }
+    
+    @FindBy(id="gbqfq") private WebElement searchField;
+    @FindBy(id="gbqfb") private WebElement searchButton;
+    public GoogleSearchPage(WebDriver driver){
+        gspfi = new GSPFluentInterface(this);
+        this.get(); // if load() fails, calls isLoaded() until page is finished loading
+        PageFactory.initElements(driver, this);  // Initialize WebElements on page
+    }
+    
+    public GSPFulentInterface withFluent(){
+        return gspfi;
+    }
+    
+    public void clickSearchButton(){
+        searchButton.click();
+    }
+    
+    public void setSearchString(String sstr){
+        clearAndType(searchField, sstr);
+    }
+    
+    @Override
+    protected void isLoaded() throws Error{
+        Assert.assertTrue("Google search page is not yet loaded.", isSearchFieldVisible());
+    }
+    
+    @Override
+    protected void load() {
+        if ( isSFieldPresent ) {
+            Wait<WebDriver> wait = new WebDriverWait( driver, Duration.ofSeconds(3) );
+            wait.until( visibilityOfElementLocated( By.id("gbqfq") ) ).click();
+        }
+    }
+}
+```
 
 ### [6-4-10 Fresh browser per test](https://www.selenium.dev/documentation/test_practices/encouraged/fresh_browser_per_test/)
 
+Start each test from a clean known state. Ideally, spin[^6-4-10-1] up a new virtual machine for each test. If spinning up a new virtual machine is not practical, at least start a new WebDriver for each test. For Firefox, start a WebDriver with you known profile.
 
+```java
+FirefoxProfile profile = new FirefoxProfile(new File("pathToFirefoxProfile"));
+WebDriver driver = new FirefoxDriver(profile);
+```
 
 ## [6-5 Discouraged](https://www.selenium.dev/documentation/test_practices/discouraged/)
 
-
+Things to avoid when automating browsers with Selenium.
 
 ### [6-5-1 Captchas](https://www.selenium.dev/documentation/test_practices/discouraged/captchas/)
 
+CAPTCHA, short for <u>*Completely Automated Public Turing test to tell Computers and Humans Apart*</u>, is explicitly designed to prevent automation, so do not try! There are two primary strategies to get around[^6-5-1-1] CAPTCHA checks:
 
+* Disable CAPTCHAs in your test environment
+* Add a hook to allow tests to bypass the CAPTCHA
 
 ### [6-5-2 File downloads](https://www.selenium.dev/documentation/test_practices/discouraged/file_downloads/)
 
+Whilst it is possible to start a download by clicking a link with a browser under Selenium's control, the API does not expose download progress, making it less than ideal for testing downloaded files. This is because downloading files is not considered an important aspect of emulating user interaction with the web platform. Instead, find the link using Selenium (and any required cookies) and pass it to a HTTP request library like [libcurl](https://curl.haxx.se/libcurl/).
 
+The [HtmlUnit driver](https://github.com/SeleniumHQ/htmlunit-driver) can download attachments by accessing them as input streams by implementing the [AttachmentHandler](https://htmlunit.sourceforge.io/apidocs/com/gargoylesoftware/htmlunit/attachment/AttachmentHandler.html) interface. The AttachmentHandler can the be added to the HtmlUnit WebClient.
 
 ### [6-5-3 HTTP response codes](https://www.selenium.dev/documentation/test_practices/discouraged/http_response_codes/)
 
+For some browser configurations in Selenium RC, Selenium acted as a proxy between the browser and the site being automated. This meant that all browser traffic passed through Selenium could be captured or manipulated. The `captureNetworkTraffic()` method purported[^6-5-3-1] to capture all of the network traffic between the browser and the site being automated, including HTTP response codes.
 
+Selenium WebDriver is a completely different approach to browser automation, preferring to act more like a user. This is represented in the way you write tests with WebDriver. In automated functional testing, checking the status code is not a particularly important detail of a test's failure; the steps that preceded[^6-5-3-2] it are more important.
+
+The browser will always represent the HTTP status code, imagine for example a 404 or a 500 error page. A simple way to "fail fast" when you encounter one of these error pages is to check the page title or content of a reliable point (e.g. the `<h1>` tag) after every page load. If you are using the page object model, you can include this check in your class constructor or similar point where the page load is expected. Occasionally[^6-5-3-3], the HTTP code may even be represented in the browser's error page and you could use WebDriver to read this and improve your debugging output.
+
+Checking the webpage itself is in line with[^6-5-3-4] WebDriver's ideal practice of representing and asserting upon the user's view of the website.
+
+If you insist, an advanced solution to capturing HTTP status codes is to replicate the behavior of Selenium RC by using a proxy. WebDriver API provides the ability to set a proxy for the browser, and there are a number of proxies that will programmatically[^6-5-3-5] allow you to manipulate the contents of requests sent to and received from the web server. Using a proxy lets you decide how you want to respond to redirection response codes. Additionally, not every browser makes the response codes available to WebDriver, so opting[^6-5-3-6] to use a proxy allows you to have a solution that works for every browser.
 
 ### [6-5-4 Gmail, email and Facebook](https://www.selenium.dev/documentation/test_practices/discouraged/gmail_email_and_facebook_logins/)
 
+For multiple reasons, logging into sites like Gmail and Facebook using WebDriver is not recommended. Aside from being against the usage terms for these sites (where you risk having the account shut down), it is slow and unrealiable.
 
+The ideal practice is to use the APIs that email providers offer, or in the case of Facebook the developer tools service which exposes an API for creating test accounts, friends and so forth. Although using an API might seem like a bit of extra hard work, you will be paid back in speed, reliability, and stability. The API is also unlikely to change, whereas webpages and HTML locators change often and require you to update your test framework.
+
+Logging in to third party sites using WebDriver at any point of your test increases the risk of your test failing because it makes your test longer. A general rule of thumb is that longer tests are more fragile and unreliable.
+
+WebDriver implementations that are [W3C conformant[^6-5-4-1]](https://w3c.github.io/webdriver/webdriver-spec.html) also annotate the `navigator` object with a `WebDriver` property so that Denial of Service[^6-5-4-2] attacks can be mitigated.
 
 ### [6-5-5 Test dependency](https://www.selenium.dev/documentation/test_practices/discouraged/test_dependency/)
 
-
+A common idea and misconception about automated testing is regarding a specific test order. Your tests should be run in any order, and not rely on other tests to complete in order to be successful.
 
 ### [6-5-6 Performance testing](https://www.selenium.dev/documentation/test_practices/discouraged/performance_testing/)
 
+Performance testing using Selenium and WebDriver is generally not advised. Not because it is incapable, but because it is not optimized for the job and you are unlikely to get good results.
 
+It may seem ideal to performance test in the context of the user but a suite of WebDriver tests are subjected to many points of external and internal fragility[^6-5-6-1] which are beyond your control; for example browser startup speed, speed of HTTP servers, response of third party servers that host JavaScript or CSS, and the instrumentation[^6-5-6-2] penalty[^6-5-6-3] of the WebDriver implementation itself. Variation at these points will cause variation in your results. It is difficult to separate the difference between the performance of your website and the performance of external resources, and it is also hard to tell what the performance penalty is for using WebDriver in the browser, especially if you are injecting scripts.
+
+The other potential attraction is "saving time" -- carrying out functional and performance tests at the same time. However, functional and performance tests have opposing objectives. To test functionality, a tester may need to be patient and wait for loading, but this will cloud the performance testing results and vice versa.
+
+To improve the performance of your website, you will need to be able to analyze overall performance independent of environment differences, identify poor code practices, breakdown of performance of individual resources (i.e. CSS or JavaScript), in order to know what to improve. There are performance testing tools available that can do this job already, that provide reporting and analysis, and can even make improvement suggestions.
+
+Example (open source) packages to use are: JMeter.
 
 ### [6-5-7 Link spidering](https://www.selenium.dev/documentation/test_practices/discouraged/link_spidering/)
 
+Using WebDriver to spider[^6-5-7-1] through links is not recommended practice. Not because it cannot be done, but because WebDriver is definitely not the most ideal tool for this. WebDriver needs time to start up, and can take several seconds, up to a minute depending on how your test is written, just to get to the page and traverse through the DOM.
 
+Instead of using WebDriver for this, you could save a ton of time by executing a curl command, or using a library such as BeautifulSoup since these methods do not rely on creating a browser and navigating to a page. You are saving tones of time by not using WebDriver for this task.
 
 ### [6-5-8 Two Factor Authentication](https://www.selenium.dev/documentation/test_practices/discouraged/two_factor_authentication/)
 
+Two factor authentication (2FA) is an authorization mechanism where a One Time Password (OTP) is generated using "Authenticator" mobile apps such as "Google Authenticator", "Microsoft Authenticator" etc., or by SMS, email to authenticate. Automating this seamlessly[^6-5-8-1] and consistently is a big challenge in Selenium. There are some ways to automate this process. But that will be another layer on top of our Selenium tests and not as secure. So , you should avoid automating 2FA.
 
+There are few options to get around 2FA checks:
+
+* Disable 2FA for certain users in the test environment, so that you can use those user credentials in the automation.
+* Disable 2FA in your test environment.
+* Disable 2FA if you login from certain IPs. That way we can configure our test machine IPs to avoid this.
 
 # 7 Legacy
 
@@ -5951,14 +6089,14 @@ It bears[^6-4-2-4] repeating: one of your primary goals should be writing an API
 [^7]: n. 键击，按键
 [^8]: as the word is usually understood; in the exact sense of the word
 [^9]: n. 样板文件; 公式化，陈词滥调
-[^10]: /ˈjeɪɡə $ -gər/
-[^11]: stopping and starting often over a period of time, but not regularly
-[^12]: extremely important and needing to be done or dealt with immediately. SYN: urgent, essential, pressing, vital
-[^13]: vt. (remedied, remedying, remedies) to deal with a problem or improve a bad situation. SYN: put right
-[^14]: to use a particular object, method, skill etc in order to achieve something. *employ a method/technique/tactic etc*. In everyday English, people usually say **use** a method rather than **employ** a method.
-[^15]: a punishment for breaking a law, rule, or legal agreement
-[^16]: adj. 详尽的，彻底的 extremely thorough and complete
-[^17]: conj. 在…期间; 与…同时; 然而; 尽管
+[^2-5-1]: /ˈjeɪɡə $ -gər/
+[^2-7-1]: stopping and starting often over a period of time, but not regularly
+[^2-7-2]: extremely important and needing to be done or dealt with immediately. SYN: urgent, essential, pressing, vital
+[^2-7-3]: vt. (remedied, remedying, remedies) to deal with a problem or improve a bad situation. SYN: put right
+[^2-7-4]: to use a particular object, method, skill etc in order to achieve something. *employ a method/technique/tactic etc*. In everyday English, people usually say **use** a method rather than **employ** a method.
+[^2-7-5]: a punishment for breaking a law, rule, or legal agreement
+[^2-7-6]: adj. 详尽的，彻底的 extremely thorough and complete
+[^2-7-7]: conj. 在…期间; 与…同时; 然而; 尽管
 [^18]: [ˈɡrænjələr] adj. 颗粒状的 consisting of granules
 [^19]: *(computing)* an area inside a frame on a screen, for viewing information
 [^2-9-0-1]: adj. 双向的 reactive or functioning or allowing movement in two usually opposite directions
@@ -5983,8 +6121,31 @@ It bears[^6-4-2-4] repeating: one of your primary goals should be writing an API
 [^6-3-2]: [ˌkæpəˈberə] n.水豚（产于南美洲湖泊溪流间的啮齿动物）
 [^6-4-1-1]: if someone scatters a lot of things, or if they scatter, they are thrown or dropped over a wide area in an irregular way
 [^6-4-1-2]: [ˌɪntərˈtwaɪn] vt.缠结在一起; 使缠结 vi.纠缠; 编结 if two things intertwine, or if they are intertwined, they are twisted together
-[^6-4-1-3]: n.杠杆作用; 优势，力量; 影响力 v.举债经营; 发挥杠杆作用; 施加影响; 利用 to spread or use resources (=money, skills, buildings etc that an organization has available), ideas etc again in several different ways or in different parts of a company, system etc
+[^6-4-1-3]: n.杠杆作用; 优势，力量; 影响力 v.举债经营; 发挥杠杆作用; 施加影响; 利用 to get as much advantage or profit as possible from something that you have
 [^6-4-2-1]: adj.绝缘的，隔热的 v.使绝缘; 使隔离; 使免除（不愉快的经历）; 使免受（不良影响）to keep someone apart from particular experiences or influences, especially unpleasant ones
 [^6-4-2-2]: /wet/ vt.（在石头上）磨（刀、斧等）; 引起，刺激（食欲、欲望、兴趣等）whet somebody’s appetite (for something);*literary* to make the edge of a blade sharp
 [^6-4-2-3]: [ˈbrɛvɪti] n.短暂; 简洁 the quality of expressing something in very few words
 [^6-4-2-4]: to bravely accept or deal with a painful, difficult, or upsetting situation SYN stand
+[^6-4-3-1]: [ rɪˈpetətɪv] done many times in the same way, and boring
+[^6-4-3-2]: [stəˈbɪləti]
+[^6-4-3-3]: **AUT**: Application under test
+[^6-4-6-1]: adj.陈腐的; 不新鲜的; 走了味的 bread or cake that is stale is no longer fresh or good to eat **OPP** fresh
+[^6-4-7-1]: vt.摒弃; 摒绝; 放弃; 在......之前 to not do or have something pleasant or enjoyable **SYN** go without
+[^6-4-8-1]: adj.可行的; 做得到的 a plan, idea, or method that is feasible is possible and is likely to work **SYN** possible
+[^6-4-8-2]: n.树桩; 铅笔头，烟蒂; 票根，存根 the short part of something long and thin, such as a cigarette or pencil, that is left when the rest has been used
+[^6-4-9-1]: v.创造（新词语）; 很快地赚（钱）to invent a new word or expression, especially one that many people start to use
+[^6-4-10-1]: v.使旋转; 急转弯; 疾驰; 甩干衣服; 有倾向性陈述; 纺纱; 吐丝 to turn around and around very quickly, or to make something do this
+[^6-5-1-1]: 传播; 绕开; 随意走走; 说服 **get around something** to avoid something that is difficult or causes problems for you
+[^6-5-3-1]: vt.声称; 意图; 意味着; 打算 n.意义，要旨; 目的，意图 *formal* to claim to be or do something, even if this is not true
+[^6-5-3-2]: vt.& vi.在…之前发生或出现，先于; 在…之上，优于; 给…作序; 处于…前面的位置 to happen or exist before something or someone, or to come before something else in a series
+[^6-5-3-3]: adv.偶尔; 偶然; 有时候 sometimes, but not regularly and not often. *In everyday English, people often say **once in a while** rather than **occasionally***
+[^6-5-3-4]: 跟…一致，符合; 本着 if something changes in line with something else, it changes in the same way and at the same rate as it
+[^6-5-3-5]: 以编程方式
+[^6-5-3-6]: vi.选择，挑选 to choose one thing or do one thing instead of another
+[^6-5-4-1]: n.顺应，一致 to behave in the way that most other people in your group or society behave
+[^6-5-4-2]: Denial of Service (DoS) 拒绝服务攻击. 分布式拒绝服务攻击（ 英文: Distributed Denial of Service，缩写：DDoS ）亦称洪水攻击。 顾名思义，即是利用网络上已被攻陷的电脑作为“僵尸 ”，向某一特定的目标电脑发动密集式的“拒绝服务”式攻击，用以把目标电脑的网络资源及系统资源耗尽，使之无法向真正正常请求的用户提供服务。黑客通过将一个个“丧尸”或者称为“肉鸡”组成僵尸网络 ，就可以发动大规模DDoS或SYN洪水网络攻击，或者将“丧尸”们组到一起进行带有利益的刷网站流量、Email垃圾邮件群发，瘫痪预定目标受雇攻击竞争对手等商业活动。A denial-of-service (DoS) attack is a cyberattack on devices, information systems, or other network resources that prevents legitimate users from accessing expected services and resources. This is usually accomplished by flooding the targeted host or network with traffic until the target can't respond or crashes.
+[^6-5-6-1]: [frə'dʒɪlətɪ]
+[^6-5-6-2]: n.使用仪器，装设仪器; 乐器法; 乐曲研究; 手段 the set of instruments used to help in controlling a machine
+[^6-5-6-3]: n.惩罚; 刑罚; 害处; 足球点球 a punishment for breaking a law, rule, or legal agreement
+[^6-5-7-1]: *technical* a computer program that searches the Internet for the best websites with the information you want, so that you can find it quickly **SYN**: crawler, bot
+[^6-5-8-1]: done or made so smoothly that you cannot tell where one thing stops and another begins
