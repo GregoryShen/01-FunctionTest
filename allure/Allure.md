@@ -826,29 +826,295 @@ Attachments are shown in the context of a test entity they belong to. Attachment
 
 #### Descriptions
 
+You can add a detailed description for tests to provide as much context to the report reader as you want. This can be done in several ways: you can add a `@allure.description` decorator providing a description string or you can use `@allure.description_html` to provide some HTML to be rendered in the 'Description' section of a test case. Alternatively description will be simply picked up from the docstring of a test method.
 
+```python
+import allure
+
+@allure.description_html("""
+<h1>Test with some complicated html description</h1>
+<table style="width:100%">
+  <tr>
+	<th>Firstname</th>
+	<th>Lastname</th>
+	<th>Age</th>
+  </tr>
+  <tr align="center">
+    <td>William</td>
+    <td>Smith</td>
+    <td>50</td>
+  </tr>
+  <tr align="center">
+    <td>Vasya</td>
+    <td>Jackson</td>
+    <td>94</td>
+  </tr>
+</table>
+""")
+def test_html_description():
+    assert True
+    
+@allure.description("""
+Multiline test description.
+That comes from the allure.description decorator.
+
+Nothing special about it.
+""")
+def test_description_from_decorator():
+    assert 42 == int(6 * 7)
+    
+def test_unicode_in_docstring_description():
+    """Unicode in description.
+    
+    Этот тест проверяет юникод.
+    
+    你好伙计.
+    """
+    assert 42 == int(6 * 7)
+```
+
+Description supports unicode strings:
+
+![](https://docs.qameta.io/allure/images/pytest_unicode_description_docstr.png)
+
+Rendered HTML from `description_html`:
+
+![](https://docs.qameta.io/allure/images/pytest_html_description.png)
+
+Also descriptions can be dynamically updated from within test body using `allure.dynamic.description`.
+
+```python
+import allure
+
+@allure.description("""
+This description will be replaced at the end of the test.
+""")
+def test_dynamic_description():
+    assert 42 == int(6 * 7)
+    allure.dynamic.description('A final description.')
+```
 
 #### Titles
 
+Test titles can be made more readable with special `@allure.title` decorator. Titles support placeholders for arguments and support dynamic replacement.
 
+```python
+import allure
+import pytest
+
+@allure.title("This test has a custom title")
+def test_with_a_title():
+    assert 2 + 2 == 4
+    
+@allure.title("This test has a custom title with unicode: Привет!")
+def test_with_unicode_title():
+    assert 3 + 3 == 6
+    
+@allure.title("Parameterized test title: adding {param1} with {param2}")
+@pytest.mark.parametrize('param1,param2,expected',[
+    (2, 2, 4),
+    (1, 2, 5)
+])
+def test_with_parameterized_title(param1, param2, exepcted):
+    assert param1 + param2 == expected
+    
+@allure.title("This title will be replaced in a test body")
+def test_with_dynamic_title():
+    assert 2 + 2 == 4
+    allure.dynamic.title('After a successful test finish, the title was replaced with this line.')
+```
+
+![](https://docs.qameta.io/allure/images/pytest_titles.png)
 
 #### Links
 
+To integrate report with a bugtracker or test management system Allure has `@allure.link`, `@allure.issue` and `@allure.testcase` descriptors.
 
+```python
+import allure
+
+TEST_CASE_LINK = 'https://github.com/qameta/allure-integrations/issues/8##issuecomment-268313637'
+
+@allure.link('https://www.youtube.com/watch?v=4YYzUTYZRMU')
+def test_with_link():
+    pass
+
+@allure.link('https://www.youtube.com/watch?v=Su5p2TqZxKU', name='Click me')
+def test_with_named_link():
+    pass
+
+@allure.issue('140', 'Pytest-flaky test retries show like test steps')
+def test_with_issue_link():
+    pass
+
+@allure.testcase(TEST_CASE_LINK, 'Test case title')
+def test_with_testcase_link():
+    pass
+```
+
+`@allure.link` will provide a clickable link to provided URL in 'Links' section:
+
+![](https://docs.qameta.io/allure/images/pytest_test_with_link.png)
+
+`@allure.issue` will provide a link with a small bug icon. This descriptor takes test case id as the input parameter to use it with provided link template for issue link type. Link templates are specified in `--alure-link-pattern` configuration option for Pytest. Link templates and types have to be specified using a colon:
+
+```shell
+$ pytest directory_with_tests/ --alluredir=/tmp/my_allure_report \
+--allure-link-pattern=issue:http://www.mytesttracker.com/issue/{}
+```
+
+Template keywords are `issue`, `link` and `test_case` to provide a template for the corresponding type of link.
+
+![](https://docs.qameta.io/allure/images/pytest_test_case_with_issue_link.png)
 
 ### 6.1.6. Retries
 
+Allure allows you to aggregate information about test being re-executed during a single test run as well as history of test execution over some period of time.
 
+For retries you can use [Pytest rerun failures plugin](https://github.com/pytest-dev/pytest-rerunfailures).
+
+For example if we have a very unreliable step method that fails often, after specifying `--reruns=5` in the Pytest startup options we would see all unsuccessful attempts to run this test displayed on the `Retries` tab.
+
+```python
+import allure
+import random
+import time
+
+@allure.step
+def passing_step():
+    pass
+
+@allure.step
+def flaky_broken_step():
+    if random.randint(1, 5) != 1:
+        raise Exception('Broken!')
+        
+def test_broken_with_randomized_time():
+    passing_step()
+    time.sleep(random.randint(1, 3))
+    flaky_broken_step()
+```
+
+![](https://docs.qameta.io/allure/images/pytest_retry_tab.png)
+
+Also such a test would receive 'flaky' bomb icon in the list of executed tests.
+
+![https://docs.qameta.io/allure/images/pytest_flaky_icon.png](https://docs.qameta.io/allure/images/pytest_flaky_icon.png)
 
 ### 6.1.7. Tags
 
+Sometimes you want to be flexible with tests that you want to be executed. Pytest allows that by using marker decorator `@pytest.mark`([Pytest docs](https://docs.pytest.org/en/latest/example/markers.html)).
 
+Allure allows to mark your tests in a similar way with 3 types of marking decorators that allow to structure representation of your report:
+
+1. BDD-style markers denoting[^6-1-7-1] Epics, Features and Stories
+2. Severity labels
+3. Custom labels
 
 #### BDD markers
 
+There are two decorators: `@allure.feature` and `@allure.story` to mark your tests according to Feature/Story breakdown specific to your project ([for background see BDD article on Wikipedia](https://en.wikipedia.org/wiki/Behavior-driven_development)). To mark that some feature or story belong to an epic, use a name that starts with `epic_` prefix.
 
+*tests.py*
+
+```python
+import allure
+
+def test_without_any_annotations_that_wont_be_executed():
+    pass
+
+@allure.story('epic_1')
+def test_with_epic_1():
+    pass
+
+@allure.story('story_1')
+def test_with_story_1():
+    pass
+
+@allure.story('story_2')
+def test_with_story_2():
+    pass
+
+@allure.feature('feature_2')
+@allure.story('story_2')
+def test_with_story_2_and_feature_2():
+    pass
+```
+
+You can use following commandline options to specify different sets of tests to execute passing a list of comma-separated values:
+
+1. `--allure-epics`
+2. `--allure-features`
+3. `--allure-stories`
+
+for example:
+
+```shell
+$ pytest test.py --allure-stories story_1,story_2
+
+collected 5 items
+
+tests.py ...
+[100%]
+
+============================== 3 passed in 0.01 seconds ==============================
+```
+
+```shell
+$ pytest tests.py --allure-features feature_2 --alure-stories story_2
+
+collected 5 items
+
+tests.py ...
+[100%]
+
+============================== 2 passed in 0.01 seconds ==============================
+```
 
 #### Severity markers
+
+To mark your tests by severity level you can use `@allure.severtiy` decorator. It takes a `allure.severity_level` enum value as an argument.
+
+*tests.py*
+
+```python
+import allure
+
+def test_with_no_severity_label():
+    pass
+
+@allure.severity(allure.severity_level.TRIVIAL)
+def test_with_trivial_severity():
+    pass
+
+@allure.severity(allure.severity_level.NORMAL)
+def test_with_normal_severity():
+    pass
+
+@allure.severity(allure.severity_level.NORMAL)
+class TestClassWithNormalSeverity(object):
+    
+    def test_inside_the_normal_severity_test_class(self):
+        pass
+    
+    @allure.severity(allure.severity_level.CRITICAL)
+    def test_inside_normal_severity_test_class_with_overriding_critical_severity(self):
+        pass
+```
+
+Severity decorator can be applied to functions, methods or entire classes.
+
+By using `--allure-severities` commandline option with a list of comma-separated severity levels only tests with corresponding severities will be run.
+
+```shell
+$ pytest tests.py --allure-severities normal,critical
+
+collected 5 items
+
+bdd_annotations_demo/test_severity_labels.py ...                                [100%]
+
+================================ 3 passed in 0.01 seconds ============================
+```
 
 
 
@@ -859,3 +1125,4 @@ Attachments are shown in the context of a test entity they belong to. Attachment
 [^6-1-5-2]: vt.& vi. 注解，注释 to add short notes to a book or piece of writing to explain parts of it
 [^6-1-5-3]: adv. 到旁边; 留出; 不顾，撇开; 除…外 1 kept to be used later
 
+[^6-1-7-1]: v.预示，表明; 意指，指代 to represent or be a sign of something
