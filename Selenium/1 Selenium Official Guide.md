@@ -86,6 +86,7 @@ After the development of the WebDriver tests, you may face the need of running y
 Building a test suite using WebDriver will require you to understand and effectively use a number of different components. As with everything in software, different people use different terms for the same idea. Below is a breakdown of how terms are used in this description.
 
 ### Terminology
+
 * **API**: Application Programming Interface. This is the set of "commands" you use to manipulate WebDriver.
 * **Library**: A code module which contains the APIs and the code necessary to implement them. Libraries are specific to each language binding, eg .jar files for Java, .dll files for .NET, etc.
 * **Driver**: Responsible for controlling the actual browser. Most drivers are created by the browser vendors themselves. Drivers are generally executable modules that run on the system with the browser itself, not on the system executing the test suite.(Although those may be the same system.) NOTE: *Some people refer to the drivers as proxies*.
@@ -409,16 +410,16 @@ Note: The Opera driver does not support w3c syntax, so we recommend using chrome
 3. ###### Hard Coded Location
 
    Similar to Option 2 above, you need to manually downloaded the driver. Specifying the location in the code itself has the advantage of not needing to figure out Environment Variables on your system, but has the drawback of making the code much less flexible.
-   
+
    **<u>Python</u>**
-   
+
    ```python
    service = Service(executable_path="/path/to/chromedriver")
    driver = webdriver.Chrome(service=service)
    ```
-   
+
    **<u>CSharp</u>**
-   
+
    ```c#
    var driver = new ChromeDriver(@"C:\WebDriver\bin");
    ```
@@ -681,16 +682,17 @@ Everything Selenium does is send the browser commands to do something or send re
    This ends the driver process, which by default closes the browser as well. No more commands can be sent to this driver instance.
 
    **<u>Python</u>**
-   
+
    ```python
    driver.quit()
    ```
 
    **<u>CSharp</u>**
-   
+
    ```c#
    driver.Quit();
    ```
+
 ##### Putting everything together
 
 Let's combine these 8 things into a complete script.
@@ -700,48 +702,48 @@ Follow the link at the bottom of the tab to see an example of the code as it wou
 **<u>Python</u>**
 
    ```python
-   from selenium import webdriver
-   from selenium.webdriver.common.by import By
-   
-   driver = webdriver.Chrome()
-   driver.get("https://www.google.com")
-   driver.title	# => "Google"
-   driver.implicitly_wait(0.5)
-   search_box = driver.find_element(By.NAME, "q")
-   search_button = driver.find_element(By.NAME, "btnK")
-   
-   search_box.send_keys("Selenium")
-   search_box.click()
-   
-   driver.find_element(By.NAME, "q").get_attribute("value") # => "Selenium"
-   
-   driver.quit()
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+
+driver = webdriver.Chrome()
+driver.get("https://www.google.com")
+driver.title	# => "Google"
+driver.implicitly_wait(0.5)
+search_box = driver.find_element(By.NAME, "q")
+search_button = driver.find_element(By.NAME, "btnK")
+
+search_box.send_keys("Selenium")
+search_box.click()
+
+driver.find_element(By.NAME, "q").get_attribute("value") # => "Selenium"
+
+driver.quit()
    ```
 
  **<u>CSharp</u>**
 
    ```c#
-   using OpenQA.Selenium;
-   using OpenQA.Selenium.Chrome;
-   
-   class HelloSelenium{
-       static void Main() {
-           var driver = new ChromeDriver();
-           driver.Navigate().GoToUrl("https://www.google.com");
-           driver.Title;
-           driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromMilliseconds(500);
-           
-           var searchBox = driver.FindElement(By.Name("q"));
-           var searchButton = driver.FindElement(By.Name("btnK"))
-               
-           searchBox.SendKeys("Selenium");
-           searchButton.Click();
-           
-           driver.FindElement(By.Name("q")).GetAttribute("value");  // => "Selenium"
-           driver.Quit();
-           
-       }
-   }
+using OpenQA.Selenium;
+using OpenQA.Selenium.Chrome;
+
+class HelloSelenium{
+    static void Main() {
+        var driver = new ChromeDriver();
+        driver.Navigate().GoToUrl("https://www.google.com");
+        driver.Title;
+        driver.Manage().Timeouts().ImplicitWait = TimeSpan.FromMilliseconds(500);
+        
+        var searchBox = driver.FindElement(By.Name("q"));
+        var searchButton = driver.FindElement(By.Name("btnK"))
+            
+        searchBox.SendKeys("Selenium");
+        searchButton.Click();
+        
+        driver.FindElement(By.Name("q")).GetAttribute("value");  // => "Selenium"
+        driver.Quit();
+        
+    }
+}
    ```
 
 ### [2-1-5 Upgrade to Selenium 4](https://www.selenium.dev/documentation/webdriver/getting_started/upgrade_to_selenium_4/)
