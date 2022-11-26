@@ -5502,20 +5502,22 @@ Same with text under Test Practices, need to raise a bug.
 
 Note: this page has merged contents from multiple sources, including the [Selenium wiki](https://github.com/SeleniumHQ/selenium/wiki/PageObjects)
 
-#### Overview
+**Overview**
 
 Within your web app's UI there are areas that your tests interact with. A Page Object simply models these as objects within the test code. This reduces the amount of duplicated code and means that if the UI changes, the fix need only be applied in one place.
 
 Page Object is a Design Pattern which has become popular in test automation for enhancing test maintenance and reducing code duplication. A page object is an object-oriented class that serves as an interface to a page of your AUT. The tests then use the methods of this page object class whenever they need to interact with the UI of that page. The benefit is that if the UI changes for the page, the tests themselves don't need to change, only the code within the page object needs to change. Subsequently all changes to support that new UI are located in one place.
 
-##### Advantages
+* **Advantages**
 
-* There is a clean separation between test code and page specific code such as locators (or their use if you're using a UI Map) and layout.
-* There is a single repository for the services or operations offered by the page rather than having these services scattered[^6-4-1-1] throughout the tests.
+  * There is a clean separation between test code and page specific code such as locators (or their use if you're using a UI Map) and layout.
+
+  * There is a single repository for the services or operations offered by the page rather than having these services scattered[^6-4-1-1] throughout the tests.
+
 
 In both cases this allows any modifications required due to UI changes to all be made in one place. Useful information on this technique can be found on numerous blogs as this 'test design pattern' is becoming widely used. We encourage the reader who wishes to know more to search the internet for blogs on this subject. Many have written on this design pattern and can provide useful tips beyond the scope of this user guide. To get you started, we'll illustrate page objects with a simple example.
 
-##### Examples
+* **Examples**
 
 First, consider an example, typical of test automation, that does not use a page object:
 
@@ -5649,7 +5651,7 @@ A page object does not necessarily need to represent all the parts of a page its
 
 There are other design patterns that also may be used in testing. Some use a Page Factory for instantiating their page objects. Discussing all of these is beyond the scope of this user guide. Here, we merely want to introduce the concepts to make the reader aware of some of the things that can be done. As was mentioned earlier, many have blogged on this topic and we encourage the reader to search for blogs on these topics.
 
-#### Implementation Notes
+**Implementation Notes**
 
 PageObjects can be thought of as facing in two directions simultaneously. Facing towards the developer of a test, they represent the **services** offered by a particular page. Facing away from the developer, they should be the only thing that has a deep knowledge of the structure of the HTML of a page (or part of a page). It's simplest to think of the methods on a page object as offering the "services" that a page offers rather than exposing the details and mechanics of the page. As an example, think of the inbox of any web-based email system. Amongst the services that it offers are typically the ability to compose a new email, to choose to read a single email, and to list the subject lines of the emails in the box. How these are implemented shouldn't matter to the test.
 
@@ -5699,7 +5701,7 @@ Of course, as with every guideline there are exceptions, and one that is commonl
 
 Finally, a PageObject need not represent an entire page. It may represent a section that appears many times within a site or page, such as site navigation. The essential principle is that there is only one place in your test suite with knowledge of the structure of the HTML of a particular (part of a) page.
 
-#### Summary
+**Summary**
 
 * The public methods represent the services that the page offers
 * Try not to expose the internals of the page
@@ -5708,7 +5710,7 @@ Finally, a PageObject need not represent an entire page. It may represent a sect
 * Need not represent an entire page
 * ==Different results for the same action are modelled as different methods==
 
-#### Example
+**Example**
 
 ```java
 public class LoginPage{
@@ -5783,7 +5785,7 @@ public class LoginPage{
 }
 ```
 
-#### Support in WebDriver
+**Support in WebDriver**
 
 There is a PageFactory in the support package that provides support for this pattern, and helps to remove some boilerplate code from your page objects at the same time.
 
@@ -5797,14 +5799,14 @@ The goal is to use <u>ubiquitous language</u>. Rather than referring to "load da
 
 With Selenium, DSL is usually represented by methods, written to make the API simple and readable -- they enable a report between the developers and the stakeholders (users, product owners, business intelligence specialists, etc.).
 
-#### Benefits
+**Benefits**
 
 * Readable: Business stakeholders can understand it.
 * Writable: Easy to write, avoids unnecessary duplication.
 * Extensible: Functionality can (reasonably) be added without breaking contracts and existing functionality.
 * Maintainable: By leaving the implementation details out of test cases, you are well-insulated[^6-4-2-1] against changes to the AUT*.
 
-#### Further Reading
+**Further Reading**
 
 (previously located: https://github.com/SeleniumHQ/selenium/wiki/Domain-Driven-Design)
 
@@ -5812,7 +5814,7 @@ There is a good book on Domain Driven Design by Eric Evans http://www.amazon.com
 
 And to whet[^6-4-2-2] your appetite there's a useful smaller book available online for download at http://www.infoq.com/minibooks/domain-driven-design-quickly
 
-#### Java
+**Java**
 
 Here is an example of a reasonable DSL method in Java. For brevity[^6-4-2-3]'s sake, it assumes the driver object is pre-defined and available to the method.
 
@@ -6011,7 +6013,7 @@ CAPTCHA, short for <u>*Completely Automated Public Turing test to tell Computers
 
 Whilst it is possible to start a download by clicking a link with a browser under Selenium's control, the API does not expose download progress, making it less than ideal for testing downloaded files. This is because downloading files is not considered an important aspect of emulating user interaction with the web platform. Instead, find the link using Selenium (and any required cookies) and pass it to a HTTP request library like [libcurl](https://curl.haxx.se/libcurl/).
 
-The [HtmlUnit driver](https://github.com/SeleniumHQ/htmlunit-driver) can download attachments by accessing them as input streams by implementing the [AttachmentHandler](https://htmlunit.sourceforge.io/apidocs/com/gargoylesoftware/htmlunit/attachment/AttachmentHandler.html) interface. The AttachmentHandler can the be added to the HtmlUnit WebClient.
+The [HtmlUnit driver](https://github.com/SeleniumHQ/htmlunit-driver) can download attachments by accessing them as input streams by implementing the [AttachmentHandler](https://htmlunit.sourceforge.io/apidocs/com/gargoylesoftware/htmlunit/attachment/AttachmentHandler.html) interface. The AttachmentHandler can then be added to the [HtmlUnit](https://htmlunit.sourceforge.io/) WebClient.
 
 ### [6-5-3 HTTP response codes](https://www.selenium.dev/documentation/test_practices/discouraged/http_response_codes/)
 
@@ -6027,7 +6029,7 @@ If you insist, an advanced solution to capturing HTTP status codes is to replica
 
 ### [6-5-4 Gmail, email and Facebook](https://www.selenium.dev/documentation/test_practices/discouraged/gmail_email_and_facebook_logins/)
 
-For multiple reasons, logging into sites like Gmail and Facebook using WebDriver is not recommended. Aside from being against the usage terms for these sites (where you risk having the account shut down), it is slow and unrealiable.
+For multiple reasons, logging into sites like Gmail and Facebook using WebDriver is not recommended. Aside from being against the usage terms for these sites (where you risk having the account shut down), it is slow and unreliable.
 
 The ideal practice is to use the APIs that email providers offer, or in the case of Facebook the developer tools service which exposes an API for creating test accounts, friends and so forth. Although using an API might seem like a bit of extra hard work, you will be paid back in speed, reliability, and stability. The API is also unlikely to change, whereas webpages and HTML locators change often and require you to update your test framework.
 
@@ -6037,7 +6039,7 @@ WebDriver implementations that are [W3C conformant[^6-5-4-1]](https://w3c.github
 
 ### [6-5-5 Test dependency](https://www.selenium.dev/documentation/test_practices/discouraged/test_dependency/)
 
-A common idea and misconception about automated testing is regarding a specific test order. Your tests should be run in any order, and not rely on other tests to complete in order to be successful.
+A common idea and misconception[^6-5-5-1] about automated testing is regarding a specific test order. Your tests should be able to run in **any** order, and not rely on other tests to complete in order to be successful.
 
 ### [6-5-6 Performance testing](https://www.selenium.dev/documentation/test_practices/discouraged/performance_testing/)
 
@@ -6055,7 +6057,7 @@ Example (open source) packages to use are: JMeter.
 
 Using WebDriver to spider[^6-5-7-1] through links is not recommended practice. Not because it cannot be done, but because WebDriver is definitely not the most ideal tool for this. WebDriver needs time to start up, and can take several seconds, up to a minute depending on how your test is written, just to get to the page and traverse through the DOM.
 
-Instead of using WebDriver for this, you could save a ton of time by executing a curl command, or using a library such as BeautifulSoup since these methods do not rely on creating a browser and navigating to a page. You are saving tones of time by not using WebDriver for this task.
+Instead of using WebDriver for this, you could save a ton of time by executing a [curl](https://curl.haxx.se/) command, or using a library such as BeautifulSoup since these methods do not rely on creating a browser and navigating to a page. You are saving tones of time by not using WebDriver for this task.
 
 ### [6-5-8 Two Factor Authentication](https://www.selenium.dev/documentation/test_practices/discouraged/two_factor_authentication/)
 
@@ -6146,7 +6148,8 @@ There are few options to get around 2FA checks:
 [^6-5-3-6]: vi.选择，挑选 to choose one thing or do one thing instead of another
 [^6-5-4-1]: n.顺应，一致 to behave in the way that most other people in your group or society behave
 [^6-5-4-2]: Denial of Service (DoS) 拒绝服务攻击. 分布式拒绝服务攻击（ 英文: Distributed Denial of Service，缩写：DDoS ）亦称洪水攻击。 顾名思义，即是利用网络上已被攻陷的电脑作为“僵尸 ”，向某一特定的目标电脑发动密集式的“拒绝服务”式攻击，用以把目标电脑的网络资源及系统资源耗尽，使之无法向真正正常请求的用户提供服务。黑客通过将一个个“丧尸”或者称为“肉鸡”组成僵尸网络 ，就可以发动大规模DDoS或SYN洪水网络攻击，或者将“丧尸”们组到一起进行带有利益的刷网站流量、Email垃圾邮件群发，瘫痪预定目标受雇攻击竞争对手等商业活动。A denial-of-service (DoS) attack is a cyberattack on devices, information systems, or other network resources that prevents legitimate users from accessing expected services and resources. This is usually accomplished by flooding the targeted host or network with traffic until the target can't respond or crashes.
-[^6-5-6-1]: [frə'dʒɪlətɪ]
+[^6-5-5-1]: n.误解; 错觉; 错误想法 an idea which is wrong or untrue, but which people believe because they do not understand the subject properly
+[^6-5-6-1]: [frə'dʒɪlətɪ] n.脆弱，虚弱; 易碎性; 脆性; 脆弱性
 [^6-5-6-2]: n.使用仪器，装设仪器; 乐器法; 乐曲研究; 手段 the set of instruments used to help in controlling a machine
 [^6-5-6-3]: n.惩罚; 刑罚; 害处; 足球点球 a punishment for breaking a law, rule, or legal agreement
 [^6-5-7-1]: *technical* a computer program that searches the Internet for the best websites with the information you want, so that you can find it quickly **SYN**: crawler, bot
